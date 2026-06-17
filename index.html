@@ -1,0 +1,2687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard CC Ciracas — Sales</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --glass-bg: rgba(255,255,255,0.52);
+    --glass-bg-strong: rgba(255,255,255,0.75);
+    --glass-bg-card: rgba(255,255,255,0.52);
+    --glass-border: rgba(255,255,255,0.82);
+    --glass-border-soft: rgba(255,255,255,0.62);
+    --glass-blur: blur(18px);
+    --glass-blur-sm: blur(10px);
+    --text: #0f0f1a;
+    --text2: #1e1b3a;
+    --text3: #4a4878;
+    --accent: #2563eb;
+    --accent-light: rgba(37,99,235,0.12);
+    --accent2: #3b82f6;
+    --accent2-light: rgba(59,130,246,0.14);
+    --green: #16a34a;
+    --green-light: rgba(22,163,74,0.12);
+    --amber: #d97706;
+    --amber-light: rgba(217,119,6,0.14);
+    --coral: #e11d5a;
+    --coral-light: rgba(225,29,90,0.12);
+    --radius: 18px;
+    --radius-sm: 10px;
+    --shadow: 0 8px 32px rgba(37,99,235,0.10);
+    --shadow-sm: 0 4px 16px rgba(37,99,235,0.07);
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: linear-gradient(135deg,#eef4ff 0%,#e8f0fe 50%,#eff6ff 100%);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    color-scheme: light;
+  }
+
+  /* PASSWORD GATE */
+  .pw-content { display: none; }
+  .pw-content.visible { display: block; animation: pwFadeIn 0.4s ease; }
+  @keyframes pwFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .pw-gate {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg,#eef4ff 0%,#e8f0fe 50%,#eff6ff 100%);
+    transition: opacity 0.4s ease;
+  }
+  .pw-gate::before {
+    content: '';
+    position: fixed; top: -20%; left: -10%; width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(190,210,255,0.75) 0%, rgba(180,205,250,0.45) 45%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .pw-gate::after {
+    content: '';
+    position: fixed; bottom: -15%; right: -8%; width: 55vw; height: 55vw;
+    background: radial-gradient(circle, rgba(200,220,255,0.65) 0%, rgba(170,200,255,0.38) 45%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .pw-gate.unlocked { opacity: 0; pointer-events: none; }
+  .pw-box {
+    position: relative; z-index: 1;
+    background: var(--glass-bg-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-soft); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 36px 32px; width: 100%; max-width: 340px; text-align: center;
+  }
+  .pw-icon { font-size: 32px; margin-bottom: 10px; }
+  .pw-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .pw-sub { font-size: 12.5px; color: #4a4878; margin-bottom: 18px; }
+  .pw-input {
+    width: 100%; background: rgba(255,255,255,0.72); border: 1px solid rgba(37,99,235,0.25);
+    border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: inherit;
+    padding: 10px 14px; outline: none; transition: all 0.2s; text-align: center;
+  }
+  .pw-input:focus { border-color: rgba(37,99,235,0.5); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); background: rgba(255,255,255,0.70); }
+  .pw-input.shake { animation: pwShake 0.4s ease; border-color: rgba(255,107,135,0.5); }
+  @keyframes pwShake { 0%,100%{transform:translateX(0);} 20%{transform:translateX(-8px);} 40%{transform:translateX(8px);} 60%{transform:translateX(-5px);} 80%{transform:translateX(5px);} }
+  .pw-btn {
+    width: 100%; margin-top: 12px; background: linear-gradient(135deg, rgba(37,99,235,0.25), rgba(59,130,246,0.20));
+    border: 1px solid rgba(37,99,235,0.5); border-radius: var(--radius-sm); color: var(--accent);
+    font-size: 13.5px; font-weight: 600; font-family: inherit; padding: 10px 14px; cursor: pointer; transition: all 0.2s;
+  }
+  .pw-btn:hover { background: linear-gradient(135deg, rgba(37,99,235,0.40), rgba(59,130,246,0.30)); }
+  .pw-error { display: none; color: var(--coral); font-size: 12px; margin-top: 12px; }
+  .pw-error.visible { display: block; }
+
+  body::before {
+    content: '';
+    position: fixed; top: -20%; left: -10%; width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(190,210,255,0.75) 0%, rgba(180,205,250,0.45) 45%, transparent 70%);
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    animation: orb1 18s ease-in-out infinite alternate;
+  }
+  body::after {
+    content: '';
+    position: fixed; bottom: -15%; right: -8%; width: 55vw; height: 55vw;
+    background: radial-gradient(circle, rgba(200,220,255,0.65) 0%, rgba(170,200,255,0.38) 45%, transparent 70%);
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    animation: orb2 22s ease-in-out infinite alternate;
+  }
+  .orb-mid {
+    position: fixed; top: 45%; left: 55%; width: 40vw; height: 40vw;
+    background: radial-gradient(circle, rgba(170,200,255,0.42) 0%, transparent 65%);
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    animation: orb3 15s ease-in-out infinite alternate;
+  }
+  @keyframes orb1 { from { transform: translate(0,0) scale(1); } to { transform: translate(4%,6%) scale(1.08); } }
+  @keyframes orb2 { from { transform: translate(0,0) scale(1); } to { transform: translate(-5%,-4%) scale(1.06); } }
+  @keyframes orb3 { from { transform: translate(0,0) scale(1); } to { transform: translate(3%,-5%) scale(1.12); } }
+  .header, .filter-bar, .main { position: relative; z-index: 1; }
+
+  /* HEADER */
+  .header {
+    background: rgba(255,255,255,0.68); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid rgba(255,255,255,0.82); padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-logo { display: flex; align-items: center; gap: 10px; }
+  .header-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 16px rgba(99,102,241,0.50); }
+  .header-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .header-sub { font-size: 11.5px; color: #4a4878; margin-top: 1px; }
+  .header-badge { background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(59,130,246,0.14)); border: 1px solid rgba(37,99,235,0.35); color: var(--accent); font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 30px; white-space: nowrap; backdrop-filter: var(--glass-blur-sm); letter-spacing: 0.02em; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: rgba(255,255,255,0.55);
+    border-bottom: 1px solid rgba(255,255,255,0.09); padding: 14px 28px;
+    display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap;
+    position: sticky; top: 69px; z-index: 90;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 5px; position: relative; }
+  .filter-label { font-size: 10.5px; font-weight: 600; color: #2d2b5a; text-transform: uppercase; letter-spacing: 0.08em; }
+  .period-group { display: flex; gap: 4px; }
+  .period-btn { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20); border-radius: var(--radius-sm); color: var(--text); font-size: 12px; font-family: inherit; font-weight: 500; padding: 8px 15px; cursor: pointer; transition: all 0.2s; }
+  .period-btn:hover { border-color: rgba(46,232,160,0.4); color: var(--accent); background: rgba(46,232,160,0.08); }
+  .period-btn.active { background: linear-gradient(135deg, rgba(37,99,235,0.22), rgba(59,130,246,0.16)); border-color: rgba(37,99,235,0.5); color: var(--accent); box-shadow: 0 2px 12px rgba(37,99,235,0.2); }
+  .filter-bar input[type="date"] { background: rgba(255,255,255,0.70); border: 1px solid rgba(37,99,235,0.22); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-family: inherit; padding: 8px 10px; outline: none; cursor: pointer; min-width: 140px; transition: all 0.2s; backdrop-filter: var(--glass-blur-sm); color-scheme: light; }
+  .filter-bar input[type="date"]:focus { border-color: rgba(37,99,235,0.5); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); background: rgba(255,255,255,0.70); }
+  .date-range-row { display: flex; gap: 8px; align-items: center; }
+  .date-range-row span { font-size: 12px; color: var(--text3); }
+  #freeRangeRow { display: none; }
+  .cal-month-btn { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20); border-radius: var(--radius-sm); color: var(--text); font-size: 11.5px; font-family: inherit; font-weight: 500; padding: 7px 13px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .cal-month-btn:hover { border-color: rgba(46,232,160,0.4); color: var(--accent); background: rgba(46,232,160,0.08); }
+  .cal-month-btn.active { background: linear-gradient(135deg, rgba(37,99,235,0.22), rgba(59,130,246,0.16)); border-color: rgba(37,99,235,0.5); color: var(--accent); box-shadow: 0 2px 12px rgba(37,99,235,0.2); }
+
+  /* ── DATE RANGE PICKER ── */
+  .cal-trigger { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.65); border: 1px solid rgba(37,99,235,0.22); border-radius: var(--radius-sm); color: #0f0f1a; font-size: 13px; font-family: inherit; padding: 8px 14px; cursor: pointer; min-width: 220px; transition: all 0.2s; user-select: none; white-space: nowrap; }
+  .cal-trigger:hover, .cal-trigger.open { border-color: rgba(37,99,235,0.45); background: rgba(255,255,255,0.85); box-shadow: 0 0 0 3px rgba(37,99,235,0.10); }
+  .cal-trigger-icon { font-size: 14px; }
+  .cal-trigger-txt { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .cal-trigger-txt.placeholder { color: var(--text3); }
+  .cal-trigger-arrow { font-size: 10px; color: var(--text3); transition: transform 0.2s; }
+  .cal-trigger.open .cal-trigger-arrow { transform: rotate(180deg); }
+  .cal-count-badge { background: linear-gradient(135deg,rgba(37,99,235,0.28),rgba(59,130,246,0.22)); border:1px solid rgba(37,99,235,0.4); color:var(--accent); font-size:10px; font-weight:700; padding:1px 7px; border-radius:20px; min-width:20px; text-align:center; }
+
+  .cal-panel { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: rgba(255,255,255,0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.90); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,5,20,0.45); z-index: 300; padding: 16px; width: 360px; animation: ddFadeIn 0.15s ease; }
+  .cal-panel.open { display: block; }
+
+  /* mode tabs */
+  .rp-tabs { display: flex; gap: 5px; margin-bottom: 12px; }
+  .rp-tab { flex: 1; background: rgba(255,255,255,0.55); border: 1px solid rgba(37,99,235,0.18); border-radius: 8px; color: var(--text); font-size: 11.5px; font-family: inherit; font-weight: 500; padding: 7px 4px; cursor: pointer; text-align: center; transition: all 0.18s; white-space: nowrap; }
+  .rp-tab:hover { border-color: rgba(46,232,160,0.4); color: var(--accent); background: rgba(46,232,160,0.08); }
+  .rp-tab.active { background: linear-gradient(135deg,rgba(37,99,235,0.22),rgba(59,130,246,0.16)); border-color: rgba(37,99,235,0.55); color: var(--accent); font-weight: 600; }
+
+  /* view toggle (Per Bulan / Per Hari) */
+  .rp-view-toggle { display: none; gap: 5px; margin-bottom: 10px; }
+  .rp-view-toggle.visible { display: flex; }
+  .rp-view-btn { flex: 1; background: rgba(255,255,255,0.55); border: 1px solid rgba(37,99,235,0.18); border-radius: 7px; color: var(--text2); font-size: 11px; font-family: inherit; padding: 5px 4px; cursor: pointer; text-align: center; transition: all 0.15s; }
+  .rp-view-btn:hover { border-color: rgba(46,232,160,0.35); color: var(--accent); }
+  .rp-view-btn.active { background: rgba(46,232,160,0.14); border-color: rgba(46,232,160,0.4); color: var(--accent); font-weight: 600; }
+
+  /* preview bar */
+  .rp-preview { background: rgba(46,232,160,0.08); border: 1px solid rgba(46,232,160,0.2); border-radius: 8px; padding: 8px 12px; font-size: 11.5px; color: var(--accent); margin-bottom: 10px; display: none; }
+  .rp-preview.visible { display: block; }
+
+  /* today info bar */
+  .rp-today-bar { background: rgba(97,184,255,0.08); border: 1px solid rgba(97,184,255,0.2); border-radius: 8px; padding: 9px 12px; font-size: 12px; color: var(--accent2); margin-bottom: 10px; display: none; }
+  .rp-today-bar.visible { display: block; }
+
+  /* ── MONTH GRID ── */
+  .rp-month-wrap { display: none; }
+  .rp-month-wrap.visible { display: block; }
+  .rp-year-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .rp-year-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 7px; color: var(--text2); font-size: 12px; font-family: inherit; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .rp-year-btn:hover { border-color: rgba(46,232,160,0.4); color: var(--accent); }
+  .rp-year-label { font-size: 13px; font-weight: 600; color: var(--text); }
+  .rp-month-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; margin-bottom: 10px; }
+  .rp-month-cell { border-radius: 8px; padding: 9px 4px; text-align: center; cursor: pointer; transition: all 0.18s; border: 1px solid transparent; font-family: inherit; background: transparent; }
+  .rp-month-cell:hover { background: rgba(37,99,235,0.18); border-color: rgba(255,255,255,0.09); }
+  .rp-month-cell.has-data { border-color: rgba(255,255,255,0.09); background: rgba(255,255,255,0.04); }
+  .rp-month-cell.selected { background: linear-gradient(135deg,rgba(46,232,160,0.28),rgba(97,184,255,0.20)); border-color: rgba(46,232,160,0.55); box-shadow: 0 2px 12px rgba(46,232,160,0.2); }
+  .rp-mc-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1; }
+  .rp-month-cell.selected .rp-mc-name { color: var(--accent); }
+  .rp-mc-cnt { font-size: 9.5px; color: var(--text3); margin-top: 3px; line-height: 1.3; }
+  .rp-month-cell.selected .rp-mc-cnt { color: rgba(46,232,160,0.75); }
+
+  /* ── DAY GRID ── */
+  .rp-day-wrap { display: none; }
+  .rp-day-wrap.visible { display: block; }
+  .rp-day-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .rp-day-nav-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 7px; color: var(--text2); font-size: 12px; font-family: inherit; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .rp-day-nav-btn:hover { border-color: rgba(46,232,160,0.4); color: var(--accent); }
+  .rp-day-nav-label { font-size: 12.5px; font-weight: 600; color: var(--text); }
+  .rp-dow-row { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 3px; }
+  .rp-dow { text-align: center; font-size: 9.5px; font-weight: 700; color: var(--text3); text-transform: uppercase; padding: 2px 0; }
+  .rp-dow.sun { color: rgba(255,107,135,0.7); }
+  .rp-day-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 10px; }
+  .rp-day-cell { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11.5px; color: var(--text); cursor: pointer; transition: all 0.15s; border: 1px solid transparent; position: relative; }
+  .rp-day-cell.other-mo { color: var(--text3); }
+  .rp-day-cell.has-data::after { content:''; position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:3px; height:3px; border-radius:50%; background:var(--accent); opacity:0.8; }
+  .rp-day-cell:hover:not(.empty-cell) { background: rgba(37,99,235,0.09); border-color: rgba(37,99,235,0.20); }
+  .rp-day-cell.today-cell { border-color: rgba(37,99,235,0.5); color: var(--accent); font-weight: 700; }
+  .rp-day-cell.sel-day { background: linear-gradient(135deg,rgba(37,99,235,0.28),rgba(59,130,246,0.20)); border-color: rgba(37,99,235,0.6); color: var(--accent); font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.2); }
+  .rp-day-cell.in-range-day { background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.18); color: var(--text); }
+  .rp-day-cell.empty-cell { cursor: default; }
+
+  /* action row */
+  .rp-actions { display: flex; gap: 6px; justify-content: flex-end; border-top: 1px solid rgba(37,99,235,0.10); padding-top: 10px; margin-top: 2px; }
+  .rp-btn { font-size: 11.5px; font-family: inherit; padding: 6px 14px; border-radius: 7px; cursor: pointer; transition: all 0.18s; border: 1px solid; }
+  .rp-btn-clear { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); color: var(--text3); }
+  .rp-btn-clear:hover { color: var(--coral); border-color: rgba(255,107,135,0.4); }
+  .rp-btn-apply { background: linear-gradient(135deg,rgba(37,99,235,0.25),rgba(59,130,246,0.18)); border-color: rgba(37,99,235,0.5); color: var(--accent); font-weight: 600; }
+  .rp-btn-apply:hover { background: linear-gradient(135deg,rgba(37,99,235,0.40),rgba(59,130,246,0.28)); }
+
+
+  /* DROPDOWN */
+  .dd-wrap { position: relative; }
+  .dd-trigger { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.70); border: 1px solid rgba(37,99,235,0.22); border-radius: var(--radius-sm); color: #0f0f1a; font-size: 13px; font-family: inherit; padding: 8px 12px; cursor: pointer; min-width: 190px; transition: all 0.2s; backdrop-filter: var(--glass-blur-sm); user-select: none; white-space: nowrap; }
+  .dd-trigger:hover, .dd-trigger.open { border-color: rgba(37,99,235,0.45); background: rgba(255,255,255,0.09); box-shadow: 0 0 0 3px rgba(46,232,160,0.10); }
+  .dd-trigger-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .dd-trigger-label.placeholder { color: var(--text3); }
+  .dd-count { background: linear-gradient(135deg, rgba(37,99,235,0.28), rgba(59,130,246,0.22)); border: 1px solid rgba(37,99,235,0.4); color: var(--accent); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 20px; min-width: 20px; text-align: center; }
+  .dd-arrow { font-size: 10px; color: var(--text3); transition: transform 0.2s; flex-shrink: 0; }
+  .dd-trigger.open .dd-arrow { transform: rotate(180deg); }
+  .dd-panel { display: none; position: absolute; top: calc(100% + 6px); left: 0; min-width: 240px; max-width: 320px; background: rgba(255,255,255,0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: var(--radius); box-shadow: 0 16px 48px rgba(0,5,20,0.38), 0 0 0 1px rgba(255,255,255,0.05) inset; z-index: 200; overflow: hidden; animation: ddFadeIn 0.15s ease; }
+  .dd-panel.open { display: block; }
+  @keyframes ddFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .dd-search-wrap { padding: 10px 10px 6px; border-bottom: 1px solid rgba(37,99,235,0.10); }
+  .dd-search { width: 100%; background: rgba(255,255,255,0.70); border: 1px solid rgba(37,99,235,0.20); border-radius: 8px; color: var(--text); font-size: 12.5px; font-family: inherit; padding: 7px 10px; outline: none; transition: border-color 0.2s; }
+  .dd-search::placeholder { color: var(--text3); }
+  .dd-search:focus { border-color: rgba(37,99,235,0.45); }
+  .dd-actions { display: flex; gap: 6px; padding: 6px 10px; border-bottom: 1px solid rgba(37,99,235,0.08); }
+  .dd-act-btn { font-size: 11px; font-family: inherit; color: var(--text3); background: none; border: none; cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: color 0.15s; }
+  .dd-act-btn:hover { color: var(--accent); }
+  .dd-list { max-height: 220px; overflow-y: auto; padding: 6px 0; }
+  .dd-item { display: flex; align-items: center; gap: 10px; padding: 7px 14px; font-size: 12.5px; color: var(--text); cursor: pointer; transition: background 0.12s, color 0.12s; user-select: none; }
+  .dd-item:hover { background: rgba(37,99,235,0.07); color: var(--text); }
+  .dd-item.selected { color: var(--accent); }
+  .dd-checkbox { width: 15px; height: 15px; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-size: 9px; }
+  .dd-item.selected .dd-checkbox { background: var(--accent); border-color: var(--accent); color: #1c2e4a; }
+  .dd-item-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dd-empty { padding: 16px 14px; font-size: 12px; color: var(--text3); text-align: center; }
+  .btn-reset { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20); border-radius: var(--radius-sm); color: var(--text2); font-size: 12px; font-family: inherit; padding: 8px 14px; cursor: pointer; transition: all 0.2s; align-self: flex-end; white-space: nowrap; }
+  .btn-reset:hover { border-color: rgba(255,107,135,0.4); color: var(--coral); background: rgba(255,107,135,0.07); }
+
+  .main { padding: 24px 28px; max-width: 1440px; margin: 0 auto; }
+
+  /* KPI */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 14px; margin-bottom: 22px; }
+  .kpi-card { background: var(--glass-bg-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border-soft); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+  .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(37,99,235,0.40), transparent); }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .kpi-label { font-size: 10.5px; color: #2d2b5a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 600; }
+  .kpi-value { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: #0f0f1a; }
+  .kpi-unit { font-size: 13px; font-weight: 400; color: var(--text3); margin-left: 3px; }
+  .kpi-foot { font-size: 11px; color: #4a4878; margin-top: 6px; }
+  .kv-green { color: var(--green); }
+  .kv-blue  { color: var(--accent2); }
+  .kv-amber { color: var(--amber); }
+  .kv-coral { color: var(--coral); }
+  .kv-purple { color: #1d4ed8; }
+
+  /* CARDS */
+  .card { background: var(--glass-bg-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border-soft); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(59,130,246,0.35), transparent); }
+  .card-title { font-size: 10.5px; font-weight: 700; color: #2d2b5a; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 16px; }
+
+  /* GRID */
+  .row { display: grid; gap: 16px; margin-bottom: 16px; }
+  .row-1    { grid-template-columns: 1fr; }
+  .row-2    { grid-template-columns: 1fr 1fr; }
+  .row-3    { grid-template-columns: 1fr 1fr 1fr; }
+  .row-4    { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .row-2-1  { grid-template-columns: 2fr 1fr; }
+  .row-1-2  { grid-template-columns: 1fr 2fr; }
+  @media (max-width: 960px) {
+    .row-2, .row-3, .row-4, .row-2-1, .row-1-2 { grid-template-columns: 1fr; }
+    .main { padding: 16px; }
+  }
+
+  .chart-wrap { position: relative; width: 100%; }
+
+  /* PIE LEGEND */
+  .pie-legend { display: flex; flex-direction: column; gap: 5px; overflow-y: auto; max-height: 260px; padding-right: 4px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text); cursor: pointer; padding: 4px 7px; border-radius: 8px; transition: background 0.15s; }
+  .pie-legend-item:hover { background: rgba(37,99,235,0.18); }
+  .pie-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .pie-legend-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pie-legend-pct { font-weight: 700; color: #0f0f1a; font-size: 12px; min-width: 38px; text-align: right; }
+  .pie-legend-kg { font-size: 11px; color: var(--text3); min-width: 52px; text-align: right; }
+  #offtakerPie, #materialPie { cursor: pointer; }
+  .card-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .toggle-btn { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20); border-radius: 8px; color: var(--text2); font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .toggle-btn:hover { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.4); color: var(--accent); }
+  .detail-table-wrap { max-height: 360px; overflow-y: auto; transition: max-height 0.2s ease; }
+  .detail-table-wrap.expanded { max-height: 720px; }
+
+  /* DONUT */
+  .donut-container { position: relative; }
+  .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+  .donut-center-val { font-size: 20px; font-weight: 700; color: #0f0f1a; line-height: 1; }
+  .donut-center-lbl { font-size: 11px; color: #4a4878; margin-top: 3px; }
+
+  /* H LEGEND */
+  .h-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .h-legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text2); }
+  .h-legend-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* STATUS PROGRESS BARS */
+  .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .status-item { }
+  .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+  .status-name { font-size: 12px; color: var(--text); font-weight: 500; }
+  .status-val { font-size: 13px; font-weight: 700; color: #0f0f1a; }
+  .status-bar-bg { height: 7px; background: rgba(37,99,235,0.18); border-radius: 10px; overflow: hidden; }
+  .status-bar-fill { height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+  .status-foot { font-size: 10.5px; color: var(--text3); margin-top: 4px; }
+
+  /* PAYMENT STATUS BADGES */
+  .pay-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .pay-paid { background: rgba(22,163,74,0.14); color: var(--green); border: 1px solid rgba(22,163,74,0.30); }
+  .pay-unpaid { background: rgba(255,197,61,0.18); color: var(--amber); border: 1px solid rgba(255,197,61,0.3); }
+  .del-completed { background: rgba(97,184,255,0.18); color: var(--accent2); border: 1px solid rgba(97,184,255,0.3); }
+  .del-delivered { background: rgba(255,197,61,0.18); color: var(--amber); border: 1px solid rgba(255,197,61,0.3); }
+  .doc-yes { display: inline-block; width: 18px; height: 18px; background: rgba(22,163,74,0.16); border: 1px solid rgba(22,163,74,0.38); border-radius: 5px; text-align: center; line-height: 18px; font-size: 10px; color: var(--green); }
+  .doc-no  { display: inline-block; width: 18px; height: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 5px; text-align: center; line-height: 18px; font-size: 10px; color: var(--text3); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { border-bottom: 1px solid rgba(37,99,235,0.15); }
+  th { padding: 9px 10px; text-align: left; font-size: 10.5px; font-weight: 700; color: #2d2b5a; text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+  td { padding: 8px 10px; color: var(--text2); border-bottom: 1px solid rgba(37,99,235,0.08); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(37,99,235,0.06); color: var(--text); }
+  .tr { text-align: right; }
+  .tc { text-align: center; }
+  .tn { font-variant-numeric: tabular-nums; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .bp-search-wrap { position: relative; display: flex; align-items: center; }
+  .bp-filter-search { background: rgba(255,255,255,0.65); border: 1px solid rgba(37,99,235,0.20); border-radius: 8px; color: var(--text); font-size: 11px; font-weight: 500; font-family: inherit; padding: 5px 26px 5px 10px; cursor: text; transition: all 0.15s; width: 170px; outline: none; }
+  .bp-filter-search::placeholder { color: var(--text3); }
+  .bp-filter-search:focus { border-color: rgba(37,99,235,0.5); background: rgba(255,255,255,0.82); }
+  .bp-filter-clear { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text3); font-size: 11px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: color 0.15s; display: none; }
+  .bp-filter-clear:hover { color: var(--coral); }
+  .bp-filter-clear.visible { display: inline-flex; }
+  .bp { background: rgba(22,163,74,0.14); color: var(--green); border: 1px solid rgba(22,163,74,0.30); }
+  .bn { background: rgba(255,107,135,0.18); color: var(--coral); border: 1px solid rgba(255,107,135,0.3); }
+  .bz { background: rgba(255,255,255,0.07); color: var(--text3); }
+
+  /* SECTION DIVIDER */
+  .section-label { font-size: 11px; font-weight: 700; color: #2d2b5a; text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 0 4px; border-top: 1px solid rgba(37,99,235,0.12); margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(37,99,235,0.12); }
+
+  .empty { padding: 48px 20px; text-align: center; color: #4a4878; font-size: 13px; }
+  
+  /* CLICKABLE SECTION LABEL */
+  .clickable-section { cursor: pointer; transition: color 0.2s; }
+  .clickable-section:hover { color: var(--accent); }
+  .clickable-section:hover .section-click-hint { opacity: 1; }
+  .section-click-hint { font-size: 10px; font-weight: 600; color: var(--accent); background: rgba(37,99,235,0.10); border: 1px solid rgba(37,99,235,0.28); border-radius: 6px; padding: 2px 8px; margin-left: 6px; opacity: 0; transition: opacity 0.2s; letter-spacing: 0.04em; text-transform: none; }
+
+  /* POPUP */
+  .popup-overlay { display: none; position: fixed; inset: 0; background: rgba(37,99,235,0.25); backdrop-filter: blur(4px); z-index: 500; }
+  .popup-overlay.open { display: block; animation: fadeIn 0.2s ease; }
+  .popup-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.96); background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.90); border-radius: 20px; box-shadow: 0 24px 80px rgba(0,5,20,0.55); z-index: 600; width: min(96vw, 1100px); max-height: 85vh; flex-direction: column; overflow: hidden; }
+  .popup-modal.open { display: flex; animation: popIn 0.22s ease; }
+  @keyframes popIn { from { opacity:0; transform: translate(-50%,-50%) scale(0.93); } to { opacity:1; transform: translate(-50%,-50%) scale(1); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  .popup-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; border-bottom: 1px solid rgba(37,99,235,0.12); flex-shrink: 0; gap: 12px; flex-wrap: wrap; }
+  .popup-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .popup-search { background: rgba(37,99,235,0.18); border: 1px solid rgba(255,255,255,0.14); border-radius: 9px; color: var(--text); font-size: 12.5px; font-family: inherit; padding: 7px 12px; outline: none; min-width: 220px; transition: border-color 0.2s; }
+  .popup-search:focus { border-color: rgba(37,99,235,0.5); background: rgba(255,255,255,0.85); }
+  .popup-search::placeholder { color: var(--text3); }
+  .popup-close { background: rgba(255,255,255,0.65); border: 1px solid rgba(37,99,235,0.20); border-radius: 9px; color: var(--text2); font-size: 16px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+  .popup-close:hover { background: rgba(255,107,135,0.18); border-color: rgba(255,107,135,0.4); color: var(--coral); }
+  .popup-body { overflow-y: auto; padding: 16px 22px 20px; flex: 1; }
+  .popup-body table { font-size: 12.5px; }
+  .popup-body th { font-size: 10px; padding: 8px 8px; }
+  .popup-body td { padding: 7px 8px; }
+  .popup-stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .popup-stat { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 16px; display: flex; flex-direction: column; gap: 3px; }
+  .popup-stat-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; }
+  .popup-stat-val { font-size: 18px; font-weight: 700; color: var(--text); }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(37,99,235,0.18); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(37,99,235,0.38); }
+
+  .disc-sort-bar { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .disc-sort-btn { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.18); border-radius: 7px; color: var(--text3); font-size: 10.5px; font-family: inherit; font-weight: 600; padding: 4px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; display:inline-flex; align-items:center; gap:4px; }
+  .disc-sort-btn:hover { border-color: rgba(37,99,235,0.4); color: var(--accent); background: rgba(37,99,235,0.08); }
+  .disc-sort-btn.active-asc, .disc-sort-btn.active-desc { background: rgba(37,99,235,0.14); border-color: rgba(37,99,235,0.5); color: var(--accent); }
+  .disc-sort-arrow { font-size: 9px; opacity:0.7; }
+  .disc-row-clickable { cursor: pointer; }
+  .disc-row-clickable:hover td { background: rgba(37,99,235,0.07) !important; color: var(--text) !important; }
+  .disc-row-clickable td { transition: background 0.15s; }
+  .disc-click-hint { display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; color: var(--text3); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 1px 6px; margin-left: 5px; opacity: 0; transition: opacity 0.15s; vertical-align: middle; }
+  .disc-row-clickable:hover .disc-click-hint { opacity: 1; }
+
+  /* DISC DETAIL CARD MODAL */
+  #popup-disc-detail { width: min(96vw, 580px); }
+  .disc-detail-body { padding: 16px 20px 20px; }
+  .disc-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0; align-items: stretch; }
+  .disc-compare-grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin: 18px 0; }
+  .disc-compare-side { background: rgba(37,99,235,0.05); border: 1px solid rgba(37,99,235,0.12); border-radius: 12px; padding: 12px 14px; text-align: center; display:flex; flex-direction:column; justify-content:center; }
+  .disc-compare-side.pdup-side { border-color: rgba(37,99,235,0.3); background: rgba(37,99,235,0.06); }
+  .disc-compare-side.oft-side { border-color: rgba(97,184,255,0.3); background: rgba(97,184,255,0.06); }
+  .disc-compare-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .pdup-side .disc-compare-label { color: rgba(37,99,235,0.8); }
+  .oft-side .disc-compare-label { color: rgba(97,184,255,0.7); }
+  .disc-compare-val { font-size: 22px; font-weight: 700; line-height: 1; }
+  .pdup-side .disc-compare-val { color: var(--accent); }
+  .oft-side .disc-compare-val { color: var(--accent2); }
+  .disc-compare-sub { font-size: 10.5px; color: var(--text3); margin-top: 4px; }
+  .disc-compare-arrow { text-align: center; font-size: 22px; color: var(--text3); }
+  .disc-result-row { display: flex; gap: 10px; margin-top: 0; flex-wrap: wrap; }
+  .disc-result-chip { flex: 1; min-width: 120px; border-radius: 12px; padding: 12px 14px; text-align: center; display:flex; flex-direction:column; justify-content:center; }
+  .disc-result-chip.chip-kg { background: rgba(255,197,61,0.1); border: 1px solid rgba(255,197,61,0.3); }
+  .disc-result-chip.chip-rp { background: rgba(255,107,135,0.1); border: 1px solid rgba(255,107,135,0.3); }
+  .disc-result-chip.chip-pos-kg { background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.28); }
+  .disc-result-chip.chip-pos-rp { background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.28); }
+  .disc-result-chip-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); margin-bottom: 5px; }
+  .disc-result-chip-val { font-size: 18px; font-weight: 700; }
+  .chip-kg .disc-result-chip-val, .chip-rp .disc-result-chip-val { color: var(--coral); }
+  .chip-pos-kg .disc-result-chip-val, .chip-pos-rp .disc-result-chip-val { color: var(--accent); }
+  .disc-meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(37,99,235,0.10); }
+  .disc-meta-chip { background: rgba(37,99,235,0.06); border: 1px solid rgba(37,99,235,0.14); border-radius: 8px; padding: 6px 12px; font-size: 11px; color: var(--text2); }
+  .disc-meta-chip span { color: var(--text3); font-size: 10px; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .disc-rp-compare { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin: 14px 0 0; }
+  .disc-rp-side { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 14px; text-align: center; display:flex; flex-direction:column; justify-content:center; }
+  .disc-rp-side.rp-oft { border-color: rgba(37,99,235,0.25); }
+  .disc-rp-side.rp-pf  { border-color: rgba(255,197,61,0.25); }
+  .disc-rp-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); margin-bottom: 5px; }
+  .rp-oft .disc-rp-label { color: rgba(37,99,235,0.7); }
+  .rp-pf .disc-rp-label { color: rgba(255,197,61,0.6); }
+  .disc-rp-val { font-size: 16px; font-weight: 700; }
+  .rp-oft .disc-rp-val { color: var(--accent); }
+  .rp-pf .disc-rp-val { color: var(--amber); }
+  .disc-rp-sub { font-size: 10px; color: var(--text3); margin-top: 3px; }
+  .disc-section-title { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; margin-top: 14px; }
+  @media (max-width: 640px) {
+    .disc-3col { grid-template-columns: 1fr; }
+  }
+
+  /* MOBILE: un-stick filter bar, tighten header, constrain popover widths */
+  @media (max-width: 700px) {
+    .header { padding: 10px 14px; }
+    .header-icon { width: 30px; height: 30px; font-size: 13px; }
+    .header-title { font-size: 13px; }
+    .header-sub { font-size: 10px; }
+    .header-badge { font-size: 9.5px; padding: 4px 10px; }
+    .filter-bar { position: static; top: auto; padding: 10px 14px; }
+    .cal-panel, .dd-panel {
+      max-width: calc(100vw - 32px);
+      width: calc(100vw - 32px);
+    }
+  }
+
+  /* ============ DARK THEME — CSS variables (from color design file) ============ */
+  html[data-theme="dark"] {
+    --glass-bg: rgba(255,255,255,0.09);
+    --glass-bg-strong: rgba(255,255,255,0.13);
+    --glass-bg-card: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.20);
+    --glass-border-soft: rgba(255,255,255,0.13);
+    --text: rgba(255,255,255,1.0);
+    --text2: rgba(255,255,255,0.80);
+    --text3: rgba(255,255,255,0.50);
+    --accent: #2ee8a0;
+    --accent-light: rgba(46,232,160,0.22);
+    --accent2: #61b8ff;
+    --accent2-light: rgba(97,184,255,0.22);
+    --green: #2ee8a0;
+    --green-light: rgba(46,232,160,0.22);
+    --amber: #ffc53d;
+    --amber-light: rgba(255,197,61,0.22);
+    --coral: #ff6b87;
+    --coral-light: rgba(255,107,135,0.22);
+    --shadow: 0 8px 32px rgba(0,0,0,0.16);
+    --shadow-sm: 0 4px 16px rgba(0,0,0,0.10);
+  }
+
+
+  /* ============ THEME TOGGLE BUTTON ============ */
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .theme-toggle-btn {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; line-height: 1; cursor: pointer; transition: all 0.2s; padding: 0;
+  }
+  .theme-toggle-btn:hover { border-color: rgba(37,99,235,0.4); background: rgba(37,99,235,0.08); transform: scale(1.05); }
+  html[data-theme="dark"] .theme-toggle-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); }
+  html[data-theme="dark"] .theme-toggle-btn:hover { background: rgba(46,232,160,0.15); border-color: rgba(46,232,160,0.4); }
+
+  /* ============ DARK THEME OVERRIDES (auto-generated from color design file) ============ */
+  html[data-theme="dark"] body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: #1a2d4a;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden; color-scheme: dark; }
+  html[data-theme="dark"] .pw-gate { position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    background: #1a2d4a;
+    transition: opacity 0.4s ease; }
+  html[data-theme="dark"] .pw-gate::before { content: '';
+    position: fixed; top: -20%; left: -10%; width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(99,102,241,0.30) 0%, rgba(139,92,246,0.16) 40%, transparent 70%);
+    border-radius: 50%; pointer-events: none; }
+  html[data-theme="dark"] .pw-gate::after { content: '';
+    position: fixed; bottom: -15%; right: -8%; width: 55vw; height: 55vw;
+    background: radial-gradient(circle, rgba(20,184,166,0.24) 0%, rgba(59,130,246,0.14) 40%, transparent 70%);
+    border-radius: 50%; pointer-events: none; }
+  html[data-theme="dark"] .pw-sub { font-size: 12.5px; color: var(--text3); margin-bottom: 18px; }
+  html[data-theme="dark"] .pw-input { width: 100%; background: rgba(255,255,255,0.09); border: 1px solid var(--glass-border-soft);
+    border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: inherit;
+    padding: 10px 14px; outline: none; transition: all 0.2s; text-align: center; }
+  html[data-theme="dark"] .pw-input:focus { border-color: rgba(46,232,160,0.5); box-shadow: 0 0 0 3px rgba(46,232,160,0.12); background: rgba(255,255,255,0.09); }
+  html[data-theme="dark"] .pw-btn { width: 100%; margin-top: 12px; background: linear-gradient(135deg, rgba(46,232,160,0.3), rgba(97,184,255,0.22));
+    border: 1px solid rgba(46,232,160,0.5); border-radius: var(--radius-sm); color: var(--accent);
+    font-size: 13.5px; font-weight: 600; font-family: inherit; padding: 10px 14px; cursor: pointer; transition: all 0.2s; }
+  html[data-theme="dark"] .pw-btn:hover { background: linear-gradient(135deg, rgba(46,232,160,0.45), rgba(97,184,255,0.32)); }
+  html[data-theme="dark"] body::before { content: '';
+    position: fixed; top: -20%; left: -10%; width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(99,102,241,0.30) 0%, rgba(139,92,246,0.16) 40%, transparent 70%);
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    animation: orb1 18s ease-in-out infinite alternate; }
+  html[data-theme="dark"] body::after { content: '';
+    position: fixed; bottom: -15%; right: -8%; width: 55vw; height: 55vw;
+    background: radial-gradient(circle, rgba(20,184,166,0.24) 0%, rgba(59,130,246,0.14) 40%, transparent 70%);
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    animation: orb2 22s ease-in-out infinite alternate; }
+  html[data-theme="dark"] .orb-mid { position: fixed; top: 45%; left: 55%; width: 40vw; height: 40vw;
+    background: radial-gradient(circle, rgba(236,72,153,0.14) 0%, transparent 65%);
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    animation: orb3 15s ease-in-out infinite alternate; }
+  html[data-theme="dark"] .header { background: rgba(255,255,255,0.10); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid rgba(255,255,255,0.14); padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100; }
+  html[data-theme="dark"] .header-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 16px rgba(99,102,241,0.50); }
+  html[data-theme="dark"] .header-sub { font-size: 11.5px; color: var(--text3); margin-top: 1px; }
+  html[data-theme="dark"] .header-badge { background: linear-gradient(135deg, rgba(46,232,160,0.22), rgba(97,184,255,0.18)); border: 1px solid rgba(46,232,160,0.35); color: var(--accent); font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 30px; white-space: nowrap; backdrop-filter: var(--glass-blur-sm); letter-spacing: 0.02em; }
+  html[data-theme="dark"] .filter-bar { background: #212f4a;
+    border-bottom: 1px solid rgba(255,255,255,0.09); padding: 14px 28px;
+    display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap;
+    position: sticky; top: 69px; z-index: 90;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+  html[data-theme="dark"] .filter-label { font-size: 10.5px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  html[data-theme="dark"] .period-btn { background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border-soft); border-radius: var(--radius-sm); color: var(--text2); font-size: 12px; font-family: inherit; font-weight: 500; padding: 8px 15px; cursor: pointer; transition: all 0.2s; }
+  html[data-theme="dark"] .period-btn.active { background: linear-gradient(135deg, rgba(46,232,160,0.3), rgba(97,184,255,0.22)); border-color: rgba(46,232,160,0.5); color: var(--accent); box-shadow: 0 2px 12px rgba(46,232,160,0.2); }
+  html[data-theme="dark"] .filter-bar input[type="date"] { background: rgba(255,255,255,0.09); border: 1px solid var(--glass-border-soft); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-family: inherit; padding: 8px 10px; outline: none; cursor: pointer; min-width: 140px; transition: all 0.2s; backdrop-filter: var(--glass-blur-sm); color-scheme: dark; }
+  html[data-theme="dark"] .filter-bar input[type="date"]:focus { border-color: rgba(46,232,160,0.5); box-shadow: 0 0 0 3px rgba(46,232,160,0.12); background: rgba(255,255,255,0.09); }
+  html[data-theme="dark"] .cal-month-btn { background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border-soft); border-radius: var(--radius-sm); color: var(--text2); font-size: 11.5px; font-family: inherit; font-weight: 500; padding: 7px 13px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  html[data-theme="dark"] .cal-month-btn.active { background: linear-gradient(135deg, rgba(46,232,160,0.3), rgba(97,184,255,0.22)); border-color: rgba(46,232,160,0.5); color: var(--accent); box-shadow: 0 2px 12px rgba(46,232,160,0.2); }
+  html[data-theme="dark"] .cal-trigger { display: flex; align-items: center; gap: 8px; background: #243858; border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-family: inherit; padding: 8px 14px; cursor: pointer; min-width: 220px; transition: all 0.2s; user-select: none; white-space: nowrap; }
+  html[data-theme="dark"] .cal-trigger:hover, html[data-theme="dark"] .cal-trigger.open { border-color: rgba(46,232,160,0.5); background: #293f62; box-shadow: 0 0 0 3px rgba(46,232,160,0.10); }
+  html[data-theme="dark"] .cal-count-badge { background: linear-gradient(135deg,rgba(46,232,160,0.35),rgba(97,184,255,0.28)); border:1px solid rgba(46,232,160,0.4); color:var(--accent); font-size:10px; font-weight:700; padding:1px 7px; border-radius:20px; min-width:20px; text-align:center; }
+  html[data-theme="dark"] .cal-panel { position: absolute; top: calc(100% + 8px); left: 0; background: #1d2f4c; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,5,20,0.45); z-index: 300; padding: 16px; width: 360px; animation: ddFadeIn 0.15s ease; }
+  html[data-theme="dark"] .rp-tab { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text2); font-size: 11.5px; font-family: inherit; font-weight: 500; padding: 7px 4px; cursor: pointer; text-align: center; transition: all 0.18s; white-space: nowrap; }
+  html[data-theme="dark"] .rp-tab.active { background: linear-gradient(135deg,rgba(46,232,160,0.28),rgba(97,184,255,0.18)); border-color: rgba(46,232,160,0.55); color: var(--accent); font-weight: 600; }
+  html[data-theme="dark"] .rp-view-btn { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 7px; color: var(--text2); font-size: 11px; font-family: inherit; padding: 5px 4px; cursor: pointer; text-align: center; transition: all 0.15s; }
+  html[data-theme="dark"] .rp-month-cell:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.09); }
+  html[data-theme="dark"] .rp-day-cell { aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11.5px; color: var(--text2); cursor: pointer; transition: all 0.15s; border: 1px solid transparent; position: relative; }
+  html[data-theme="dark"] .rp-day-cell:hover:not(.empty-cell) { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.14); }
+  html[data-theme="dark"] .rp-day-cell.today-cell { border-color: rgba(46,232,160,0.5); color: var(--accent); font-weight: 700; }
+  html[data-theme="dark"] .rp-day-cell.sel-day { background: linear-gradient(135deg,rgba(46,232,160,0.35),rgba(97,184,255,0.25)); border-color: rgba(46,232,160,0.6); color: var(--accent); font-weight: 700; box-shadow: 0 2px 8px rgba(46,232,160,0.2); }
+  html[data-theme="dark"] .rp-day-cell.in-range-day { background: rgba(46,232,160,0.1); border-color: rgba(46,232,160,0.2); color: var(--text); }
+  html[data-theme="dark"] .rp-actions { display: flex; gap: 6px; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; margin-top: 2px; }
+  html[data-theme="dark"] .rp-btn-apply { background: linear-gradient(135deg,rgba(46,232,160,0.3),rgba(97,184,255,0.22)); border-color: rgba(46,232,160,0.5); color: var(--accent); font-weight: 600; }
+  html[data-theme="dark"] .rp-btn-apply:hover { background: linear-gradient(135deg,rgba(46,232,160,0.45),rgba(97,184,255,0.32)); }
+  html[data-theme="dark"] .dd-trigger { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.09); border: 1px solid var(--glass-border-soft); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-family: inherit; padding: 8px 12px; cursor: pointer; min-width: 190px; transition: all 0.2s; backdrop-filter: var(--glass-blur-sm); user-select: none; white-space: nowrap; }
+  html[data-theme="dark"] .dd-trigger:hover, html[data-theme="dark"] .dd-trigger.open { border-color: rgba(46,232,160,0.45); background: rgba(255,255,255,0.09); box-shadow: 0 0 0 3px rgba(46,232,160,0.10); }
+  html[data-theme="dark"] .dd-count { background: linear-gradient(135deg, rgba(46,232,160,0.35), rgba(97,184,255,0.28)); border: 1px solid rgba(46,232,160,0.4); color: var(--accent); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 20px; min-width: 20px; text-align: center; }
+  html[data-theme="dark"] .dd-panel { position: absolute; top: calc(100% + 6px); left: 0; min-width: 240px; max-width: 320px; background: rgba(15,23,42,0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: var(--radius); box-shadow: 0 16px 48px rgba(0,5,20,0.38), 0 0 0 1px rgba(255,255,255,0.05) inset; z-index: 200; overflow: hidden; animation: ddFadeIn 0.15s ease; }
+  html[data-theme="dark"] .dd-search-wrap { padding: 10px 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  html[data-theme="dark"] .dd-search { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: var(--text); font-size: 12.5px; font-family: inherit; padding: 7px 10px; outline: none; transition: border-color 0.2s; }
+  html[data-theme="dark"] .dd-search:focus { border-color: rgba(46,232,160,0.45); }
+  html[data-theme="dark"] .dd-actions { display: flex; gap: 6px; padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  html[data-theme="dark"] .dd-item { display: flex; align-items: center; gap: 10px; padding: 7px 14px; font-size: 12.5px; color: var(--text2); cursor: pointer; transition: background 0.12s, color 0.12s; user-select: none; }
+  html[data-theme="dark"] .dd-item:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+  html[data-theme="dark"] .btn-reset { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border-soft); border-radius: var(--radius-sm); color: var(--text2); font-size: 12px; font-family: inherit; padding: 8px 14px; cursor: pointer; transition: all 0.2s; align-self: flex-end; white-space: nowrap; }
+  html[data-theme="dark"] .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(46,232,160,0.55), transparent); }
+  html[data-theme="dark"] .kpi-label { font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 500; }
+  html[data-theme="dark"] .kpi-value { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+  html[data-theme="dark"] .kpi-foot { font-size: 11px; color: var(--text3); margin-top: 6px; }
+  html[data-theme="dark"] .kv-green { color: var(--accent); }
+  html[data-theme="dark"] .kv-purple { color: #c4b5fd; }
+  html[data-theme="dark"] .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(97,184,255,0.45), transparent); }
+  html[data-theme="dark"] .card-title { font-size: 10.5px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 16px; }
+  html[data-theme="dark"] .pie-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); cursor: pointer; padding: 4px 7px; border-radius: 8px; transition: background 0.15s; }
+  html[data-theme="dark"] .pie-legend-item:hover { background: rgba(255,255,255,0.08); }
+  html[data-theme="dark"] .pie-legend-pct { font-weight: 600; color: var(--text); font-size: 12px; min-width: 38px; text-align: right; }
+  html[data-theme="dark"] .toggle-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; color: var(--text2); font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  html[data-theme="dark"] .toggle-btn:hover { background: rgba(46,232,160,0.15); border-color: rgba(46,232,160,0.4); color: var(--accent); }
+  html[data-theme="dark"] .donut-center-val { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1; }
+  html[data-theme="dark"] .donut-center-lbl { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  html[data-theme="dark"] .status-name { font-size: 12px; color: var(--text2); font-weight: 500; }
+  html[data-theme="dark"] .status-val { font-size: 13px; font-weight: 700; color: var(--text); }
+  html[data-theme="dark"] .status-bar-bg { height: 7px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+  html[data-theme="dark"] .pay-paid { background: rgba(46,232,160,0.18); color: var(--accent); border: 1px solid rgba(46,232,160,0.3); }
+  html[data-theme="dark"] .pay-unpaid { background: rgba(255,107,135,0.18); color: var(--coral); border: 1px solid rgba(255,107,135,0.3); }
+  html[data-theme="dark"] .doc-yes { display: inline-block; width: 18px; height: 18px; background: rgba(46,232,160,0.2); border: 1px solid rgba(46,232,160,0.4); border-radius: 5px; text-align: center; line-height: 18px; font-size: 10px; color: var(--accent); }
+  html[data-theme="dark"] thead tr { border-bottom: 1px solid rgba(255,255,255,0.14); }
+  html[data-theme="dark"] th { padding: 9px 10px; text-align: left; font-size: 10.5px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+  html[data-theme="dark"] td { padding: 8px 10px; color: var(--text2); border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: middle; }
+  html[data-theme="dark"] tbody tr:hover td { background: rgba(255,255,255,0.05); color: var(--text); }
+  html[data-theme="dark"] .bp-filter-search { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; color: var(--text); font-size: 11px; font-weight: 500; font-family: inherit; padding: 5px 26px 5px 10px; cursor: text; transition: all 0.15s; width: 170px; outline: none; }
+  html[data-theme="dark"] .bp-filter-search:focus { border-color: rgba(46,232,160,0.5); background: rgba(255,255,255,0.1); }
+  html[data-theme="dark"] .bp { background: rgba(46,232,160,0.18); color: var(--accent); border: 1px solid rgba(46,232,160,0.3); }
+  html[data-theme="dark"] .section-label { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 0 4px; border-top: 1px solid rgba(255,255,255,0.07); margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+  html[data-theme="dark"] .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+  html[data-theme="dark"] .empty { padding: 48px 20px; text-align: center; color: var(--text3); font-size: 13px; }
+  html[data-theme="dark"] .section-click-hint { font-size: 10px; font-weight: 600; color: var(--accent); background: rgba(46,232,160,0.12); border: 1px solid rgba(46,232,160,0.3); border-radius: 6px; padding: 2px 8px; margin-left: 6px; opacity: 0; transition: opacity 0.2s; letter-spacing: 0.04em; text-transform: none; }
+  html[data-theme="dark"] .popup-overlay { position: fixed; inset: 0; background: rgba(0,5,20,0.55); backdrop-filter: blur(4px); z-index: 500; }
+  html[data-theme="dark"] .popup-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.96); background: #1d2f4c; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; box-shadow: 0 24px 80px rgba(0,5,20,0.55); z-index: 600; width: min(96vw, 1100px); max-height: 85vh; flex-direction: column; overflow: hidden; }
+  html[data-theme="dark"] .popup-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; gap: 12px; flex-wrap: wrap; }
+  html[data-theme="dark"] .popup-search { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 9px; color: var(--text); font-size: 12.5px; font-family: inherit; padding: 7px 12px; outline: none; min-width: 220px; transition: border-color 0.2s; }
+  html[data-theme="dark"] .popup-search:focus { border-color: rgba(46,232,160,0.5); background: rgba(255,255,255,0.12); }
+  html[data-theme="dark"] .popup-close { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 9px; color: var(--text2); font-size: 16px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+  html[data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+  html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+  html[data-theme="dark"] .disc-sort-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 7px; color: var(--text3); font-size: 10.5px; font-family: inherit; font-weight: 600; padding: 4px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; display:inline-flex; align-items:center; gap:4px; }
+  html[data-theme="dark"] .disc-sort-btn:hover { border-color: rgba(97,184,255,0.4); color: var(--accent2); background: rgba(97,184,255,0.08); }
+  html[data-theme="dark"] .disc-sort-btn.active-asc, html[data-theme="dark"] .disc-sort-btn.active-desc { background: rgba(97,184,255,0.18); border-color: rgba(97,184,255,0.5); color: var(--accent2); }
+  html[data-theme="dark"] .disc-row-clickable:hover td { background: rgba(97,184,255,0.08) !important; color: var(--text) !important; }
+  html[data-theme="dark"] .disc-compare-side { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 14px; text-align: center; display:flex; flex-direction:column; justify-content:center; }
+  html[data-theme="dark"] .disc-compare-side.pdup-side { border-color: rgba(46,232,160,0.3); background: rgba(46,232,160,0.06); }
+  html[data-theme="dark"] .pdup-side .disc-compare-label { color: rgba(46,232,160,0.7); }
+  html[data-theme="dark"] .disc-result-chip.chip-pos-kg { background: rgba(46,232,160,0.1); border: 1px solid rgba(46,232,160,0.3); }
+  html[data-theme="dark"] .disc-result-chip.chip-pos-rp { background: rgba(46,232,160,0.1); border: 1px solid rgba(46,232,160,0.3); }
+  html[data-theme="dark"] .disc-meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+  html[data-theme="dark"] .disc-meta-chip { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 12px; font-size: 11px; color: var(--text2); }
+  html[data-theme="dark"] .disc-rp-side.rp-oft { border-color: rgba(46,232,160,0.25); }
+  html[data-theme="dark"] .rp-oft .disc-rp-label { color: rgba(46,232,160,0.6); }
+</style>
+</head>
+<body>
+
+<!-- ═══ PASSWORD GATE ═══ -->
+<div id="pw-gate" class="pw-gate">
+  <div class="pw-box">
+    <div class="pw-icon">🔒</div>
+    <div class="pw-title">Dashboard CC Ciracas</div>
+    <div class="pw-sub">Masukkan password untuk mengakses dashboard</div>
+    <input type="password" id="pw-input" class="pw-input" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter') checkPwGate()">
+    <button class="pw-btn" onclick="checkPwGate()">Masuk</button>
+    <div class="pw-error" id="pw-error">Password salah, coba lagi.</div>
+  </div>
+</div>
+
+<div id="pw-content" class="pw-content">
+<div class="orb-mid"></div>
+
+<div class="header">
+  <div class="header-logo">
+    <div class="header-icon">♻️</div>
+    <div>
+      <div class="header-title">CC Ciracas — Sales</div>
+      <div class="header-sub">Laporan berat, pembayaran & kelengkapan dokumen · Jan–Jun 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="header-badge" id="rangeLabel">Jan – Jun 2026</span>
+    <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Switch to dark mode">
+      <span id="themeToggleIcon">🌙</span>
+    </button>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <!-- Bulan / Tanggal — Range picker -->
+  <div class="filter-group">
+    <span class="filter-label">📅 Bulan / Tanggal</span>
+    <div class="dd-wrap" id="cal-picker-wrap">
+      <div class="cal-trigger" id="cal-trigger" onclick="toggleCalPanel()">
+        <span class="cal-trigger-icon">📅</span>
+        <span class="cal-trigger-txt placeholder" id="cal-trigger-txt">Semua tanggal</span>
+        <span class="cal-count-badge" id="cal-count-badge" style="display:none"></span>
+        <span class="cal-trigger-arrow">▼</span>
+      </div>
+      <div class="cal-panel" id="cal-panel">
+
+        <!-- Mode tabs -->
+        <div class="rp-tabs">
+          <button class="rp-tab active" id="rp-tab-all"    onclick="rpSetMode('all',this)">Semua</button>
+          <button class="rp-tab"        id="rp-tab-today"  onclick="rpSetMode('today',this)">Hari Ini</button>
+          <button class="rp-tab"        id="rp-tab-custom" onclick="rpSetMode('custom',this)">Custom</button>
+        </div>
+
+        <!-- Today info bar -->
+        <div class="rp-today-bar" id="rp-today-bar"></div>
+
+        <!-- View toggle: Per Bulan / Per Hari (shown in Custom mode) -->
+        <div class="rp-view-toggle" id="rp-view-toggle">
+          <button class="rp-view-btn active" id="rp-vt-month" onclick="rpSetView('month',this)">📅 Per Bulan</button>
+          <button class="rp-view-btn"        id="rp-vt-day"   onclick="rpSetView('day',this)">🗓️ Per Hari</button>
+        </div>
+
+        <!-- MONTH GRID -->
+        <div class="rp-month-wrap" id="rp-month-wrap">
+          <div class="rp-year-nav">
+            <button class="rp-year-btn" onclick="rpNavYear(-1)">◀◀</button>
+            <span class="rp-year-label" id="rp-year-label">2026</span>
+            <button class="rp-year-btn" onclick="rpNavYear(1)">▶▶</button>
+          </div>
+          <div class="rp-month-grid" id="rp-month-grid"></div>
+        </div>
+
+        <!-- DAY GRID -->
+        <div class="rp-day-wrap" id="rp-day-wrap">
+          <div class="rp-day-nav">
+            <button class="rp-day-nav-btn" onclick="rpNavMonth(-1)">◀</button>
+            <span class="rp-day-nav-label" id="rp-day-nav-label"></span>
+            <button class="rp-day-nav-btn" onclick="rpNavMonth(1)">▶</button>
+          </div>
+          <div class="rp-dow-row" id="rp-dow-row"></div>
+          <div class="rp-day-grid" id="rp-day-grid"></div>
+        </div>
+
+        <!-- Preview bar -->
+        <div class="rp-preview" id="rp-preview"></div>
+
+        <!-- Actions -->
+        <div class="rp-actions">
+          <button class="rp-btn rp-btn-clear" onclick="rpClear()">Hapus</button>
+          <button class="rp-btn rp-btn-apply" onclick="rpApply()">Terapkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offtaker -->
+  <div class="filter-group">
+    <span class="filter-label">🏭 Offtaker</span>
+    <div class="dd-wrap" id="dd-offtaker">
+      <div class="dd-trigger" onclick="toggleDropdown('dd-offtaker')">
+        <span class="dd-trigger-label placeholder" id="dd-offtaker-label">Semua offtaker</span>
+        <span class="dd-count" id="dd-offtaker-count" style="display:none"></span>
+        <span class="dd-arrow">▼</span>
+      </div>
+      <div class="dd-panel" id="dd-offtaker-panel">
+        <div class="dd-search-wrap"><input class="dd-search" placeholder="Cari offtaker…" oninput="filterDdItems('dd-offtaker',this.value)"/></div>
+        <div class="dd-actions">
+          <button class="dd-act-btn" onclick="selectAllDd('dd-offtaker')">Pilih semua</button>
+          <button class="dd-act-btn" onclick="clearDd('dd-offtaker')">Hapus semua</button>
+        </div>
+        <div class="dd-list" id="dd-offtaker-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jenis Material -->
+  <div class="filter-group">
+    <span class="filter-label">♻️ Jenis Material</span>
+    <div class="dd-wrap" id="dd-material">
+      <div class="dd-trigger" onclick="toggleDropdown('dd-material')">
+        <span class="dd-trigger-label placeholder" id="dd-material-label">Semua material</span>
+        <span class="dd-count" id="dd-material-count" style="display:none"></span>
+        <span class="dd-arrow">▼</span>
+      </div>
+      <div class="dd-panel" id="dd-material-panel">
+        <div class="dd-search-wrap"><input class="dd-search" placeholder="Cari material…" oninput="filterDdItems('dd-material',this.value)"/></div>
+        <div class="dd-actions">
+          <button class="dd-act-btn" onclick="selectAllDd('dd-material')">Pilih semua</button>
+          <button class="dd-act-btn" onclick="clearDd('dd-material')">Hapus semua</button>
+        </div>
+        <div class="dd-list" id="dd-material-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="resetFilters()">↺ Reset</button>
+</div>
+
+<div class="main">
+
+  <!-- ═══ SECTION: VOLUME & WEIGHT ═══ -->
+  <div class="section-label clickable-section" onclick="openPopup('volume')" title="Klik untuk lihat tabel detail">📦 Volume &amp; Timbang <span class="section-click-hint">🔍 Lihat Tabel</span></div>
+
+  <!-- KPI Row 1: Volume -->
+  <div class="kpi-row" style="margin-bottom:14px;">
+    <div class="kpi-card">
+      <div class="kpi-label">Total volume (PDUP)</div>
+      <div class="kpi-value kv-green"><span id="kpi-vol">—</span><span class="kpi-unit">kg</span></div>
+      <div class="kpi-foot" id="kpi-vol-t">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Jumlah transaksi</div>
+      <div class="kpi-value kv-blue"><span id="kpi-txn">—</span></div>
+      <div class="kpi-foot">No. SJ unik</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Offtaker aktif</div>
+      <div class="kpi-value"><span id="kpi-oft">—</span></div>
+      <div class="kpi-foot">pembeli unik</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Rata-rata selisih</div>
+      <div class="kpi-value kv-amber"><span id="kpi-gap">—</span><span class="kpi-unit">kg</span></div>
+      <div class="kpi-foot">PDUP vs offtaker per baris</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total selisih</div>
+      <div class="kpi-value kv-coral"><span id="kpi-totgap">—</span><span class="kpi-unit">kg</span></div>
+      <div class="kpi-foot" id="kpi-totgap-pct">—</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: KEUANGAN ═══ -->
+  <div class="section-label clickable-section" onclick="openPopup('keuangan')" title="Klik untuk lihat tabel detail">💰 Keuangan &amp; Pembayaran <span class="section-click-hint">🔍 Lihat Tabel</span></div>
+
+  <!-- KPI Row 2: Financial -->
+  <div class="kpi-row" style="margin-bottom:14px;">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Net Diterima</div>
+      <div class="kpi-value kv-green" style="font-size:20px;"><span id="kpi-net">—</span></div>
+      <div class="kpi-foot">pendapatan bersih</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Selisih Total Offtaker vs Proforma</div>
+      <div class="kpi-value" style="font-size:18px;"><span id="kpi-selisih-oft-pf">—</span></div>
+      <div class="kpi-foot" id="kpi-selisih-lbl">Offtaker vs Proforma</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Status Paid <span style="font-size:9px;color:var(--text3)">(per No.SJ)</span></div>
+      <div class="kpi-value kv-green"><span id="kpi-paid">—</span></div>
+      <div class="kpi-foot" id="kpi-paid-pct">dari total SJ</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Status Unpaid <span style="font-size:9px;color:var(--text3)">(per No.SJ)</span></div>
+      <div class="kpi-value kv-coral"><span id="kpi-unpaid">—</span></div>
+      <div class="kpi-foot" id="kpi-unpaid-val">SJ</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Delivery Completed <span style="font-size:9px;color:var(--text3)">(per No.SJ)</span></div>
+      <div class="kpi-value kv-blue"><span id="kpi-completed">—</span></div>
+      <div class="kpi-foot" id="kpi-completed-pct">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Delivery Delivered <span style="font-size:9px;color:var(--text3)">(per No.SJ)</span></div>
+      <div class="kpi-value kv-amber"><span id="kpi-delivered">—</span></div>
+      <div class="kpi-foot">dalam proses</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: DOKUMEN ═══ -->
+  <div class="section-label">📋 Kelengkapan Dokumen</div>
+
+  <!-- Doc completion progress bars -->
+  <div class="row row-1" style="margin-bottom:16px;">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div class="card-title" style="margin-bottom:0;">Progress Kelengkapan Dokumen</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          <button class="period-btn active" id="doc-filter-all" onclick="setDocFilter('all',this)" style="font-size:11px;padding:5px 11px;">Semua</button>
+          <button class="period-btn" id="doc-filter-complete" onclick="setDocFilter('complete',this)" style="font-size:11px;padding:5px 11px;border-color:rgba(46,232,160,0.3)">✅ Lengkap</button>
+          <button class="period-btn" id="doc-filter-partial" onclick="setDocFilter('partial',this)" style="font-size:11px;padding:5px 11px;border-color:rgba(255,197,61,0.3)">⚠️ Sebagian</button>
+        </div>
+      </div>
+      <div class="status-grid">
+        <div class="status-item">
+          <div class="status-header">
+            <span class="status-name">✅ Surat Jalan</span>
+            <span class="status-val"><span id="doc-sj-n">—</span> / <span id="doc-sj-t">—</span></span>
+          </div>
+          <div class="status-bar-bg"><div class="status-bar-fill" id="doc-sj-bar" style="background:var(--green);width:0%"></div></div>
+          <div class="status-foot"><span id="doc-sj-pct">—</span>% lengkap</div>
+        </div>
+        <div class="status-item">
+          <div class="status-header">
+            <span class="status-name">🧾 Receipt Offtaker</span>
+            <span class="status-val"><span id="doc-rc-n">—</span> / <span id="doc-rc-t">—</span></span>
+          </div>
+          <div class="status-bar-bg"><div class="status-bar-fill" id="doc-rc-bar" style="background:var(--accent2);width:0%"></div></div>
+          <div class="status-foot"><span id="doc-rc-pct">—</span>% lengkap</div>
+        </div>
+        <div class="status-item">
+          <div class="status-header">
+            <span class="status-name">💸 Transfer</span>
+            <span class="status-val"><span id="doc-tr-n">—</span> / <span id="doc-tr-t">—</span></span>
+          </div>
+          <div class="status-bar-bg"><div class="status-bar-fill" id="doc-tr-bar" style="background:var(--amber);width:0%"></div></div>
+          <div class="status-foot"><span id="doc-tr-pct">—</span>% lengkap</div>
+        </div>
+        <div class="status-item">
+          <div class="status-header">
+            <span class="status-name">📁 Docs Fisik</span>
+            <span class="status-val"><span id="doc-df-n">—</span> / <span id="doc-df-t">—</span></span>
+          </div>
+          <div class="status-bar-bg"><div class="status-bar-fill" id="doc-df-bar" style="background:var(--coral);width:0%"></div></div>
+          <div class="status-foot"><span id="doc-df-pct">—</span>% lengkap</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: CHART ═══ -->
+  <div class="section-label">📊 Analitik Volume</div>
+
+  <!-- Trend + Revenue side by side -->
+  <div class="row row-2">
+    <div class="card">
+      <div class="card-title" id="trendTitle">Volume per bulan (kg PDUP)</div>
+      <div class="chart-wrap" style="height:210px;">
+        <canvas id="trendChart" role="img" aria-label="Trend volume PDUP per periode"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" id="revTitle">Net Diterima per bulan (Rp)</div>
+      <div class="chart-wrap" style="height:210px;">
+        <canvas id="revChart" role="img" aria-label="Net diterima per bulan"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offtaker donut + Material donut -->
+  <div class="row row-2">
+    <div class="card">
+      <div class="card-title">Porsi volume per offtaker <span style="font-size:11px;color:var(--text3);font-weight:400;">(klik untuk detail log)</span></div>
+      <div style="display:flex; gap:20px; align-items:center;">
+        <div class="donut-container" style="flex-shrink:0; width:200px; height:200px;">
+          <canvas id="offtakerPie" width="200" height="200"></canvas>
+          <div class="donut-center">
+            <div class="donut-center-val" id="pieOftTotal">—</div>
+            <div class="donut-center-lbl">total kg</div>
+          </div>
+        </div>
+        <div class="pie-legend" id="offtakerPieLegend" style="flex:1;"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Porsi volume per material (top 10) <span style="font-size:11px;color:var(--text3);font-weight:400;">(klik untuk detail log)</span></div>
+      <div style="display:flex; gap:20px; align-items:center;">
+        <div class="donut-container" style="flex-shrink:0; width:200px; height:200px;">
+          <canvas id="materialPie" width="200" height="200"></canvas>
+          <div class="donut-center">
+            <div class="donut-center-val" id="pieMatTotal">—</div>
+            <div class="donut-center-lbl">total kg</div>
+          </div>
+        </div>
+        <div class="pie-legend" id="materialPieLegend" style="flex:1;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Best price ranking per material -->
+  <div class="row row-1">
+    <div class="card">
+      <div class="card-title">
+        <span>🏆 Ranking Harga Terbaik per Material <span style="font-size:11px;color:var(--text3);font-weight:400;">(top 10)</span></span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:11px;color:var(--text3);font-weight:400;">harga/kg tertinggi yang pernah diberikan ke tiap offtaker</span>
+          <div class="bp-search-wrap">
+            <input id="bestPriceMatFilter" class="bp-filter-search" type="text" list="bestPriceMatList" placeholder="Cari material…" autocomplete="off" oninput="renderBestPriceRanking(window._lastRows)">
+            <datalist id="bestPriceMatList"></datalist>
+            <button class="bp-filter-clear" id="bestPriceMatClear" onclick="clearBestPriceFilter()" title="Hapus filter">✕</button>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap" id="bestPriceTable"></div>
+    </div>
+  </div>
+
+
+
+  <!-- ═══ SECTION: TABEL ═══ -->
+  <div class="section-label">📋 Tabel Detail</div>
+
+  <!-- Detail tables side by side -->
+  <div class="row row-2" style="margin-bottom:0;">
+    <div class="card">
+      <div class="card-title">
+        <span>Selisih Timbang Terbesar</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <div class="disc-sort-bar">
+            <button class="disc-sort-btn" id="disc-sort-kg"  onclick="setDiscSort('kg')"   title="Urutkan berdasarkan selisih berat">⚖️ Berat <span class="disc-sort-arrow" id="disc-sort-kg-arrow">↕</span></button>
+            <button class="disc-sort-btn" id="disc-sort-rp"  onclick="setDiscSort('rp')"   title="Urutkan berdasarkan selisih nilai">💰 Nilai <span class="disc-sort-arrow" id="disc-sort-rp-arrow">↕</span></button>
+            <button class="disc-sort-btn" id="disc-sort-date" onclick="setDiscSort('date')" title="Urutkan berdasarkan tanggal">📅 Tgl <span class="disc-sort-arrow" id="disc-sort-date-arrow">↕</span></button>
+          </div>
+          <button class="toggle-btn" id="discToggle" onclick="openDiscFullPopup()">Lihat Semua</button>
+        </div>
+      </div>
+      <div class="table-wrap detail-table-wrap" id="discTableWrap"><div id="discTable"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Transaksi — Unpaid &amp; Delivered <button class="toggle-btn" id="payToggle" onclick="openPayFullPopup()">Lihat Semua</button></div>
+      <div class="table-wrap detail-table-wrap" id="payTableWrap"><div id="payTable"></div></div>
+    </div>
+  </div>
+
+
+<!-- ═══ POPUP MODALS ═══ -->
+<div id="popup-overlay" class="popup-overlay" onclick="closePopup()"></div>
+
+<div id="popup-volume" class="popup-modal">
+  <div class="popup-header">
+    <div class="popup-title">📦 Detail Volume &amp; Timbang</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input class="popup-search" id="vol-search" placeholder="Cari offtaker / material…" oninput="filterPopupTable('vol')">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body">
+    <div class="table-wrap"><div id="vol-table-body"></div></div>
+  </div>
+</div>
+
+<div id="popup-filtered" class="popup-modal">
+  <div class="popup-header">
+    <div class="popup-title" id="filtered-popup-title">📄 Detail Log</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input class="popup-search" id="filtered-search" placeholder="Cari…" oninput="filterPopupTable('filtered')">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body">
+    <div class="table-wrap"><div id="filtered-table-body"></div></div>
+  </div>
+</div>
+
+<div id="popup-keuangan" class="popup-modal">
+  <div class="popup-header">
+    <div class="popup-title">💰 Detail Keuangan &amp; Pembayaran</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input class="popup-search" id="keu-search" placeholder="Cari No. SJ / offtaker…" oninput="filterPopupTable('keu')">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body">
+    <div class="table-wrap"><div id="keu-table-body"></div></div>
+  </div>
+</div>
+
+<!-- DISC DETAIL MODAL -->
+<div id="popup-disc-detail" class="popup-modal">
+  <div class="popup-header">
+    <div>
+      <div class="popup-title">⚖️ Detail Selisih Timbang</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Perbandingan berat PDUP vs berat offtaker</div>
+    </div>
+    <button class="popup-close" onclick="closePopup()">✕</button>
+  </div>
+  <div class="disc-detail-body" id="disc-detail-body">
+  </div>
+</div>
+
+<!-- DISC FULL LIST MODAL ("Lihat Semua" for Selisih Timbang Terbesar) -->
+<div id="popup-disc-full" class="popup-modal">
+  <div class="popup-header">
+    <div class="popup-title">⚖️ Semua Selisih Timbang</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input class="popup-search" id="disc-full-search" placeholder="Cari No. SJ / offtaker / material…" oninput="filterPopupTable('disc-full')">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body">
+    <div class="table-wrap"><div id="disc-full-table-body"></div></div>
+  </div>
+</div>
+
+<!-- PAY FULL LIST MODAL ("Lihat Semua" for Transaksi - Unpaid & Delivered) -->
+<div id="popup-pay-full" class="popup-modal">
+  <div class="popup-header">
+    <div class="popup-title">📦 Semua Transaksi — Unpaid &amp; Delivered</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input class="popup-search" id="pay-full-search" placeholder="Cari No. SJ / offtaker…" oninput="filterPopupTable('pay-full')">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+  </div>
+  <div class="popup-body">
+    <div class="table-wrap"><div id="pay-full-table-body"></div></div>
+  </div>
+</div>
+</div>
+
+<script>
+
+  let isDarkMode = false;
+  function applyChartTheming() {
+    Chart.defaults.color = isDarkMode ? 'rgba(255,255,255,0.75)' : '#1e1b3a';
+    Chart.defaults.font.family = "'Inter',system-ui,sans-serif";
+    Chart.defaults.borderColor = isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(37,99,235,0.08)';
+  }
+  applyChartTheming();
+// RAW: [date, offtaker, jenis, beratPDUP, beratOfftaker, hargaKg, totalOfftaker, totalProforma, netDiterima, invoiceNo, noSJ, payStatus, deliveryStatus, suratJalan, receiptOfftaker, transfer, docsFisik]
+const RAW = [
+  ["2026-01-06","Panca Kraft Pratama - UWAAA","Kardus",1180.5,1183.0,2350.0,2780050.0,2774175.0,2775050.0,"MGI/JAN/2026/001","SJ001","Paid","Completed",true,true,true,true],
+  ["2026-01-30","Lapak Tri","Kerasan Campur",2195.0,2195.0,1300.0,2853500.0,2853500.0,3000000.0,"MGI/JAN/2026/002","SJ004","Paid","Completed",true,true,true,true],
+  ["2026-02-03","PD Fajar Mandiri","Tutup Botol",184.0,184.0,5500.0,1012000.0,1012000.0,1012000.0,"MGI/FEB/2026/001","SJ005","Paid","Completed",true,true,true,true],
+  ["2026-02-03","Buana Plast","Cacah PP BN Sablon",625.0,625.0,7000.0,4375000.0,4375000.0,4375000.0,"MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true],
+  ["2026-02-03","Buana Plast","Cacah PP Mambo + Abu",106.0,106.0,4500.0,477000.0,477000.0,477000.0,"MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true],
+  ["2026-02-03","Buana Plast","Cacah PP Warna",1055.0,1055.0,5500.0,5802500.0,5802500.0,5802500.0,"MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true],
+  ["2026-02-03","Haka Sentral Plastik","Cacah PP PK",149.0,149.0,8500.0,1266500.0,1266500.0,1266500.0,"MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true],
+  ["2026-02-03","Haka Sentral Plastik","Cacah PP Hitam",475.0,475.0,5000.0,2375000.0,2375000.0,2375000.0,"MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true],
+  ["2026-02-03","Haka Sentral Plastik","Cacah PP Mambo",105.0,105.0,5000.0,525000.0,525000.0,525000.0,"MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true],
+  ["2026-02-06","BMPS","BP PET MIX",3922.0,3415.96,6200.0,21178952.0,24316400.0,21178952.0,"MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,true],
+  ["2026-02-06","BMPS","BP PET BN",378.5,369.0,6700.0,2472300.0,2535950.0,2472300.0,"MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,true],
+  ["2026-02-06","BMPS","BP PET BM",0.0,265.0,5700.0,1510500.0,0.0,1510500.0,"MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,true],
+  ["2026-02-06","BMPS","BP PET GALON LE",356.0,353.0,5600.0,1976800.0,1993600.0,1976800.0,"MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,true],
+  ["2026-02-06","BMPS","BP AG Bersih",185.5,184.0,7000.0,1288000.0,1298500.0,1288000.0,"MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,true],
+  ["2026-02-06","BMPS","BP AG Kotor",239.0,254.0,4500.0,1143000.0,1075500.0,1143000.0,"MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,true],
+  ["2026-02-09","Panca Kraft Pratama - Daya Selaras Group","Kardus",2682.0,2726.0,2550.0,6951300.0,6839100.0,6951300.0,"MGI/FEB/2026/006","SJ009","Paid","Completed",true,true,true,true],
+  ["2026-02-10","PD Fajar Mandiri","Tutup Botol",56.0,55.0,5500.0,302500.0,308000.0,302500.0,"MGI/FEB/2026/005","SJ010","Paid","Completed",true,true,true,true],
+  ["2026-02-21","PD Fajar Mandiri","Keleman PP",255.0,255.0,2000.0,510000.0,510000.0,510000.0,"MGI/FEB/2026/007","SJ011","Paid","Completed",true,true,true,true],
+  ["2026-02-23","Lapak Tri","Gabruk Kecil",1924.0,1924.0,800.0,1539200.0,1539200.0,1539200.0,"MGI/FEB/2026/007","SJ012","Paid","Completed",true,true,true,true],
+  ["2026-02-23","Lapak Tri","",510.0,451.0,800.0,360800.0,408000.0,360800.0,"MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true],
+  ["2026-02-23","Lapak Tri","PETC Warna",48.5,0.0,0.0,0.0,0.0,0.0,"MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true],
+  ["2026-02-25","Panca Kraft Pratama - Daya Selaras Group","Kardus",1805.5,1794.0,2550.0,4574700.0,4604025.0,4574700.0,"MGI/FEB/2026/009","SJ013","Paid","Completed",true,true,true,true],
+  ["2026-03-03","PT Kita Olah Indonesia","BP Naso",582.0,574.0,6500.0,3731000.0,3783000.0,3731000.0,"MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
+  ["2026-03-03","PT Kita Olah Indonesia","BP BLPK",297.0,291.0,6000.0,1746000.0,1782000.0,1746000.0,"MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
+  ["2026-03-03","PT Kita Olah Indonesia","BP BL Warna",168.0,183.0,5000.0,915000.0,840000.0,915000.0,"MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
+  ["2026-03-03","PT Kita Olah Indonesia","BP BL Merah",64.0,64.0,5000.0,320000.0,320000.0,320000.0,"MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
+  ["2026-03-03","PT Kita Olah Indonesia","BP BL Hitam",57.0,55.0,4000.0,220000.0,228000.0,220000.0,"MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
+  ["2026-03-04","Buana Plast","Cacah PP BN",599.5,599.0,9500.0,5690500.0,5695250.0,5690500.0,"","SJ016","Paid","Completed",true,true,true,true],
+  ["2026-03-04","Buana Plast","Cacah PP Warna",1391.0,1390.0,5500.0,7645000.0,7650500.0,7645000.0,"","SJ016","Paid","Completed",true,true,true,true],
+  ["2026-03-05","PT Indah Kiat - Uwaaa","Duplek",1534.0,1280.4,1550.0,1984620.0,2377700.0,1984620.0,"","SJ015","Paid","Completed",true,true,true,true],
+  ["2026-03-06","BMPS","BP PET MIX",2467.5,2579.95,6800.0,17543660.0,16779000.0,17543660.0,"","SJ019","Paid","Completed",true,true,true,true],
+  ["2026-03-06","BMPS","BP Galon Le",1094.5,1100.0,5600.0,6160000.0,6129200.0,6160000.0,"","SJ019","Paid","Completed",true,true,true,true],
+  ["2026-03-06","Haka Sentral Plastik","Cacah PP Hitam",729.5,749.0,5000.0,3745000.0,3647500.0,3745000.0,"","SJ018","Paid","Completed",true,true,true,true],
+  ["2026-03-06","Haka Sentral Plastik","Cacah PP PK",401.5,383.0,8500.0,3255500.0,3412750.0,3255500.0,"","SJ018","Paid","Completed",true,true,true,true],
+  ["2026-03-07","PT Kita Olah Indonesia","BP AG Bersih",170.5,170.0,6000.0,1020000.0,1023000.0,1020000.0,"","SJ017","Paid","Completed",true,true,true,true],
+  ["2026-03-07","PT Kita Olah Indonesia","BP AG Kotor",1076.5,1045.0,3000.0,3135000.0,3229500.0,3135000.0,"","SJ017","Paid","Completed",true,true,true,true],
+  ["2026-03-07","PT Kita Olah Indonesia","BP Monti",248.5,240.0,2500.0,600000.0,621250.0,600000.0,"","SJ017","Paid","Completed",true,true,true,true],
+  ["2026-03-07","PT Kita Olah Indonesia","BP BL Warna",214.0,211.0,5000.0,1055000.0,1070000.0,1055000.0,"","SJ017","Paid","Completed",true,true,true,true],
+  ["2026-03-07","PT Kita Olah Indonesia","BP Oli Warna",113.0,113.0,5000.0,565000.0,565000.0,565000.0,"","SJ017","Paid","Completed",true,true,true,true],
+  ["2026-03-07","PT Kita Olah Indonesia","BP Oli Hitam",13.5,13.0,4000.0,52000.0,54000.0,52000.0,"","SJ017","Paid","Completed",true,true,true,true],
+  ["2026-03-07","PT Kita Olah Indonesia","BP Facial Wash",60.0,50.0,1500.0,75000.0,90000.0,75000.0,"","SJ017","Paid","Completed",true,true,true,true],
+  ["2026-03-11","PD Fajar Mandiri","Tutup Botol",120.0,118.0,5500.0,649000.0,660000.0,649000.0,"","SJ021","Paid","Completed",true,true,true,true],
+  ["2026-03-12","Panca Kraft Pratama - Daya Selaras Group","Kardus",1449.0,1320.0,2550.0,3366000.0,3694950.0,3366000.0,"","SJ022","Paid","Completed",true,true,true,true],
+  ["2026-03-14","Lapak Tri","Boncos",2605.0,2130.0,900.0,1917000.0,2344500.0,1917000.0,"","SJ024","Paid","Completed",true,true,true,true],
+  ["2026-03-16","Buana Plast","Cacah PP BN",257.0,257.0,9500.0,2441500.0,2441500.0,2441500.0,"","SJ025","Paid","Completed",true,true,true,true],
+  ["2026-03-16","Buana Plast","Cacah PP Warna Biru",66.0,66.0,5500.0,363000.0,363000.0,363000.0,"","SJ025","Paid","Completed",true,true,true,true],
+  ["2026-03-16","Buana Plast","Cacah PP Mambo",780.5,780.0,5000.0,3900000.0,3902500.0,3900000.0,"","SJ025","Paid","Completed",true,true,true,true],
+  ["2026-03-16","Buana Plast","Cacah PP Sablon",105.5,105.0,7000.0,735000.0,738500.0,735000.0,"","SJ025","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP Monti",20.5,17.0,2500.0,42500.0,51250.0,42500.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP AG Bersih",61.0,60.0,6000.0,360000.0,366000.0,360000.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP AG Kotor",184.0,179.0,3000.0,537000.0,552000.0,537000.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP Facial Wash",43.0,34.0,1500.0,51000.0,64500.0,51000.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP Naso",143.0,139.0,6500.0,903500.0,929500.0,903500.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP BLPK",325.5,316.0,6000.0,1896000.0,1953000.0,1896000.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP BL Mambo",200.0,192.0,4500.0,864000.0,900000.0,864000.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP Oli Mambo",119.0,67.0,4500.0,301500.0,535500.0,301500.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-03-17","PT Kita Olah Indonesia","BP Oli Hitam",31.0,29.0,4000.0,116000.0,124000.0,116000.0,"","SJ026","Paid","Completed",true,true,true,true],
+  ["2026-04-10","Panca Kraft Pratama - Daya Selaras Group","Kardus",2749.5,2502.0,2625.0,6567750.0,7217438.0,6567750.0,"MGI/APR/2026/001","SJ027","Paid","Completed",true,true,true,true],
+  ["2026-04-11","PD Fajar Mandiri","Tutup Botol",324.0,0.0,5500.0,0.0,1782000.0,0.0,"","SJ029","Unpaid","Completed",true,false,false,true],
+  ["2026-04-15","UD Rahayu Abadi","Monti",180.0,182.0,4500.0,819000.0,810000.0,819000.0,"MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
+  ["2026-04-15","UD Rahayu Abadi","AG Bersih",214.0,219.0,9000.0,1971000.0,1926000.0,1971000.0,"MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
+  ["2026-04-15","UD Rahayu Abadi","AG Kotor",1013.5,918.0,5200.0,4773600.0,5270200.0,4773600.0,"MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
+  ["2026-04-15","UD Rahayu Abadi","PP BN",767.0,746.0,7200.0,5371200.0,5522400.0,5371200.0,"MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
+  ["2026-04-15","UD Rahayu Abadi","Naso",13.0,13.0,6300.0,81900.0,81900.0,81900.0,"MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
+  ["2026-04-15","BMPS","BP PET BM",1312.5,1340.0,7000.0,9380000.0,9187500.0,9380000.0,"MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,true],
+  ["2026-04-15","BMPS","BP PET BN",2331.0,2320.0,8000.0,18560000.0,18648000.0,18560000.0,"MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,true],
+  ["2026-04-15","BMPS","BP Galon Le",545.0,600.0,6000.0,3600000.0,3270000.0,3600000.0,"MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,true],
+  ["2026-04-16","PT Kita Olah Indonesia","BP Naso",272.0,268.0,6700.0,1795600.0,1822400.0,1798600.0,"MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
+  ["2026-04-16","PT Kita Olah Indonesia","BP BL Warna",253.5,249.0,5200.0,1294800.0,1318200.0,1294800.0,"MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
+  ["2026-04-16","PT Kita Olah Indonesia","BP Oli Warna",220.0,216.0,4700.0,1015200.0,1034000.0,1015200.0,"MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
+  ["2026-04-16","PT Kita Olah Indonesia","BP Oli Hitam",28.5,27.0,4200.0,113400.0,119700.0,113400.0,"MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
+  ["2026-04-16","PT Kita Olah Indonesia","BP BLPK",205.0,196.0,6200.0,1215200.0,1271000.0,1215200.0,"MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
+  ["2026-04-17","Panca Kraft Pratama - Daya Selaras Group","Kardus",2133.0,1827.0,2625.0,4795875.0,5599125.0,4795875.0,"MGI/APR/2026/005","SJ033","Paid","Completed",true,true,true,true],
+  ["2026-04-21","Panca Kraft Pratama - Daya Selaras Group","Kardus",1266.0,1121.0,2625.0,2942625.0,3323250.0,2942625.0,"MGI/APR/2026/006","SJ034","Paid","Completed",true,true,true,true],
+  ["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN",140.5,85.0,7500.0,637500.0,1053750.0,637500.0,"MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
+  ["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN Sablon",47.5,100.0,8000.0,800000.0,380000.0,800000.0,"MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
+  ["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP Mambo",652.0,640.0,5500.0,3520000.0,3586000.0,3520000.0,"MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
+  ["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP BL Mambo",90.0,90.0,5500.0,495000.0,495000.0,495000.0,"MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
+  ["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP Oli Mambo",69.5,70.0,6500.0,455000.0,451750.0,455000.0,"MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
+  ["2026-04-23","Lapak Bapak Rocky","Logam Gabruk",503.5,503.5,0.0,0.0,0.0,0.0,"","SJ036","Paid","Completed",true,true,true,true],
+  ["2026-04-24","PT Haka Sentral Plastik","Cacah PP PK",255.0,255.0,9500.0,2422500.0,2422500.0,2422500.0,"MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
+  ["2026-04-24","PT Haka Sentral Plastik","Cacah PP Hitam",532.0,532.0,5500.0,2926000.0,2926000.0,2926000.0,"MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
+  ["2026-04-24","PT Haka Sentral Plastik","Cacah Falkon",527.0,552.0,5300.0,2925600.0,2793100.0,2925600.0,"MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
+  ["2026-04-24","PT Haka Sentral Plastik","Cacah PP Mambo",1994.0,1933.0,5300.0,10244900.0,10568200.0,10244900.0,"MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
+  ["2026-04-25","Lapak Tri","Kerasan Campur",1321.5,1321.5,1000.0,1321500.0,1321500.0,1057200.0,"MGI/APR/2026/009","SJ037-1","Paid","Completed",true,true,true,true],
+  ["2026-04-26","Lapak Bapak Rocky","Logam Gabruk",1107.5,1107.5,0.0,0.0,0.0,0.0,"","SJ038","Paid","Completed",true,true,true,true],
+  ["2026-04-29","Panca Kraft Pratama - Daya Selaras Group","Kardus",2106.0,1969.0,2625.0,5168625.0,5528250.0,5168625.0,"MGI/APR/2026/010","SJ039","Paid","Completed",true,true,true,true],
+  ["2026-04-30","UD Rahayu Abadi","AG Kotor",604.5,569.0,5200.0,2958800.0,3143400.0,2952300.0,"MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true],
+  ["2026-04-30","UD Rahayu Abadi","Monti",118.5,111.0,4500.0,499500.0,533250.0,499500.0,"MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true],
+  ["2026-04-30","UD Rahayu Abadi","PP A",0.0,20.0,9000.0,180000.0,0.0,180000.0,"MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true],
+  ["2026-04-30","PT Eterna Persada Indonesia (Pan Era Group)","BP PP Warna",403.0,405.0,6000.0,2430000.0,2418000.0,2430000.0,"MGI/APR/2026/012","SJ041","Paid","Completed",true,true,true,true],
+  ["2026-04-30","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN",158.0,155.0,9000.0,1395000.0,1422000.0,1395000.0,"MGI/APR/2026/012","SJ041","Paid","Completed",true,true,true,true],
+  ["2026-05-04","Lapak Tri","Kerasan Campur",2245.0,2245.0,1000.0,2245000.0,2245000.0,1796000.0,"MGI/MEI/2026/001","SJ042","Paid","Completed",true,true,true,true],
+  ["2026-05-04","PT Mitra Plastik Nusantara","BP PET MIX",3194.0,3220.0,8300.0,26726000.0,26510200.0,26726000.0,"MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,true],
+  ["2026-05-04","PT Mitra Plastik Nusantara","BP Galon",552.0,540.0,6700.0,3618000.0,3698400.0,3618000.0,"MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,true],
+  ["2026-05-04","PT Mitra Plastik Nusantara","BP PET GALON LE",292.0,279.99,8700.0,2435913.0,2540400.0,2435913.0,"MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,true],
+  ["2026-05-05","UD Rahayu Abadi","AG Bersih",230.5,317.0,5200.0,1648400.0,1198600.0,1641900.0,"MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
+  ["2026-05-05","UD Rahayu Abadi","Monti",52.0,50.0,4500.0,225000.0,234000.0,225000.0,"MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
+  ["2026-05-05","UD Rahayu Abadi","Tutup Botol",83.5,74.0,5500.0,407000.0,459250.0,407000.0,"MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
+  ["2026-05-05","UD Rahayu Abadi","PP BN",307.0,304.0,7200.0,2188800.0,2210400.0,2188800.0,"MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
+  ["2026-05-05","UD Rahayu Abadi","PP A",0.0,29.0,9000.0,261000.0,0.0,261000.0,"MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
+  ["2026-05-08","Panca Kraft Pratama - Daya Selaras Group","Kardus",1823.0,2006.0,2625.0,5265750.0,4785375.0,5265750.0,"MGI/MEI/2026/004","SJ045","Paid","Completed",true,true,true,true],
+  ["2026-05-09","UD Rahayu Abadi","Bodong Warna",399.0,157.0,1700.0,266900.0,678300.0,260400.0,"MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
+  ["2026-05-09","UD Rahayu Abadi","AG Kotor",217.5,194.0,5200.0,1008800.0,1131000.0,1008800.0,"MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
+  ["2026-05-09","UD Rahayu Abadi","Monti",22.0,21.0,4500.0,94500.0,99000.0,94500.0,"MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
+  ["2026-05-09","UD Rahayu Abadi","Tutup Botol",99.5,97.0,5500.0,533500.0,547250.0,533500.0,"MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
+  ["2026-05-09","CV Sido Mulyo","Duplek",962.5,962.0,1000.0,962000.0,962500.0,962000.0,"MGI/MEI/2026/006","SJ047","Paid","Completed",true,true,true,true],
+  ["2026-05-09","CV Sido Mulyo","Kardus",817.5,817.0,2200.0,1797400.0,1798500.0,1797400.0,"MGI/MEI/2026/006","SJ047","Paid","Completed",true,true,true,true],
+  ["2026-05-12","PT Kita Olah Indonesia","Bodong Kotor",286.0,286.0,3500.0,1001000.0,1001000.0,1001000.0,"MGI/MEI/2026/009","SJ048","Paid","Completed",true,true,true,true],
+  ["2026-05-12","PT Kita Olah Indonesia","Bodong Warna",275.5,275.5,1700.0,468350.0,468350.0,468350.0,"MGI/MEI/2026/009","SJ048","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP HDPE Press Blow Bening 2",205.0,205.0,9000.0,1845000.0,1845000.0,1842500.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP HDPE Press Blow Mambo Mainan Kotor",75.0,75.0,5300.0,397500.0,397500.0,397500.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP HDPE Press Blow Mambo khusus 2",60.0,60.0,7000.0,420000.0,420000.0,420000.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP HDPE Press Blow Mambo Kotor",275.0,275.0,6500.0,1787500.0,1787500.0,1787500.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP HDPE Press Blow Putih 2",170.0,170.0,8000.0,1360000.0,1360000.0,1360000.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP PP Press Bening Thinwall 1",355.0,355.0,10000.0,3550000.0,3550000.0,3550000.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP PP Press Mambo 2",1105.0,1105.0,5500.0,6077500.0,6077500.0,6077500.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP PP Press Mambo Kotor",85.0,85.0,5000.0,425000.0,425000.0,425000.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-15","PT Elite Recycling Indonesia (Pan Era)","BP PP Press White 1",415.0,415.0,8500.0,3527500.0,3527500.0,3527500.0,"MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
+  ["2026-05-16","PT Kita Olah Indonesia","Bodong Kotor",606.0,367.0,3500.0,1284500.0,2121000.0,1284500.0,"MGI/MEI/2026/008","SJ050","Paid","Completed",true,true,true,true],
+  ["2026-05-18","PT Kita Olah Indonesia","Bodong Kotor",595.5,473.0,3500.0,1655500.0,2084250.0,1655500.0,"MGI/MEI/2026/009","SJ051","Paid","Completed",true,true,true,true],
+  ["2026-05-18","PT Kita Olah Indonesia","Bodong Warna",54.0,38.0,1700.0,64600.0,91800.0,64600.0,"MGI/MEI/2026/009","SJ051","Paid","Completed",true,true,true,true],
+  ["2026-05-18","UD Rafa Putra","Kerasan Campur",719.0,719.0,800.0,575200.0,575200.0,575200.0,"MGI/MEI/2026/010","SJ053","Paid","Completed",true,true,true,true],
+  ["2026-05-18","UD Rafa Putra","Kerasan Halus",67.0,67.0,300.0,20100.0,20100.0,20100.0,"MGI/MEI/2026/010","SJ053","Paid","Completed",true,true,true,true],
+  ["2026-05-18","UD Rafa Putra","Kerasan Campur",600.0,600.0,800.0,480000.0,480000.0,480000.0,"MGI/MEI/2026/011","SJ056","Paid","Completed",true,true,true,true],
+  ["2026-05-18","UD Rafa Putra","Kerasan Halus",218.0,218.0,300.0,65400.0,65400.0,65400.0,"MGI/MEI/2026/011","SJ056","Paid","Completed",true,true,true,true],
+  ["2026-05-18","Lapak Bapak Rocky","Kerasan Campur",1398.5,0.0,800.0,0.0,1118800.0,0.0,"","SJ054","Paid","Completed",true,true,true,true],
+  ["2026-05-18","Lapak Pak Aldi","Kerasan Campur (Kasar)",651.5,0.0,0.0,0.0,0.0,0.0,"","SJ055","Paid","Completed",true,true,true,true],
+  ["2026-05-18","Lapak Pak Aldi","Emberan Besar",474.5,0.0,1500.0,0.0,711750.0,0.0,"","SJ055","Paid","Completed",true,true,true,true],
+  ["2026-05-18","Lapak Pak Aldi","Kerasan Campur (Halus)",58.0,0.0,0.0,0.0,0.0,0.0,"","SJ055","Paid","Completed",true,true,true,true],
+  ["2026-05-19","PT Doa Ibu Terlaksana","Gabruk",1186.0,1186.0,2300.0,2727800.0,2727800.0,2727800.0,"","SJ052","Paid","Completed",true,true,true,true],
+  ["2026-05-19","UD Rafa Putra","Kerasan Campur",90.0,84.0,800.0,67200.0,72000.0,67200.0,"MGI/MEI/2026/012","SJ057","Paid","Completed",true,true,true,true],
+  ["2026-05-19","UD Rafa Putra","Emberan Besar",368.0,342.0,1700.0,581400.0,625600.0,581400.0,"MGI/MEI/2026/012","SJ057","Paid","Completed",true,true,true,true],
+  ["2026-05-19","UD Rafa Putra","Emberan Besar",439.0,408.0,1700.0,693600.0,746300.0,693600.0,"MGI/MEI/2026/013","SJ058","Paid","Completed",true,true,true,true],
+  ["2026-05-19","BMPS","BP PET MIX",3520.0,3520.0,8600.0,30272000.0,30272000.0,30272000.0,"MGI/MEI/2026/014","SJ059","Paid","Completed",true,true,true,true],
+  ["2026-05-19","BMPS","BP Galon Le",142.0,140.0,7200.0,1008000.0,1022400.0,1008000.0,"MGI/MEI/2026/014","SJ059","Paid","Completed",true,true,true,true],
+  ["2026-05-19","Lapak Bapak Rocky","Emberan Besar",991.5,0.0,2300.0,0.0,2280450.0,0.0,"","SJ060","Unpaid","Completed",true,false,false,true],
+  ["2026-05-20","Lapak Bapak Rocky","Kerasan Campur",644.5,0.0,800.0,0.0,515600.0,0.0,"","SJ061","Unpaid","Completed",true,false,false,true],
+  ["2026-05-20","Lapak Bapak Rocky","Emberan Besar",602.5,0.0,2300.0,0.0,1385750.0,0.0,"","SJ061","Unpaid","Completed",true,false,false,true],
+  ["2026-05-20","CV Sido Mulyo","Kardus",1497.5,1497.5,2200.0,3294500.0,3294500.0,3294500.0,"MGI/MEI/2026/015","SJ062","Paid","Completed",true,true,true,true],
+  ["2026-05-20","CV Sido Mulyo","Duplek",248.5,248.5,1200.0,298200.0,298200.0,298200.0,"MGI/MEI/2026/015","SJ062","Paid","Completed",true,true,true,true],
+  ["2026-05-20","Lapak Pak Aldi","Emberan Besar",477.5,0.0,1500.0,0.0,716250.0,0.0,"","SJ063","Paid","Completed",true,true,true,true],
+  ["2026-05-20","Lapak Pak Aldi","Kerasan Campur",727.0,0.0,500.0,0.0,363500.0,0.0,"","SJ063","Paid","Completed",true,true,true,true],
+  ["2026-05-20","Lapak Pondok Rajeg (Bpk. Rico Imam)","Kerasan Campur",225.5,0.0,800.0,0.0,180400.0,0.0,"","SJ064","Unpaid","Completed",true,false,false,true],
+  ["2026-05-20","Lapak Pondok Rajeg (Bpk. Rico Imam)","Emberan Besar",742.0,0.0,2300.0,0.0,1706600.0,0.0,"","SJ064","Unpaid","Completed",true,false,false,true],
+  ["2026-05-21","CV Sido Mulyo","Kardus",1660.0,1645.0,2200.0,3619000.0,3652000.0,3619000.0,"MGI/MEI/2026/016","SJ065","Paid","Completed",true,true,true,true],
+  ["2026-05-21","CV Sido Mulyo","Duplek",122.5,117.0,1200.0,140400.0,147000.0,140400.0,"MGI/MEI/2026/016","SJ065","Paid","Completed",true,true,true,true],
+  ["2026-05-21","Lapak Bapak Rocky","Kerasan Campur",1521.5,0.0,800.0,0.0,1217200.0,0.0,"","SJ066","Unpaid","Completed",true,false,false,true],
+  ["2026-05-23","CV Sido Mulyo","Kardus",970.0,960.0,2200.0,2112000.0,2134000.0,2112000.0,"MGI/MEI/2026/017","SJ067","Paid","Completed",true,true,true,true],
+  ["2026-05-23","CV Sido Mulyo","Duplek",1460.0,1445.0,1200.0,1734000.0,1752000.0,1734000.0,"MGI/MEI/2026/017","SJ067","Paid","Completed",true,true,true,true],
+  ["2026-05-23","CV Sido Mulyo","Kardus",1607.0,1597.0,2200.0,3513400.0,3535400.0,3513400.0,"MGI/MEI/2026/018","SJ068","Paid","Completed",true,true,true,true],
+  ["2026-05-23","CV Sido Mulyo","Duplek",41.0,41.0,1200.0,49200.0,49200.0,49200.0,"MGI/MEI/2026/018","SJ068","Paid","Completed",true,true,true,true],
+  ["2026-05-28","PT Elite Recycling Indonesia (Pan Era)","BP PP PK",448.5,360.0,7000.0,2520000.0,3139500.0,2520000.0,"","SJ069","Paid","Completed",true,true,true,true],
+  ["2026-05-28","PT Elite Recycling Indonesia (Pan Era)","BP PP BN",458.5,90.0,9000.0,810000.0,4126500.0,810000.0,"","SJ069","Paid","Completed",true,true,true,true],
+  ["2026-05-28","PT Elite Recycling Indonesia (Pan Era)","BP PP Mambo",2332.0,2335.0,4800.0,11208000.0,11193600.0,11208000.0,"","SJ069","Paid","Completed",true,true,true,true],
+  ["2026-05-28","PT Elite Recycling Indonesia (Pan Era)","BP PP Merah",102.5,100.0,5300.0,530000.0,543250.0,530000.0,"","SJ069","Paid","Completed",true,true,true,true],
+  ["2026-05-28","PT Elite Recycling Indonesia (Pan Era)","BP PP Biru",49.5,50.0,5300.0,265000.0,262350.0,265000.0,"","SJ069","Paid","Completed",true,true,true,true],
+  ["2026-05-28","PT Elite Recycling Indonesia (Pan Era)","BP PP BN Sablon",70.5,75.0,8000.0,600000.0,564000.0,600000.0,"","SJ069","Paid","Completed",true,true,true,true],
+  ["2026-05-29","CV Sido Mulyo","Kardus",1115.5,1100.0,2200.0,2420000.0,2454100.0,2420000.0,"MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true],
+  ["2026-05-29","CV Sido Mulyo","Duplek",1159.0,1149.0,1200.0,1378800.0,1390800.0,1378800.0,"MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true],
+  ["2026-05-29","CV Sido Mulyo","Boncos",430.5,420.0,1000.0,420000.0,430500.0,420000.0,"MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true],
+  ["2026-05-30","Lapak Pak Aldi","Kerasan Campur",1555.0,0.0,500.0,0.0,777500.0,0.0,"","SJ071","Unpaid","Completed",true,false,false,true],
+  ["2026-05-30","Lapak Pak Aldi","Emberan Besar",363.5,0.0,1500.0,0.0,545250.0,0.0,"","SJ071","Unpaid","Completed",true,false,false,true],
+  ["2026-05-30","Lapak Bapak Rocky","Bodong Kotor",482.5,0.0,4200.0,0.0,2026500.0,0.0,"","SJ072","Unpaid","Completed",true,false,false,true],
+  ["2026-05-30","Lapak Bapak Rocky","Pet C Bening",68.0,0.0,0.0,0.0,0.0,0.0,"","SJ072","Unpaid","Completed",true,false,false,true],
+  ["2026-05-30","Lapak Bapak Rocky","Bodong Warna",172.0,0.0,0.0,0.0,0.0,0.0,"","SJ072","Unpaid","Completed",true,false,false,true],
+  ["2026-06-02","Lapak Bapak Rocky","Bodong Kotor",581.5,0.0,4200.0,0.0,2442300.0,0.0,"","SJ073","Unpaid","Completed",true,false,false,true],
+  ["2026-06-03","Lapak Bapak Rocky","Kerasan Campur",1908.5,0.0,800.0,0.0,1526800.0,0.0,"","SJ074","Unpaid","Completed",true,false,false,true],
+  ["2026-06-03","Lapak Bapak Rocky","Emberan Besar",81.0,0.0,2300.0,0.0,186300.0,0.0,"","SJ074","Unpaid","Completed",true,false,false,true],
+  ["2026-06-03","Lapak Pak Aldi","Emberan Besar",17.0,0.0,1500.0,0.0,25500.0,0.0,"","SJ075","Unpaid","Completed",true,false,false,true],
+  ["2026-06-03","Lapak Pak Aldi","Kerasan Campur",220.0,0.0,500.0,0.0,110000.0,0.0,"","SJ075","Unpaid","Completed",true,false,false,true],
+  ["2026-06-03","Lapak Pak Aldi","BP AG Kotor",1088.0,1056.0,4000.0,4224000.0,4352000.0,4224000.0,"MGI/MEI/2026/020","SJ076","Paid","Completed",true,true,true,true],
+  ["2026-06-04","CV Sido Mulyo","Kardus",1962.5,1947.0,2200.0,4283400.0,4317500.0,4283400.0,"MGI/MEI/2026/021","SJ077","Paid","Completed",true,true,true,true],
+  ["2026-06-04","CV Sido Mulyo","Duplek",166.0,166.0,1200.0,199200.0,199200.0,199200.0,"MGI/MEI/2026/021","SJ077","Paid","Completed",true,true,true,true],
+  ["2026-06-05","Lapak Bapak Rocky","Bodong Kotor",751.0,0.0,4200.0,0.0,3154200.0,0.0,"","SJ078","Unpaid","Completed",true,false,false,true],
+  ["2026-06-06","CV Sido Mulyo","Kardus",1843.5,1824.0,2200.0,4012800.0,4055700.0,4012800.0,"","SJ079","Paid","Completed",true,true,true,true],
+  ["2026-06-06","CV Sido Mulyo","Duplek",349.5,334.0,1200.0,400800.0,419400.0,400800.0,"","SJ079","Paid","Completed",true,true,true,true],
+  ["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","BP Naso",395.0,390.0,0.0,0.0,0.0,0.0,"","SJ081","Paid","Completed",true,true,true,true],
+  ["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","BP BLPK",477.5,475.0,0.0,0.0,0.0,0.0,"","SJ081","Paid","Completed",true,true,true,true],
+  ["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","BP BL Warna",766.0,645.0,0.0,0.0,0.0,0.0,"","SJ081","Paid","Completed",true,true,true,true],
+  ["2026-06-08","Lapak Bapak Rocky","Kerasan Campur",1764.5,1764.5,800.0,1411600.0,1411600.0,1411600.0,"","SJ082","Unpaid","Completed",true,false,false,true],
+  ["2026-06-09","Lapak Bapak Rocky","Bodong Kotor",517.0,517.0,4200.0,2171400.0,2171400.0,2171400.0,"","SJ083","Unpaid","Completed",true,false,false,true],
+  ["2026-06-09","BMPS","BP PET MIX",3808.5,3880.0,9300.0,36084000.0,35419050.0,36084000.0,"","SJ084","Paid","Completed",true,true,true,true],
+  ["2026-06-09","BMPS","BP PET BM",147.0,140.0,8700.0,1218000.0,1278900.0,1218000.0,"","SJ084","Paid","Completed",true,true,true,true],
+  ["2026-06-09","BMPS","BP PET BN",134.0,140.0,9700.0,1358000.0,1299800.0,1358000.0,"","SJ084","Paid","Completed",true,true,true,true],
+  ["2026-06-09","BMPS","BP Galon Le",431.5,440.0,7700.0,3388000.0,3322550.0,3388000.0,"","SJ084","Paid","Completed",true,true,true,true],
+  ["2026-06-10","CV Sido Mulyo","Kardus",1387.0,1377.0,2200.0,3029400.0,3051400.0,3029400.0,"","SJ085","Paid","Completed",true,true,true,true],
+  ["2026-06-10","CV Sido Mulyo","Duplek",473.5,466.0,1200.0,559200.0,568200.0,559200.0,"","SJ085","Paid","Completed",true,true,true,true],
+  ["2026-06-10","CV Sido Mulyo","Boncos",270.5,255.0,1000.0,255000.0,270500.0,255000.0,"","SJ085","Paid","Completed",true,true,true,true],
+  ["2026-06-11","UD Rahayu Abadi","AG Kotor",84.5,84.5,4700.0,397150.0,397150.0,397150.0,"","SJ086","Paid","Completed",true,true,true,true],
+  ["2026-06-11","UD Rahayu Abadi","Bodong Warna",211.0,154.0,2500.0,385000.0,527500.0,385000.0,"","SJ086","Paid","Completed",true,true,true,true],
+  ["2026-06-11","UD Rahayu Abadi","BP AG Kotor",920.0,851.5,4700.0,4002050.0,4324000.0,4002050.0,"","SJ086","Paid","Completed",true,true,true,true],
+  ["2026-06-11","UD Rahayu Abadi","BP Milku",187.5,113.0,3000.0,339000.0,562500.0,339000.0,"","SJ086","Paid","Completed",true,true,true,true],
+  ["2026-06-11","UD Rahayu Abadi","BP Sprite",106.5,62.0,3500.0,217000.0,372750.0,217000.0,"","SJ086","Paid","Completed",true,true,true,true],
+  ["2026-06-11","UD Rahayu Abadi","BP Mizone",50.5,12.0,3500.0,42000.0,176750.0,42000.0,"","SJ086","Paid","Completed",true,true,true,true],
+  ["2026-06-11","UD Rahayu Abadi","Tutup Botol",77.0,77.0,5500.0,423500.0,423500.0,423500.0,"","SJ086","Paid","Completed",true,true,true,true],
+  ["2026-06-12","Lapak Pak Aldi","Kerasan Campur",1755.0,1755.0,500.0,877500.0,877500.0,877500.0,"","SJ087","Unpaid","Completed",true,false,false,true],
+  ["2026-06-12","Lapak Pak Aldi","Emberan Besar",26.0,26.0,1500.0,39000.0,39000.0,39000.0,"","SJ087","Unpaid","Completed",true,false,false,true],
+  ["2026-06-13","CV Sido Mulyo","Kardus",1359.5,1344.0,2200.0,2956800.0,2990900.0,2956800.0,"","SJ088","Paid","Completed",true,true,true,true],
+  ["2026-06-13","CV Sido Mulyo","Duplek",374.5,367.0,1200.0,440400.0,449400.0,440400.0,"","SJ088","Paid","Completed",true,true,true,true],
+  ["2026-06-13","CV Sido Mulyo","Boncos",141.0,136.0,1000.0,136000.0,141000.0,136000.0,"","SJ088","Paid","Completed",true,true,true,true],
+  ["2026-06-15","PT Elite Recycling Indonesia (Pan Era)","BP PP Mambo",1329.5,1345.0,4300.0,5783500.0,5716850.0,5783500.0,"","SJ089","Unpaid","Completed",true,true,false,true],
+  ["2026-06-16","Lapak Bapak Rocky","Kerasan Campur",1352.5,0.0,800.0,0.0,1082000.0,0.0,"","SJ090","Unpaid","Completed",true,false,false,true],
+  ["2026-06-16","Lapak Bapak Rocky","Kerasan Campur",2034.0,0.0,800.0,0.0,1627200.0,0.0,"","SJ091","Unpaid","Completed",true,false,false,true]
+];
+
+const COLORS = [
+  '#2ee8a0','#61b8ff','#ffc53d','#ff6b87','#c4b5fd',
+  '#4ade80','#f472b6','#22d3ee','#fb923c','#818cf8',
+  '#86efac','#93c5fd','#fde68a','#fca5a5','#c4b5fd',
+  '#6ee7b7','#bfdbfe','#fef08a','#fda4af','#ddd6fe'
+];
+const MONTH_NAME = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+let currentPeriod = 'month';
+let charts = {};
+
+const fmtInt = n => Math.round(n).toLocaleString('id-ID');
+const fmtShort = n => n >= 1000000 ? (n/1000000).toFixed(1)+'jt' : n >= 1000 ? (n/1000).toFixed(1)+'rb' : Math.round(n)+'';
+const fmtRp = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
+const fmtRpShort = n => n >= 1000000000 ? 'Rp '+(n/1000000000).toFixed(1)+'M' : n >= 1000000 ? 'Rp '+(n/1000000).toFixed(1)+'jt' : n >= 1000 ? 'Rp '+(n/1000).toFixed(0)+'rb' : 'Rp '+Math.round(n);
+
+const getWeekKey = d => {
+  const dt = new Date(d);
+  const jan1 = new Date(dt.getFullYear(),0,1);
+  const wk = Math.ceil(((dt-jan1)/86400000+jan1.getDay()+1)/7);
+  return dt.getFullYear()+'-W'+String(wk).padStart(2,'0');
+};
+const getMonthKey = d => d.slice(0,7);
+
+const periodLabel = k => {
+  if (k.includes('-W')) {
+    const [y,w]=k.split('-W'); return 'W'+w+' '+y;
+  }
+  if (k.length===10) {
+    const dt=new Date(k); return dt.getDate()+' '+MONTH_NAME[dt.getMonth()];
+  }
+  const [y,m]=k.split('-'); return MONTH_NAME[parseInt(m)-1]+' '+y;
+};
+
+// ── DROPDOWN STATE ──
+const ddSelected = { 'dd-offtaker': new Set(), 'dd-material': new Set() };
+const ddAll      = { 'dd-offtaker': [], 'dd-material': [] };
+
+let selectedCalMonths = new Set();
+let currentDocFilter = 'all';
+
+// (date counts pre-computed in rpInit section below)
+
+// ── RANGE PICKER STATE ──
+let rpMode = 'all';
+let rpCalView = 'month'; // 'month' | 'day'
+let rpViewYear = new Date().getFullYear();
+let rpViewMonth = new Date().getMonth();
+let rpDateFrom = null;
+let rpDateTo   = null;
+let rpPickingEnd = false;
+let rpSelMonths = new Set(); // "YYYY-MM" keys selected in month view
+let rpSelDays   = new Set(); // "YYYY-MM-DD" keys selected in day view
+
+const MONTH_SHORT = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const MONTH_FULL  = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const DOW_SHORT   = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+
+// Pre-compute counts from RAW
+const _dateCounts = {};
+const _monthCounts = {};
+RAW.forEach(r => {
+  _dateCounts[r[0]] = (_dateCounts[r[0]] || 0) + 1;
+  const mk = r[0].slice(0,7);
+  _monthCounts[mk] = (_monthCounts[mk] || 0) + 1;
+});
+
+function rpInit() { rpRenderCurrentView(); }
+
+function rpSetMode(mode, btn) {
+  rpMode = mode;
+  document.querySelectorAll('.rp-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const todayBar   = document.getElementById('rp-today-bar');
+  const viewToggle = document.getElementById('rp-view-toggle');
+  const preview    = document.getElementById('rp-preview');
+
+  todayBar.classList.remove('visible');
+  viewToggle.classList.remove('visible');
+  document.getElementById('rp-month-wrap').classList.remove('visible');
+  document.getElementById('rp-day-wrap').classList.remove('visible');
+  preview.classList.remove('visible');
+
+  if (mode === 'all') {
+    // nothing extra to show
+  } else if (mode === 'today') {
+    const t = new Date();
+    todayBar.textContent = 'Hari ini: ' + t.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    todayBar.classList.add('visible');
+  } else if (mode === 'custom') {
+    viewToggle.classList.add('visible');
+    rpRenderCurrentView();
+  }
+}
+
+function rpSetView(view, btn) {
+  rpCalView = view;
+  document.querySelectorAll('.rp-view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  rpRenderCurrentView();
+}
+
+function rpRenderCurrentView() {
+  document.getElementById('rp-month-wrap').classList.remove('visible');
+  document.getElementById('rp-day-wrap').classList.remove('visible');
+  if (rpCalView === 'month') {
+    document.getElementById('rp-month-wrap').classList.add('visible');
+    rpRenderMonthGrid();
+  } else {
+    document.getElementById('rp-day-wrap').classList.add('visible');
+    rpRenderDayGrid();
+  }
+}
+
+function rpNavYear(d)  { rpViewYear += d; rpRenderMonthGrid(); }
+function rpNavMonth(d) {
+  rpViewMonth += d;
+  if (rpViewMonth < 0)  { rpViewMonth = 11; rpViewYear--; }
+  if (rpViewMonth > 11) { rpViewMonth = 0;  rpViewYear++; }
+  rpRenderDayGrid();
+}
+
+function rpRenderMonthGrid() {
+  document.getElementById('rp-year-label').textContent = rpViewYear;
+  const grid = document.getElementById('rp-month-grid');
+  grid.innerHTML = '';
+  for (let m = 0; m < 12; m++) {
+    const key = rpViewYear + '-' + String(m+1).padStart(2,'0');
+    const cnt = _monthCounts[key] || 0;
+    const isSel = rpSelMonths.has(key);
+    const cell = document.createElement('button');
+    cell.className = 'rp-month-cell' + (cnt > 0 ? ' has-data' : '') + (isSel ? ' selected' : '');
+    cell.innerHTML = '<div class="rp-mc-name">'+MONTH_SHORT[m]+'</div>' +
+      '<div class="rp-mc-cnt">'+(cnt > 0 ? cnt+' txn' : '—')+'</div>';
+    cell.onclick = () => rpToggleMonth(key, cell);
+    grid.appendChild(cell);
+  }
+  rpUpdatePreview();
+}
+
+function rpToggleMonth(key, cell) {
+  if (rpSelMonths.has(key)) { rpSelMonths.delete(key); cell.classList.remove('selected'); }
+  else { rpSelMonths.add(key); cell.classList.add('selected'); }
+  rpUpdatePreview();
+}
+
+function rpRenderDayGrid() {
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+  document.getElementById('rp-day-nav-label').textContent = MONTH_FULL[rpViewMonth] + ' ' + rpViewYear;
+
+  // DOW header
+  const dowEl = document.getElementById('rp-dow-row');
+  dowEl.innerHTML = DOW_SHORT.map((d,i) => '<div class="rp-dow'+(i===0?' sun':'')+'">'+d+'</div>').join('');
+
+  const grid = document.getElementById('rp-day-grid');
+  grid.innerHTML = '';
+  const first   = new Date(rpViewYear, rpViewMonth, 1);
+  const startDow = first.getDay();
+  const daysInMonth = new Date(rpViewYear, rpViewMonth+1, 0).getDate();
+  const prevDays    = new Date(rpViewYear, rpViewMonth, 0).getDate();
+
+  // previous month padding
+  for (let i = 0; i < startDow; i++) {
+    const d = prevDays - startDow + 1 + i;
+    const cell = document.createElement('div');
+    cell.className = 'rp-day-cell other-mo empty-cell';
+    cell.textContent = d;
+    grid.appendChild(cell);
+  }
+  // current month days
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dStr = rpViewYear+'-'+String(rpViewMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const isToday   = dStr === todayStr;
+    const hasData   = !!_dateCounts[dStr];
+    const isSel     = rpSelDays.has(dStr);
+    let cls = 'rp-day-cell';
+    if (hasData)  cls += ' has-data';
+    if (isToday)  cls += ' today-cell';
+    if (isSel)    cls += ' sel-day';
+    const cell = document.createElement('div');
+    cell.className = cls;
+    cell.textContent = d;
+    cell.onclick = () => rpToggleDay(dStr, cell);
+    grid.appendChild(cell);
+  }
+  // trailing padding
+  const total = startDow + daysInMonth;
+  const rem = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let i = 1; i <= rem; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'rp-day-cell other-mo empty-cell';
+    cell.textContent = i;
+    grid.appendChild(cell);
+  }
+  rpUpdatePreview();
+}
+
+function rpToggleDay(dStr, cell) {
+  if (rpSelDays.has(dStr)) {
+    rpSelDays.delete(dStr);
+    cell.classList.remove('sel-day');
+  } else {
+    rpSelDays.add(dStr);
+    cell.classList.add('sel-day');
+  }
+  rpUpdatePreview();
+}
+
+function rpFmtStr(dt) {
+  if (!dt) return null;
+  return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+}
+
+function rpFmtDate(str) {
+  const dt = new Date(str+'T00:00:00');
+  return dt.getDate() + ' ' + MONTH_NAME[dt.getMonth()] + ' ' + dt.getFullYear();
+}
+function rpFmtDateObj(dt) {
+  return dt.getDate() + ' ' + MONTH_NAME[dt.getMonth()] + ' ' + dt.getFullYear();
+}
+function rpDateToStr(dt) {
+  return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+}
+
+function rpUpdatePreview() {
+  const bar = document.getElementById('rp-preview');
+  if (rpCalView === 'month' && rpSelMonths.size > 0) {
+    const sorted = [...rpSelMonths].sort();
+    bar.textContent = sorted.map(k => { const [y,m]=k.split('-'); return MONTH_SHORT[parseInt(m)-1]+' '+y; }).join(', ');
+    bar.classList.add('visible');
+  } else if (rpCalView === 'day' && rpSelDays.size > 0) {
+    const sorted = [...rpSelDays].sort();
+    const display = sorted.length <= 3
+      ? sorted.map(d => rpFmtDate(d)).join(', ')
+      : sorted.length + ' tanggal terpilih';
+    bar.textContent = display;
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+function rpApply() {
+  if (rpMode === 'custom') {
+    if (rpCalView === 'month' && rpSelMonths.size === 0) return;
+    if (rpCalView === 'day' && rpSelDays.size === 0) return;
+  }
+  updateCalTrigger();
+  render();
+  document.getElementById('cal-panel').classList.remove('open');
+  document.getElementById('cal-trigger').classList.remove('open');
+}
+
+function rpClear() {
+  rpMode = 'all';
+  rpDateFrom = null; rpDateTo = null;
+  rpPickingEnd = false;
+  rpSelMonths.clear();
+  rpSelDays.clear();
+  selectedCalMonths.clear();
+  document.querySelectorAll('.rp-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('rp-tab-all').classList.add('active');
+  document.getElementById('rp-today-bar').classList.remove('visible');
+  document.getElementById('rp-view-toggle').classList.remove('visible');
+  document.getElementById('rp-month-wrap').classList.remove('visible');
+  document.getElementById('rp-day-wrap').classList.remove('visible');
+  document.getElementById('rp-preview').classList.remove('visible');
+  updateCalTrigger();
+  render();
+}
+
+function updateCalTrigger() {
+  const txt   = document.getElementById('cal-trigger-txt');
+  const badge = document.getElementById('cal-count-badge');
+  if (!txt) return;
+  if (rpMode === 'all') {
+    txt.textContent = 'Semua tanggal'; txt.classList.add('placeholder');
+    badge.style.display = 'none'; return;
+  }
+  if (rpMode === 'today') {
+    const t = new Date();
+    txt.textContent = t.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+    txt.classList.remove('placeholder'); badge.style.display = 'none'; return;
+  }
+  // custom
+  if (rpCalView === 'month' && rpSelMonths.size > 0) {
+    const sorted = [...rpSelMonths].sort();
+    txt.textContent = sorted.map(k => { const [y,m]=k.split('-'); return MONTH_SHORT[parseInt(m)-1]+' '+y; }).join(', ');
+    txt.classList.remove('placeholder');
+    badge.textContent = rpSelMonths.size; badge.style.display = 'inline-block';
+  } else if (rpCalView === 'day' && rpSelDays.size > 0) {
+    const sorted = [...rpSelDays].sort();
+    const display = sorted.length <= 3
+      ? sorted.map(d => rpFmtDate(d)).join(', ')
+      : sorted.length + ' tanggal terpilih';
+    txt.textContent = display;
+    txt.classList.remove('placeholder');
+    badge.textContent = rpSelDays.size;
+    badge.style.display = 'inline-block';
+  } else {
+    txt.textContent = 'Semua tanggal'; txt.classList.add('placeholder');
+    badge.style.display = 'none';
+  }
+}
+
+function toggleCalPanel() {
+  const panel   = document.getElementById('cal-panel');
+  const trigger = document.getElementById('cal-trigger');
+  const isOpen  = panel.classList.contains('open');
+  document.querySelectorAll('.dd-panel.open').forEach(p=>{ p.classList.remove('open'); p.closest('.dd-wrap').querySelector('.dd-trigger').classList.remove('open'); });
+  panel.classList.toggle('open', !isOpen);
+  trigger.classList.toggle('open', !isOpen);
+}
+
+// close cal panel on outside click
+document.addEventListener('click', e=>{
+  if (!e.target.closest('#cal-picker-wrap')) {
+    const panel   = document.getElementById('cal-panel');
+    const trigger = document.getElementById('cal-trigger');
+    if (panel) { panel.classList.remove('open'); trigger.classList.remove('open'); }
+  }
+});
+
+// legacy stubs
+function calSelectAll() { rpClear(); }
+function calClearAll()  { rpClear(); }
+
+function setDocFilter(val, el) {
+  currentDocFilter = val;
+  document.querySelectorAll('#doc-filter-all,#doc-filter-complete,#doc-filter-partial').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function buildDropdowns() {
+  const offtakers = [...new Set(RAW.map(r=>r[1]))].sort();
+  const materials = [...new Set(RAW.map(r=>r[2]).filter(Boolean))].sort();
+  ddAll['dd-offtaker'] = offtakers;
+  ddAll['dd-material'] = materials;
+  populateDd('dd-offtaker', offtakers);
+  populateDd('dd-material', materials);
+  rpInit();
+}
+
+function populateDd(id, items) {
+  const list = document.getElementById(id+'-list');
+  list.innerHTML = items.map(v => {
+    const sel = ddSelected[id].has(v) ? 'selected' : '';
+    const chk = ddSelected[id].has(v) ? '✓' : '';
+    return `<div class="dd-item ${sel}" data-val="${v}" onclick="toggleDdItem('${id}','${v}',this)">
+      <div class="dd-checkbox">${chk}</div>
+      <div class="dd-item-text">${v}</div>
+    </div>`;
+  }).join('') || '<div class="dd-empty">Tidak ada data</div>';
+}
+
+function toggleDdItem(id, val, el) {
+  if (ddSelected[id].has(val)) { ddSelected[id].delete(val); el.classList.remove('selected'); el.querySelector('.dd-checkbox').textContent=''; }
+  else { ddSelected[id].add(val); el.classList.add('selected'); el.querySelector('.dd-checkbox').textContent='✓'; }
+  updateDdTrigger(id);
+  render();
+}
+function selectAllDd(id) {
+  ddAll[id].forEach(v=>ddSelected[id].add(v));
+  populateDd(id, getCurrentItems(id));
+  updateDdTrigger(id); render();
+}
+function clearDd(id) {
+  ddSelected[id].clear();
+  populateDd(id, getCurrentItems(id));
+  updateDdTrigger(id); render();
+}
+function getCurrentItems(id) {
+  const q = document.querySelector('#'+id+' .dd-search');
+  const v = q ? q.value.toLowerCase() : '';
+  return v ? ddAll[id].filter(x=>x.toLowerCase().includes(v)) : ddAll[id];
+}
+function filterDdItems(id, q) {
+  const filtered = q ? ddAll[id].filter(x=>x.toLowerCase().includes(q.toLowerCase())) : ddAll[id];
+  populateDd(id, filtered);
+}
+function updateDdTrigger(id) {
+  const sel = ddSelected[id];
+  const lbl = document.getElementById(id+'-label');
+  const cnt = document.getElementById(id+'-count');
+  if (sel.size===0) { lbl.textContent=id==='dd-date'?'Semua tanggal':id==='dd-offtaker'?'Semua offtaker':'Semua material'; lbl.classList.add('placeholder'); cnt.style.display='none'; }
+  else { lbl.textContent=sel.size===1?[...sel][0]:sel.size+' dipilih'; lbl.classList.remove('placeholder'); cnt.textContent=sel.size; cnt.style.display='inline-block'; }
+}
+function toggleDropdown(id) {
+  document.querySelectorAll('.dd-panel.open').forEach(p=>{ if(p.id!==id+'-panel'){ p.classList.remove('open'); p.closest('.dd-wrap').querySelector('.dd-trigger').classList.remove('open'); } });
+  const panel=document.getElementById(id+'-panel');
+  const trigger=panel.closest('.dd-wrap').querySelector('.dd-trigger');
+  panel.classList.toggle('open'); trigger.classList.toggle('open');
+}
+document.addEventListener('click', e=>{ if(!e.target.closest('.dd-wrap')) { document.querySelectorAll('.dd-panel.open').forEach(p=>{ p.classList.remove('open'); p.closest('.dd-wrap').querySelector('.dd-trigger').classList.remove('open'); }); } });
+
+function setPeriod(p, btn) {
+  currentPeriod=p;
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('freeRangeRow').style.display = p==='free'?'flex':'none';
+  render();
+}
+
+function resetFilters() {
+  rpClear();
+  ['dd-offtaker','dd-material'].forEach(id=>{ ddSelected[id].clear(); populateDd(id,ddAll[id]); updateDdTrigger(id); });
+  currentDocFilter = 'all';
+  ['doc-filter-all','doc-filter-complete','doc-filter-partial'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('active');
+  });
+  document.getElementById('doc-filter-all')?.classList.add('active');
+  currentPeriod='month';
+  render();
+}
+
+function getDocStatus(r) {
+  const docs = [r[13], r[14], r[15], r[16]];
+  const n = docs.filter(Boolean).length;
+  return n === 4 ? 'complete' : n === 0 ? 'missing' : 'partial';
+}
+
+function getFilteredRows() {
+  const selOft = ddSelected['dd-offtaker'];
+  const selMat = ddSelected['dd-material'];
+  return RAW.filter(r=>{
+    // ── Date filter ──
+    if (rpMode === 'today') {
+      const t = new Date();
+      const todayStr = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+      if (r[0] !== todayStr) return false;
+    } else if (rpMode === 'custom') {
+      if (rpCalView === 'month') {
+        if (rpSelMonths.size > 0 && !rpSelMonths.has(r[0].slice(0,7))) return false;
+      } else {
+        if (rpSelDays.size > 0 && !rpSelDays.has(r[0])) return false;
+      }
+    }
+    // ── Other filters ──
+    if (selOft.size>0 && !selOft.has(r[1])) return false;
+    if (selMat.size>0 && !selMat.has(r[2])) return false;
+    if (currentDocFilter !== 'all' && getDocStatus(r) !== currentDocFilter) return false;
+    return true;
+  });
+}
+
+function destroyChart(key) {
+  if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+}
+
+function makePieLegend(containerId, entries, total, type) {
+  document.getElementById(containerId).innerHTML = entries.map((e,i)=>{
+    const pct=(e[1]/total*100).toFixed(1);
+    const safe = e[0].replace(/'/g,"\\'");
+    return `<div class="pie-legend-item" onclick="openFilteredLog('${type}','${safe}')" title="Klik untuk lihat log ${e[0]}">
+      <div class="pie-legend-dot" style="background:${COLORS[i%COLORS.length]}"></div>
+      <div class="pie-legend-name">${e[0]}</div>
+      <div class="pie-legend-pct">${pct}%</div>
+      <div class="pie-legend-kg">${fmtShort(e[1])}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── BEST PRICE RANKING PER MATERIAL ──
+function renderBestPriceRanking(rows) {
+  rows = rows || [];
+  // Group: material -> offtaker -> { totalKg, totalRp, orders(Set of noSJ) }
+  const matMap = {};
+  rows.forEach(r => {
+    const material = r[2];
+    const offtaker = r[1];
+    const kg = r[3] || 0; // berat PDUP
+    const harga = r[5] || 0; // harga/kg
+    const noSJ = r[10] || '';
+    if (!material || kg <= 0) return;
+    if (!matMap[material]) matMap[material] = {};
+    if (!matMap[material][offtaker]) matMap[material][offtaker] = { totalKg:0, totalRp:0, orders:new Set(), lastDate:null, maxHarga:0, lastHarga:0 };
+    const entry = matMap[material][offtaker];
+    entry.totalKg += kg;
+    entry.totalRp += kg * harga;
+    if (noSJ) entry.orders.add(noSJ);
+    if (harga > entry.maxHarga) entry.maxHarga = harga;
+    if (!entry.lastDate || r[0] >= entry.lastDate) { entry.lastDate = r[0]; entry.lastHarga = harga; }
+  });
+
+  // Populate datalist (preserve current selection)
+  const filterEl = document.getElementById('bestPriceMatFilter');
+  const clearBtn = document.getElementById('bestPriceMatClear');
+  if (filterEl && !filterEl.dataset.populated) {
+    const allMaterials = [...new Set(RAW.map(r=>r[2]).filter(Boolean))].sort();
+    const listEl = document.getElementById('bestPriceMatList');
+    allMaterials.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      listEl.appendChild(opt);
+    });
+    filterEl.dataset.populated = '1';
+  }
+  const query = filterEl ? filterEl.value.trim() : '';
+  if (clearBtn) clearBtn.classList.toggle('visible', query.length > 0);
+
+  // Build ranking
+  let materials = Object.keys(matMap).sort();
+  let exactMat = null;
+  if (query) {
+    exactMat = materials.find(m => m.toLowerCase() === query.toLowerCase()) || null;
+    if (exactMat) {
+      materials = [exactMat];
+    } else {
+      const q = query.toLowerCase();
+      materials = materials.filter(m => m.toLowerCase().includes(q));
+    }
+  }
+  if (!materials.length) {
+    document.getElementById('bestPriceTable').innerHTML = '<div class="empty">Tidak ada material yang cocok dengan pencarian.</div>';
+    return;
+  }
+
+  let html, rankRows;
+
+  if (exactMat) {
+    // ── SINGLE MATERIAL: show every offtaker, ranked by last updated price (most recent first) ──
+    const material = materials[0];
+    const offtakers = Object.entries(matMap[material]).map(([oft, e]) => ({
+      offtaker: oft,
+      lastHarga: e.lastHarga,
+      totalKg: e.totalKg,
+      orders: e.orders.size,
+      lastDate: e.lastDate
+    })).sort((a,b) => b.lastHarga - a.lastHarga);
+
+    html = `<table><thead><tr>
+      <th>#</th><th>Offtaker</th>
+      <th class="tr">Harga/Kg Terakhir</th><th class="tr">Total Volume (kg)</th>
+      <th class="tr">Jumlah Order</th><th>Terakhir Order</th>
+    </tr></thead><tbody>`;
+
+    offtakers.forEach((o, i) => {
+      const dt = o.lastDate ? new Date(o.lastDate) : null;
+      const dtStr = dt ? dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear() : '—';
+      const oftSafe = o.offtaker.replace(/'/g,"\\'");
+      const matSafe = material.replace(/'/g,"\\'");
+      const badgeCls = i===0 ? 'bp' : 'bz';
+      html += `<tr class="disc-row-clickable" onclick="openFilteredLog('offtaker','${oftSafe}','${matSafe}')" title="Klik untuk lihat log offtaker ${o.offtaker} - ${material}">
+        <td style="color:var(--text3);font-size:11px">${i+1}</td>
+        <td style="font-size:11px;font-weight:600;color:var(--accent2)" title="${o.offtaker}">${o.offtaker}</td>
+        <td class="tr"><span class="badge ${badgeCls}">${fmtRp(o.lastHarga)}</span></td>
+        <td class="tr" style="font-size:11px">${fmtInt(o.totalKg)}</td>
+        <td class="tr" style="font-size:11px">${o.orders}×</td>
+        <td style="font-size:11px;white-space:nowrap;color:var(--text3)">${dtStr}</td>
+      </tr>`;
+    });
+
+    html += '</tbody></table>';
+  } else {
+    // ── ALL MATERIALS: show top 10 by best price, with runner-up ──
+    rankRows = materials.map(material => {
+      const offtakers = Object.entries(matMap[material]).map(([oft, e]) => ({
+        offtaker: oft,
+        bestHarga: e.maxHarga,
+        totalKg: e.totalKg,
+        orders: e.orders.size,
+        lastDate: e.lastDate
+      })).sort((a,b) => b.bestHarga - a.bestHarga);
+      return { material, best: offtakers[0], runnerUp: offtakers[1] || null };
+    }).sort((a,b) => b.best.bestHarga - a.best.bestHarga).slice(0, 10);
+
+    html = `<table><thead><tr>
+      <th>#</th><th>Material</th><th>Offtaker Harga Terbaik</th>
+      <th class="tr">Harga/Kg</th><th class="tr">Total Volume (kg)</th>
+      <th class="tr">Jumlah Order</th><th>Terakhir Order</th>
+      <th>Runner-up</th>
+    </tr></thead><tbody>`;
+
+    rankRows.forEach((r, i) => {
+      const dt = r.best.lastDate ? new Date(r.best.lastDate) : null;
+      const dtStr = dt ? dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear() : '—';
+      const oftSafe = r.best.offtaker.replace(/'/g,"\\'");
+      const matSafe = r.material.replace(/'/g,"\\'");
+      let runnerHtml = '—';
+      if (r.runnerUp) {
+        const diffPct = ((r.best.bestHarga - r.runnerUp.bestHarga) / r.runnerUp.bestHarga * 100).toFixed(1);
+        runnerHtml = `<span style="color:var(--text2)">${r.runnerUp.offtaker}</span> <span style="color:var(--text3)">(${fmtRp(r.runnerUp.bestHarga)}, +${diffPct}% dari ini)</span>`;
+      }
+      html += `<tr class="disc-row-clickable" onclick="openFilteredLog('material','${matSafe}')" title="Klik untuk lihat log material ${r.material}">
+        <td style="color:var(--text3);font-size:11px">${i+1}</td>
+        <td style="font-size:11px;font-weight:600">${r.material}</td>
+        <td style="font-size:11px;font-weight:600;color:var(--accent2)" title="${r.best.offtaker}">${oftSafe}</td>
+        <td class="tr"><span class="badge bp">${fmtRp(r.best.bestHarga)}</span></td>
+        <td class="tr" style="font-size:11px">${fmtInt(r.best.totalKg)}</td>
+        <td class="tr" style="font-size:11px">${r.best.orders}×</td>
+        <td style="font-size:11px;white-space:nowrap;color:var(--text3)">${dtStr}</td>
+        <td style="font-size:11px">${runnerHtml}</td>
+      </tr>`;
+    });
+
+    html += '</tbody></table>';
+  }
+
+  document.getElementById('bestPriceTable').innerHTML = html;
+}
+
+function clearBestPriceFilter() {
+  const el = document.getElementById('bestPriceMatFilter');
+  if (el) el.value = '';
+  renderBestPriceRanking(window._lastRows);
+}
+
+function render() {
+  const rows = getFilteredRows();
+
+  // ── GROUP BY No. SJ (deduplicate for KPI counts) ──
+  // Build SJ-level map: each unique No.SJ gets one entry
+  // RAW indices: [0]=date, [1]=offtaker, [2]=jenis, [3]=beratPDUP, [4]=beratOfftaker,
+  //              [5]=hargaKg, [6]=totalOfftaker, [7]=totalProforma, [8]=netDiterima,
+  //              [9]=invoiceNo, [10]=noSJ, [11]=payStatus, [12]=deliveryStatus,
+  //              [13]=suratJalan, [14]=receiptOfftaker, [15]=transfer, [16]=docsFisik
+  const sjMap = {};
+  rows.forEach(r => {
+    const key = r[10] || ('__NOSJ__'+r[0]+'__'+r[1]+'__'+r[9]);
+    if (!sjMap[key]) {
+      sjMap[key] = {
+        date:r[0], offtaker:r[1], noSJ:r[10], invoiceNo:r[9],
+        payStatus:r[11], delStatus:r[12],
+        sj:r[13], rc:r[14], tr:r[15], df:r[16],
+        totalOft:0, totalPf:0, netDiterima:0,
+        beratPDUP:0, beratOft:0, lines:0,
+        rows:[]
+      };
+    }
+    sjMap[key].totalOft   += (r[6]||0);
+    sjMap[key].totalPf    += (r[7]||0);
+    sjMap[key].netDiterima+= (r[8]||0);
+    sjMap[key].beratPDUP  += (r[3]||0);
+    sjMap[key].beratOft   += (r[4]||0);
+    sjMap[key].lines++;
+    sjMap[key].rows.push(r);
+  });
+  const sjEntries = Object.values(sjMap);
+  window._lastSjEntries = sjEntries; // for popup use
+  window._lastRows = rows;
+
+  // ── VOLUME KPIs (by row-level for weight totals) ──
+  const totalPDUP = rows.reduce((s,r)=>s+(r[3]||0),0);
+  const pairsForGap = rows.filter(r=>r[4]!=null && r[4]>0);
+  const totalGap = rows.reduce((s,r)=>s+(r[4]||0)-(r[3]||0),0);
+  const avgGap = pairsForGap.length ? pairsForGap.reduce((s,r)=>s+(r[4]-r[3]),0)/pairsForGap.length : null;
+  const pct = totalPDUP>0 ? totalGap/totalPDUP*100 : 0;
+  const uniqOft = new Set(rows.map(r=>r[1]));
+
+  // Jumlah transaksi = unique No.SJ count
+  document.getElementById('kpi-vol').textContent = fmtInt(totalPDUP);
+  document.getElementById('kpi-vol-t').textContent = fmtRpShort(rows.reduce((s,r)=>s+(r[8]||0),0));
+  document.getElementById('kpi-txn').textContent = sjEntries.length;
+  document.getElementById('kpi-oft').textContent = uniqOft.size;
+  document.getElementById('kpi-gap').textContent = avgGap!=null ? (avgGap>=0?'+':'')+avgGap.toFixed(1) : '—';
+  document.getElementById('kpi-totgap').textContent = (totalGap>=0?'+':'')+fmtInt(totalGap);
+  document.getElementById('kpi-totgap-pct').textContent = (pct>=0?'+':'')+pct.toFixed(2)+'% dari total PDUP';
+
+  // ── FINANCIAL KPIs (count by unique SJ) ──
+  const totalNet = rows.reduce((s,r)=>s+(r[8]||0),0);
+  // Selisih Total (Offtaker) vs Total (Proforma) per SJ-group
+  const totalOftAll = sjEntries.reduce((s,e)=>s+e.totalOft,0);
+  const totalPfAll  = sjEntries.reduce((s,e)=>s+e.totalPf,0);
+  const selisihOftPf = totalOftAll - totalPfAll;
+
+  // SJ-level status counts (unique SJ only)
+  const paidSJ      = sjEntries.filter(e=>e.payStatus==='Paid').length;
+  const unpaidSJ    = sjEntries.filter(e=>e.payStatus==='Unpaid').length;
+  const completedSJ = sjEntries.filter(e=>e.delStatus==='Completed').length;
+  const deliveredSJ = sjEntries.filter(e=>e.delStatus==='Delivered').length;
+  const totalSJ     = sjEntries.length;
+  const unpaidNet   = sjEntries.filter(e=>e.payStatus==='Unpaid').reduce((s,e)=>s+e.netDiterima,0);
+
+  document.getElementById('kpi-net').textContent = fmtRpShort(totalNet);
+  document.getElementById('kpi-selisih-oft-pf').textContent = (selisihOftPf>=0?'+':'')+fmtRpShort(Math.abs(selisihOftPf));
+  document.getElementById('kpi-selisih-oft-pf').style.color = selisihOftPf >= 0 ? 'var(--accent)' : 'var(--coral)';
+  document.getElementById('kpi-selisih-lbl').textContent = selisihOftPf >= 0 ? 'Offtaker lebih besar' : 'Proforma lebih besar';
+
+  document.getElementById('kpi-paid').textContent = paidSJ;
+  document.getElementById('kpi-paid-pct').textContent = totalSJ>0 ? (paidSJ/totalSJ*100).toFixed(1)+'% dari '+totalSJ+' SJ' : '—';
+  document.getElementById('kpi-unpaid').textContent = unpaidSJ;
+  document.getElementById('kpi-unpaid-val').textContent = unpaidSJ>0 ? fmtRpShort(unpaidNet) : 'SJ';
+  document.getElementById('kpi-completed').textContent = completedSJ;
+  document.getElementById('kpi-completed-pct').textContent = totalSJ>0 ? (completedSJ/totalSJ*100).toFixed(1)+'% dari '+totalSJ+' SJ' : '—';
+  document.getElementById('kpi-delivered').textContent = deliveredSJ;
+
+  // ── DOC STATUS (by unique SJ) ──
+  const total = sjEntries.length;
+  const sjN  = sjEntries.filter(e=>e.sj).length;
+  const rcN  = sjEntries.filter(e=>e.rc).length;
+  const trN  = sjEntries.filter(e=>e.tr).length;
+  const dfN  = sjEntries.filter(e=>e.df).length;
+
+  const setDocBar = (nId, tId, barId, pctId, n, t) => {
+    document.getElementById(nId).textContent = n;
+    document.getElementById(tId).textContent = t;
+    const p = t>0 ? (n/t*100).toFixed(1) : 0;
+    document.getElementById(barId).style.width = p+'%';
+    document.getElementById(pctId).textContent = p;
+  };
+  setDocBar('doc-sj-n','doc-sj-t','doc-sj-bar','doc-sj-pct', sjN, total);
+  setDocBar('doc-rc-n','doc-rc-t','doc-rc-bar','doc-rc-pct', rcN, total);
+  setDocBar('doc-tr-n','doc-tr-t','doc-tr-bar','doc-tr-pct', trN, total);
+  setDocBar('doc-df-n','doc-df-t','doc-df-bar','doc-df-pct', dfN, total);
+
+  // Range badge
+  if (rows.length) {
+    const dates = rows.map(r=>r[0]).sort();
+    const d1=new Date(dates[0]), d2=new Date(dates[dates.length-1]);
+    const f=d=>d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+    document.getElementById('rangeLabel').textContent = f(d1)+' – '+f(d2);
+  } else {
+    document.getElementById('rangeLabel').textContent = 'Tidak ada data';
+  }
+
+  // ── TREND (volume) — smart grouping based on active filter ──
+  // Determine grouping key: daily if narrow day range, otherwise monthly
+  let groupFn, labelFn, trendTitleSuffix, revTitleSuffix;
+  const isDayRange = rpMode === 'custom' && rpCalView === 'day' && rpSelDays.size > 0;
+  const isSingleMonth = rpMode === 'custom' && rpCalView === 'month' && rpSelMonths.size === 1;
+
+  if (isDayRange) {
+    // Group by day
+    groupFn = r => r[0];
+    labelFn = k => { const dt=new Date(k+'T00:00:00'); return dt.getDate()+' '+MONTH_NAME[dt.getMonth()]; };
+    trendTitleSuffix = 'per hari (kg PDUP)';
+    revTitleSuffix   = 'per hari (Rp)';
+  } else if (isSingleMonth) {
+    // Group by day within that month
+    groupFn = r => r[0];
+    labelFn = k => { const dt=new Date(k+'T00:00:00'); return dt.getDate()+' '+MONTH_NAME[dt.getMonth()]; };
+    trendTitleSuffix = 'per hari — '+([...rpSelMonths][0].split('-').reverse().map((v,i)=>i===0?MONTH_NAME[parseInt(v)-1]:v).join(' '))+' (kg PDUP)';
+    revTitleSuffix   = 'per hari — '+([...rpSelMonths][0].split('-').reverse().map((v,i)=>i===0?MONTH_NAME[parseInt(v)-1]:v).join(' '))+' (Rp)';
+  } else if (rpMode === 'today') {
+    groupFn = r => r[0];
+    labelFn = k => { const dt=new Date(k+'T00:00:00'); return dt.getDate()+' '+MONTH_NAME[dt.getMonth()]; };
+    trendTitleSuffix = 'hari ini (kg PDUP)';
+    revTitleSuffix   = 'hari ini (Rp)';
+  } else {
+    // Default: group by month
+    groupFn = r => getMonthKey(r[0]);
+    labelFn = k => periodLabel(k);
+    trendTitleSuffix = 'per bulan (kg PDUP)';
+    revTitleSuffix   = 'per bulan (Rp)';
+  }
+
+  const grouped = {};
+  rows.forEach(r=>{
+    const key = groupFn(r);
+    if (!grouped[key]) grouped[key]={pdup:0,net:0};
+    grouped[key].pdup += r[3];
+    grouped[key].net  += (r[8]||0);
+  });
+  const tKeys = Object.keys(grouped).sort();
+
+  // Custom plugin: data labels just outside the end of each bar
+  const dataLabelPlugin = {
+    id:'dataLabel',
+    afterDatasetsDraw(chart){
+      const {ctx, data, scales:{x,y}} = chart;
+      if (!x||!y) return;
+      ctx.save();
+      data.datasets.forEach((ds, di)=>{
+        chart.getDatasetMeta(di).data.forEach((bar, i)=>{
+          const val = ds.data[i];
+          if (!val) return;
+          const label = ds._isRp ? fmtRpShort(val) : fmtShort(val)+' kg';
+          ctx.font = '600 10.5px Inter, sans-serif';
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = 'left';
+          ctx.fillStyle = isDarkMode ? 'rgba(255,255,255,0.75)' : '#1e1b3a';
+          ctx.fillText(label, bar.x + 6, bar.y);
+        });
+      });
+      ctx.restore();
+    }
+  };
+
+  const axisTickColor = isDarkMode ? 'rgba(255,255,255,0.4)' : '#1e1b3a';
+  const axisGridColor = isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(37,99,235,0.08)';
+
+  document.getElementById('trendTitle').textContent = 'Volume ' + trendTitleSuffix;
+  destroyChart('trend');
+  const trendDs = {label:'PDUP (kg)', data:tKeys.map(k=>Math.round(grouped[k].pdup)), backgroundColor: isDarkMode ? 'rgba(46,232,160,0.75)' : 'rgba(37,99,235,0.75)', borderRadius:3, barThickness:10, _isRp:false};
+  charts['trend'] = new Chart(document.getElementById('trendChart'),{
+    type:'bar',
+    plugins:[dataLabelPlugin],
+    data:{ labels: tKeys.map(k=>labelFn(k)), datasets:[trendDs] },
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, layout:{padding:{right:70}}, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtInt(ctx.raw)+' kg'}}}, scales:{ y:{grid:{display:false},ticks:{color:axisTickColor,font:{size:11}}}, x:{grid:{color:axisGridColor},ticks:{color:axisTickColor,callback:v=>fmtShort(v)}} } }
+  });
+
+  // ── REVENUE TREND ──
+  document.getElementById('revTitle').textContent = 'Net Diterima ' + revTitleSuffix;
+  destroyChart('rev');
+  const revDs = {label:'Net Diterima (Rp)', data:tKeys.map(k=>Math.round(grouped[k].net)), backgroundColor: isDarkMode ? 'rgba(97,184,255,0.75)' : 'rgba(37,99,235,0.75)', borderRadius:3, barThickness:10, _isRp:true};
+  charts['rev'] = new Chart(document.getElementById('revChart'),{
+    type:'bar',
+    plugins:[dataLabelPlugin],
+    data:{ labels: tKeys.map(k=>labelFn(k)), datasets:[revDs] },
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, layout:{padding:{right:90}}, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtRpShort(ctx.raw)}}}, scales:{ y:{grid:{display:false},ticks:{color:axisTickColor,font:{size:11}}}, x:{grid:{color:axisGridColor},ticks:{color:axisTickColor,callback:v=>fmtRpShort(v)}} } }
+  });
+
+  // Payment status bar chart removed per request
+
+  // ── OFFTAKER DONUT ──
+  const offtakerMap = {};
+  rows.forEach(r=>{ offtakerMap[r[1]]=(offtakerMap[r[1]]||0)+r[3]; });
+  const sortedOft = Object.entries(offtakerMap).sort((a,b)=>b[1]-a[1]);
+  const top10Oft = sortedOft.slice(0,10);
+  const othersOft = sortedOft.slice(10).reduce((s,e)=>s+e[1],0);
+  const pieOftEntries = othersOft>0 ? [...top10Oft,['Lainnya',othersOft]] : top10Oft;
+  const pieOftTotal = pieOftEntries.reduce((s,e)=>s+e[1],0);
+  document.getElementById('pieOftTotal').textContent = fmtShort(pieOftTotal);
+  destroyChart('offtakerPie');
+  charts['offtakerPie'] = new Chart(document.getElementById('offtakerPie'),{
+    type:'doughnut',
+    data:{ labels: pieOftEntries.map(e=>e[0]), datasets:[{data: pieOftEntries.map(e=>Math.round(e[1])), backgroundColor: COLORS.slice(0,pieOftEntries.length), borderWidth:2, borderColor:'rgba(15,23,42,0.5)', hoverOffset:8}] },
+    options:{ responsive:false, cutout:'62%', onClick:(evt,els)=>{ if(els.length){ const lbl=pieOftEntries[els[0].index][0]; openFilteredLog('offtaker',lbl); } }, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>{const p=(ctx.parsed/pieOftTotal*100).toFixed(1); return ` ${fmtInt(ctx.parsed)} kg (${p}%)`;} }} } }
+  });
+  makePieLegend('offtakerPieLegend', pieOftEntries, pieOftTotal, 'offtaker');
+
+  // ── MATERIAL DONUT ──
+  const matMap = {};
+  rows.forEach(r=>{ if(r[2]) matMap[r[2]]=(matMap[r[2]]||0)+r[3]; });
+  const sortedMat = Object.entries(matMap).sort((a,b)=>b[1]-a[1]);
+  const top10Mat = sortedMat.slice(0,10);
+  const othersMat = sortedMat.slice(10).reduce((s,e)=>s+e[1],0);
+  const pieMatEntries = othersMat>0 ? [...top10Mat,['Lainnya',othersMat]] : top10Mat;
+  const pieMatTotal = pieMatEntries.reduce((s,e)=>s+e[1],0);
+  document.getElementById('pieMatTotal').textContent = fmtShort(pieMatTotal);
+  destroyChart('materialPie');
+  charts['materialPie'] = new Chart(document.getElementById('materialPie'),{
+    type:'doughnut',
+    data:{ labels: pieMatEntries.map(e=>e[0]), datasets:[{data: pieMatEntries.map(e=>Math.round(e[1])), backgroundColor: COLORS.slice(0,pieMatEntries.length), borderWidth:2, borderColor:'rgba(15,23,42,0.5)', hoverOffset:8}] },
+    options:{ responsive:false, cutout:'62%', onClick:(evt,els)=>{ if(els.length){ const lbl=pieMatEntries[els[0].index][0]; openFilteredLog('material',lbl); } }, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>{const p=(ctx.parsed/pieMatTotal*100).toFixed(1); return ` ${fmtInt(ctx.parsed)} kg (${p}%)`;} }} } }
+  });
+  makePieLegend('materialPieLegend', pieMatEntries, pieMatTotal, 'material');
+
+  // ── BEST PRICE RANKING PER MATERIAL ──
+  renderBestPriceRanking(rows);
+
+  // Offtaker bar and material bar removed per request
+
+  // ── DISCREPANCY TABLE (No.SJ grouped, show Total Offtaker vs Proforma diff) ──
+  const discRowArr = rows
+    .filter(r=>r[4]!=null && r[4]>0)
+    .map(r=>({date:r[0],offtaker:r[1],material:r[2],noSJ:r[10]||'—',pdup:r[3],off:r[4],harga:r[5]||0,totOft:r[6]||0,totPf:r[7]||0,diff:r[4]-r[3],diffRp:(r[6]||0)-(r[7]||0)}));
+
+  // Apply sort
+  const _sk = window._discSortKey || 'kg';
+  const _sd = window._discSortDir || 'asc';
+  discRowArr.sort((a,b)=>{
+    let va, vb;
+    if (_sk === 'kg')   { va = a.diff;   vb = b.diff; }
+    else if (_sk === 'rp')   { va = a.diffRp; vb = b.diffRp; }
+    else                     { va = a.date;              vb = b.date; }
+    if (va < vb) return _sd === 'asc' ? -1 : 1;
+    if (va > vb) return _sd === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  // Update sort button UI
+  ['kg','rp','date'].forEach(k => {
+    const btn   = document.getElementById('disc-sort-'+k);
+    const arrow = document.getElementById('disc-sort-'+k+'-arrow');
+    if (!btn || !arrow) return;
+    btn.classList.remove('active-asc','active-desc');
+    if (_sk === k) {
+      btn.classList.add(_sd === 'asc' ? 'active-asc' : 'active-desc');
+      arrow.textContent = _sd === 'asc' ? '↑' : '↓';
+    } else {
+      arrow.textContent = '↕';
+    }
+  });
+
+  window._discRowArr = discRowArr;
+  if (!discRowArr.length) {
+    document.getElementById('discTable').innerHTML='<div class="empty">Tidak ada data untuk filter ini.</div>';
+    document.getElementById('discToggle').style.display='none';
+  } else {
+    document.getElementById('discToggle').style.display = discRowArr.length>10 ? '' : 'none';
+    document.getElementById('discToggle').textContent = 'Lihat Semua';
+    const dispDisc = discRowArr.slice(0,10);
+    let html=`<table><thead><tr>
+      <th>#</th><th>No. SJ</th><th>Tgl</th><th>Material</th>
+      <th class="tr">Selisih (kg)</th><th class="tr">Selisih (Rp)</th>
+    </tr></thead><tbody>`;
+    dispDisc.forEach((r,i)=>{
+      const sign=r.diff>=0?'+':'';
+      const cls=r.diff>0?'bp':'bn';
+      const signRp=r.diffRp>=0?'+':'';
+      const clsRp=r.diffRp>0?'bp':'bn';
+      const pct=r.pdup>0?(r.diff/r.pdup*100).toFixed(1):'—';
+      const dt=new Date(r.date); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()];
+      const oft=r.offtaker.length>18?r.offtaker.slice(0,17)+'…':r.offtaker;
+      const idx = window._discRowArr ? window._discRowArr.indexOf(r) : i;
+      html+=`<tr class="disc-row-clickable" onclick="openDiscDetail(${idx})" title="Klik untuk lihat perbandingan data">
+        <td style="color:var(--text3);font-size:11px">${i+1}</td>
+        <td style="font-size:11px;font-weight:600;color:var(--accent2)" title="${r.offtaker}">${r.noSJ}<br><span style="color:var(--text3);font-weight:400">${oft}</span></td>
+        <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
+        <td style="font-size:11px;color:var(--text3)">${r.material||'—'} <span class="disc-click-hint">🔍 detail</span></td>
+        <td class="tr"><span class="badge ${cls}">${sign}${fmtInt(r.diff)} kg</span></td>
+        <td class="tr"><span class="badge ${clsRp}">${signRp}${fmtRpShort(Math.abs(r.diffRp))}</span></td>
+      </tr>`;
+    });
+    html+='</tbody></table>';
+    document.getElementById('discTable').innerHTML=html;
+  }
+
+  // ── PAYMENT/DOC STATUS TABLE (grouped by No.SJ) ──
+  if (!rows.length) {
+    document.getElementById('payTable').innerHTML='<div class="empty">Tidak ada data untuk filter ini.</div>';
+    document.getElementById('payToggle').style.display='none';
+  } else {
+    const sjMap2 = {};
+    rows.forEach(r=>{
+      const key = r[10] || ('__NOSJ__'+r[0]+'__'+r[1]+'__'+r[9]);
+      if (!sjMap2[key]) sjMap2[key]={noSJ:r[10]||'—',inv:r[9]||'—',date:r[0],offtaker:r[1],lines:0,totalPf:0,pay:r[11],del:r[12],sj:r[13],rc:r[14],tr:r[15],df:r[16]};
+      sjMap2[key].lines++;
+      sjMap2[key].totalPf += (r[7]||0);
+    });
+    const allSJ2 = Object.values(sjMap2);
+    const unpaidDel2 = allSJ2.filter(e=>e.pay==='Unpaid'&&e.del==='Delivered').sort((a,b)=>b.date.localeCompare(a.date));
+    const others2    = allSJ2.filter(e=>!(e.pay==='Unpaid'&&e.del==='Delivered')).sort((a,b)=>b.date.localeCompare(a.date));
+    const top10sj = [...unpaidDel2,...others2];
+    window._payRowArr = top10sj;
+    document.getElementById('payToggle').style.display = top10sj.length>10 ? '' : 'none';
+    document.getElementById('payToggle').textContent = 'Lihat Semua';
+    const dispPay = top10sj.slice(0,10);
+    let html=`<table><thead><tr>
+      <th>#</th><th>No. SJ</th><th>Tgl</th><th>Offtaker</th>
+      <th class="tr">Total (Proforma)</th>
+      <th class="tc">Bayar</th><th class="tc">Kirim</th>
+    </tr></thead><tbody>`;
+    dispPay.forEach((e,i)=>{
+      const payBadge = e.pay==='Paid'?'<span class="pay-badge pay-paid">✓</span>':e.pay==='Unpaid'?'<span class="pay-badge pay-unpaid">⏳</span>':'<span class="badge bz">—</span>';
+      const delBadge = e.del==='Completed'?'<span class="pay-badge del-completed">✓</span>':e.del==='Delivered'?'<span class="pay-badge del-delivered">⏳</span>':'<span class="badge bz">—</span>';
+      const docIcon = ok => ok?'<span class="doc-yes">✓</span>':'<span class="doc-no">✗</span>';
+      const dt=new Date(e.date); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()];
+      const oft=e.offtaker.length>16?e.offtaker.slice(0,15)+'…':e.offtaker;
+      const hi = e.pay==='Unpaid'&&e.del==='Delivered'?'style="background:rgba(255,107,135,0.05)"':'';
+      html+=`<tr ${hi}>
+        <td style="color:var(--text3);font-size:11px">${i+1}</td>
+        <td style="font-size:11px;font-weight:600;color:var(--accent2);white-space:nowrap">${e.noSJ}</td>
+        <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
+        <td title="${e.offtaker}" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${oft}</td>
+        <td class="tr tn" style="color:var(--amber);font-weight:600;font-size:11px">${e.totalPf>0?fmtRpShort(e.totalPf):'—'}</td>
+        <td class="tc">${payBadge}</td><td class="tc">${delBadge}</td>
+      </tr>`;
+    });
+    html+='</tbody></table>';
+    document.getElementById('payTable').innerHTML=html;
+  }
+}
+
+
+function openDiscFullPopup() {
+  document.getElementById('disc-full-search').value = '';
+  document.getElementById('popup-overlay').classList.add('open');
+  document.getElementById('popup-disc-full').classList.add('open');
+  renderDiscFullTable(window._discRowArr || []);
+}
+
+function openPayFullPopup() {
+  document.getElementById('pay-full-search').value = '';
+  document.getElementById('popup-overlay').classList.add('open');
+  document.getElementById('popup-pay-full').classList.add('open');
+  renderPayFullTable(window._payRowArr || []);
+}
+// ── DISC SORT STATE ──
+window._discSortKey = window._discSortKey || 'kg';   // 'kg' | 'rp' | 'date'
+window._discSortDir = window._discSortDir || 'asc';  // 'asc' | 'desc'
+
+function setDiscSort(key) {
+  if (window._discSortKey === key) {
+    window._discSortDir = window._discSortDir === 'desc' ? 'asc' : 'desc';
+  } else {
+    window._discSortKey = key;
+    window._discSortDir = key === 'date' ? 'desc' : 'asc';
+  }
+  render();
+}
+
+// ─── POPUP FUNCTIONS ───────────────────────────────────────
+let _popupVolRows = [];
+let _popupKeuEntries = [];
+let _popupFilteredRows = [];
+
+function openDiscDetail(idx) {
+  const r = (window._discRowArr || [])[idx];
+  if (!r) return;
+  const dt = new Date(r.date);
+  const dtStr = dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
+  const diffKg = r.diff; // off - pdup
+  const diffRp = r.diffRp; // totOft - totPf
+  const absDiffKg = Math.abs(diffKg);
+  const absDiffRp = Math.abs(diffRp);
+  const pct = r.pdup > 0 ? (diffKg / r.pdup * 100).toFixed(2) : '—';
+
+  // Who is heavier?
+  const pdupBigger = diffKg < 0;
+  const pdupSame   = diffKg === 0;
+  const kgResultClass = diffKg === 0 ? '' : diffKg > 0 ? 'chip-pos-kg' : 'chip-kg';
+  const rpResultClass = diffRp === 0 ? '' : diffRp > 0 ? 'chip-pos-rp' : 'chip-rp';
+  const kgSign = diffKg >= 0 ? '+' : '';
+  const rpSign = diffRp >= 0 ? '+' : '';
+
+  // Explanation text
+  const explainKg = pdupSame
+    ? 'Berat PDUP dan offtaker sama persis — tidak ada selisih.'
+    : pdupBigger
+      ? `Berat PDUP <strong>${fmtInt(r.pdup)} kg</strong> lebih besar dari berat offtaker <strong>${fmtInt(r.off)} kg</strong> sebesar <strong>${fmtInt(absDiffKg)} kg (${pct}%)</strong>. Artinya timbangan PDUP mencatat lebih banyak dari yang diakui offtaker.`
+      : `Berat offtaker <strong>${fmtInt(r.off)} kg</strong> lebih besar dari berat PDUP <strong>${fmtInt(r.pdup)} kg</strong> sebesar <strong>${fmtInt(absDiffKg)} kg (${Math.abs(parseFloat(pct))}%)</strong>. Artinya offtaker mengakui lebih banyak dari timbangan PDUP.`;
+
+  const washBg = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(37,99,235,0.04)';
+  const washBorder = 'rgba(255,255,255,0.14)';
+  const explainBg = isDarkMode ? 'rgba(255,255,255,0.04)' : 'rgba(37,99,235,0.04)';
+  const explainBorder = isDarkMode ? 'rgba(255,255,255,0.09)' : 'rgba(37,99,235,0.09)';
+
+  const body = document.getElementById('disc-detail-body');
+  body.innerHTML = `
+    <!-- Meta info -->
+    <div class="disc-meta-row" style="margin-top:0;padding-top:0;border-top:none;">
+      <div class="disc-meta-chip"><span>No. SJ</span>${r.noSJ}</div>
+      <div class="disc-meta-chip"><span>Tanggal</span>${dtStr}</div>
+      <div class="disc-meta-chip"><span>Offtaker</span>${r.offtaker}</div>
+      <div class="disc-meta-chip"><span>Material</span>${r.material||'—'}</div>
+      <div class="disc-meta-chip"><span>Harga / Kg</span>${fmtRp(r.harga)}</div>
+    </div>
+
+    <!-- Weight comparison -->
+    <div class="disc-section-title" style="margin-top:14px;">⚖️ Perbandingan Berat</div>
+    <div class="disc-3col">
+      <div class="disc-compare-side pdup-side">
+        <div class="disc-compare-label">🏭 Berat PDUP</div>
+        <div class="disc-compare-val">${fmtInt(r.pdup)}</div>
+        <div class="disc-compare-sub">kg · timbangan internal</div>
+      </div>
+      <div class="disc-compare-side oft-side">
+        <div class="disc-compare-label">🚛 Berat Offtaker</div>
+        <div class="disc-compare-val">${fmtInt(r.off)}</div>
+        <div class="disc-compare-sub">kg · timbangan offtaker</div>
+      </div>
+      <div class="disc-result-chip ${kgResultClass}" style="${diffKg===0?'background:'+washBg+';border-color:'+washBorder+';':''}">
+        <div class="disc-result-chip-label">Selisih Berat</div>
+        <div class="disc-result-chip-val" style="${diffKg===0?'color:var(--text3);':''}">
+          ${kgSign}${fmtInt(diffKg)} kg
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px;">${pct !== '—' ? kgSign+pct+'% dari PDUP' : '—'}</div>
+      </div>
+    </div>
+
+    <!-- Rp comparison -->
+    <div class="disc-section-title">💰 Perbandingan Nilai Transaksi <span style="text-transform:none;font-weight:400;letter-spacing:0;color:var(--text3);">(@ ${fmtRp(r.harga)}/kg)</span></div>
+    <div class="disc-3col">
+      <div class="disc-rp-side rp-oft">
+        <div class="disc-rp-label">Total (Offtaker)</div>
+        <div class="disc-rp-val">${fmtRp(r.totOft)}</div>
+        <div class="disc-rp-sub">${fmtRp(r.harga)} × ${fmtInt(r.off)} kg</div>
+      </div>
+      <div class="disc-rp-side rp-pf">
+        <div class="disc-rp-label">Total (Proforma)</div>
+        <div class="disc-rp-val" style="color:var(--amber)">${fmtRp(r.totPf)}</div>
+        <div class="disc-rp-sub">${fmtRp(r.harga)} × ${fmtInt(r.pdup)} kg</div>
+      </div>
+      <div class="disc-result-chip ${rpResultClass}" style="${diffRp===0?'background:'+washBg+';border-color:'+washBorder+';':''}">
+        <div class="disc-result-chip-label">Selisih Nilai</div>
+        <div class="disc-result-chip-val" style="${diffRp===0?'color:var(--text3);':''}">
+          ${rpSign}${fmtRpShort(Math.abs(diffRp))}
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px;">Offtaker vs Proforma</div>
+      </div>
+    </div>
+
+    <!-- Explanation -->
+    <div style="margin-top:14px;padding:12px 14px;background:${explainBg};border:1px solid ${explainBorder};border-radius:10px;font-size:12px;color:var(--text2);line-height:1.7;">
+      ${explainKg}
+      Pada selisih berat ${absDiffKg>0?fmtInt(absDiffKg)+' kg':'ini'} dengan harga ${fmtRp(r.harga)}/kg, dampaknya terhadap nilai transaksi adalah <strong>${rpSign}${fmtRpShort(Math.abs(diffRp))}</strong>.
+    </div>
+  `;
+
+  document.getElementById('popup-overlay').classList.add('open');
+  document.getElementById('popup-disc-detail').classList.add('open');
+}
+
+function openFilteredLog(type, name, extraMaterial) {
+  let rows = (window._lastRows || []).filter(r => type==='offtaker' ? r[1]===name : r[2]===name);
+  if (extraMaterial) rows = rows.filter(r => r[2]===extraMaterial);
+  _popupFilteredRows = rows;
+  document.getElementById('filtered-popup-title').textContent =
+    (type==='offtaker' ? '🏢 Log Offtaker: ' : '📦 Log Material: ') + name + (extraMaterial ? ' — ' + extraMaterial : '');
+  document.getElementById('filtered-search').value = '';
+  document.getElementById('popup-overlay').classList.add('open');
+  document.getElementById('popup-filtered').classList.add('open');
+  renderVolTable(_popupFilteredRows, 'filtered-table-body');
+}
+
+function openPopup(type) {
+  document.getElementById('popup-overlay').classList.add('open');
+  document.getElementById('popup-'+type).classList.add('open');
+  if (type === 'volume') {
+    _popupVolRows = window._lastRows || [];
+    renderVolTable(_popupVolRows);
+  } else if (type === 'keuangan') {
+    _popupKeuEntries = window._lastSjEntries || [];
+    renderKeuTable(_popupKeuEntries);
+  }
+}
+
+function closePopup() {
+  document.getElementById('popup-overlay').classList.remove('open');
+  document.querySelectorAll('.popup-modal').forEach(m=>m.classList.remove('open'));
+}
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePopup(); });
+
+function filterPopupTable(type) {
+  const q = document.getElementById(type+'-search').value.toLowerCase();
+  if (type==='vol') {
+    renderVolTable(_popupVolRows.filter(r=>
+      (r[1]||'').toLowerCase().includes(q) ||
+      (r[2]||'').toLowerCase().includes(q) ||
+      (r[10]||'').toLowerCase().includes(q)
+    ));
+  } else if (type==='filtered') {
+    renderVolTable(_popupFilteredRows.filter(r=>
+      (r[1]||'').toLowerCase().includes(q) ||
+      (r[2]||'').toLowerCase().includes(q) ||
+      (r[10]||'').toLowerCase().includes(q)
+    ), 'filtered-table-body');
+  } else if (type==='disc-full') {
+    renderDiscFullTable((window._discRowArr||[]).filter(r=>
+      (r.offtaker||'').toLowerCase().includes(q) ||
+      (r.material||'').toLowerCase().includes(q) ||
+      (r.noSJ||'').toLowerCase().includes(q)
+    ));
+  } else if (type==='pay-full') {
+    renderPayFullTable((window._payRowArr||[]).filter(e=>
+      (e.offtaker||'').toLowerCase().includes(q) ||
+      (e.noSJ||'').toLowerCase().includes(q)
+    ));
+  } else {
+    renderKeuTable(_popupKeuEntries.filter(e=>
+      (e.offtaker||'').toLowerCase().includes(q) ||
+      (e.noSJ||'').toLowerCase().includes(q) ||
+      (e.invoiceNo||'').toLowerCase().includes(q)
+    ));
+  }
+}
+
+function renderVolTable(data, targetId) {
+  const el = document.getElementById(targetId || 'vol-table-body');
+  if (!data.length) { el.innerHTML='<div class="empty">Tidak ada data.</div>'; return; }
+  const totalPdup = data.reduce((s,r)=>s+(r[3]||0),0);
+  const totalOft  = data.reduce((s,r)=>s+(r[6]||0),0);
+  const totalPf   = data.reduce((s,r)=>s+(r[7]||0),0);
+  const totalNet  = data.reduce((s,r)=>s+(r[8]||0),0);
+  let html = `<div class="popup-stat-row">
+    <div class="popup-stat"><div class="popup-stat-label">Total Berat PDUP</div><div class="popup-stat-val kv-green">${fmtInt(totalPdup)} kg</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Total (Offtaker)</div><div class="popup-stat-val kv-blue">${fmtRpShort(totalOft)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Total (Proforma)</div><div class="popup-stat-val kv-amber">${fmtRpShort(totalPf)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Net Diterima</div><div class="popup-stat-val kv-green">${fmtRpShort(totalNet)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Jumlah Baris</div><div class="popup-stat-val">${data.length}</div></div>
+  </div>
+  <table><thead><tr>
+    <th>#</th><th>Tgl</th><th>No. SJ</th><th>Offtaker</th><th>Material</th>
+    <th class="tr">Harga/Kg</th>
+    <th class="tr">Berat PDUP</th><th class="tr">Berat Offtaker</th>
+    <th class="tr">Total (Offtaker)</th><th class="tr">Total (Proforma)</th>
+    <th class="tr">Selisih Rp</th><th class="tr">Net Diterima</th>
+  </tr></thead><tbody>`;
+  data.forEach((r,i)=>{
+    const dt=new Date(r[0]); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
+    const oft=r[1].length>20?r[1].slice(0,19)+'…':r[1];
+    const diffRp = (r[6]||0)-(r[7]||0);
+    const diffCls = diffRp>0?'kv-green':diffRp<0?'kv-coral':'';
+    const diffSign = diffRp>=0?'+':'';
+    html+=`<tr>
+      <td style="color:var(--text3);font-size:11px">${i+1}</td>
+      <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
+      <td style="font-size:11px;font-weight:600;color:var(--accent2)">${r[10]||'—'}</td>
+      <td title="${r[1]}" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${oft}</td>
+      <td style="font-size:11px;color:var(--text3)">${r[2]||'—'}</td>
+      <td class="tr tn" style="color:var(--text2)">${r[5]?fmtRp(r[5]):'—'}</td>
+      <td class="tr tn" style="font-weight:600">${r[3]!=null?fmtInt(r[3])+' kg':'—'}</td>
+      <td class="tr tn" style="color:var(--text3)">${r[4]!=null?fmtInt(r[4])+' kg':'—'}</td>
+      <td class="tr tn">${r[6]?fmtRp(r[6]):'—'}</td>
+      <td class="tr tn" style="color:var(--text3)">${r[7]?fmtRp(r[7]):'—'}</td>
+      <td class="tr tn ${diffCls}" style="font-weight:600">${diffSign}${fmtRpShort(Math.abs(diffRp))}</td>
+      <td class="tr tn" style="color:var(--accent);font-weight:600">${r[8]?fmtRpShort(r[8]):'—'}</td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+function renderKeuTable(entries) {
+  const el = document.getElementById('keu-table-body');
+  if (!entries.length) { el.innerHTML='<div class="empty">Tidak ada data.</div>'; return; }
+  const paidCount    = entries.filter(e=>e.payStatus==='Paid').length;
+  const unpaidCount  = entries.filter(e=>e.payStatus==='Unpaid').length;
+  const compCount    = entries.filter(e=>e.delStatus==='Completed').length;
+  const delivCount   = entries.filter(e=>e.delStatus==='Delivered').length;
+  const totalNetKeu  = entries.reduce((s,e)=>s+e.netDiterima,0);
+  const totalOftKeu  = entries.reduce((s,e)=>s+e.totalOft,0);
+  const totalPfKeu   = entries.reduce((s,e)=>s+e.totalPf,0);
+  const selRpKeu     = totalOftKeu - totalPfKeu;
+  const selSign      = selRpKeu>=0?'+':'';
+  const selCls       = selRpKeu>=0?'kv-green':'kv-coral';
+  let html = `<div class="popup-stat-row">
+    <div class="popup-stat"><div class="popup-stat-label">Jumlah SJ</div><div class="popup-stat-val">${entries.length}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Paid</div><div class="popup-stat-val kv-green">${paidCount}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Unpaid</div><div class="popup-stat-val kv-coral">${unpaidCount}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Completed</div><div class="popup-stat-val kv-blue">${compCount}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Delivered</div><div class="popup-stat-val kv-amber">${delivCount}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Net Diterima</div><div class="popup-stat-val kv-green">${fmtRpShort(totalNetKeu)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Selisih Offtaker-Proforma</div><div class="popup-stat-val ${selCls}">${selSign}${fmtRpShort(Math.abs(selRpKeu))}</div></div>
+  </div>
+  <table><thead><tr>
+    <th>#</th><th>No. SJ</th><th>Tgl</th><th>Offtaker</th><th>Invoice</th>
+    <th class="tr">Berat PDUP</th>
+    <th class="tr">Total (Offtaker)</th><th class="tr">Total (Proforma)</th><th class="tr">Selisih Rp</th>
+    <th class="tr">Net Diterima</th>
+    <th class="tc">Bayar</th><th class="tc">Kirim</th>
+    <th class="tc">SJ</th><th class="tc">RC</th><th class="tc">TF</th><th class="tc">DF</th>
+  </tr></thead><tbody>`;
+  entries.sort((a,b)=>a.date.localeCompare(b.date)).forEach((e,i)=>{
+    const dt=new Date(e.date); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
+    const oft=e.offtaker.length>18?e.offtaker.slice(0,17)+'…':e.offtaker;
+    const diffRpKeu = e.totalOft - e.totalPf;
+    const dCls = diffRpKeu>0?'kv-green':diffRpKeu<0?'kv-coral':'';
+    const dSign = diffRpKeu>=0?'+':'';
+    const payBadge = e.payStatus==='Paid'?'<span class="pay-badge pay-paid">✓ Paid</span>':e.payStatus==='Unpaid'?'<span class="pay-badge pay-unpaid">⏳ Unpaid</span>':'<span class="badge bz">—</span>';
+    const delBadge = e.delStatus==='Completed'?'<span class="pay-badge del-completed">✓</span>':e.delStatus==='Delivered'?'<span class="pay-badge del-delivered">⏳</span>':'<span class="badge bz">—</span>';
+    const docIcon = ok => ok?'<span class="doc-yes">✓</span>':'<span class="doc-no">✗</span>';
+    const hi = e.payStatus==='Unpaid'&&e.delStatus==='Delivered'?'style="background:rgba(255,107,135,0.05)"':'';
+    html+=`<tr ${hi}>
+      <td style="color:var(--text3);font-size:11px">${i+1}</td>
+      <td style="font-size:11px;font-weight:700;color:var(--accent2)">${e.noSJ||'—'}</td>
+      <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
+      <td title="${e.offtaker}" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${oft}</td>
+      <td style="font-size:10.5px;color:var(--text3)">${e.invoiceNo||'—'}</td>
+      <td class="tr tn" style="font-weight:600">${fmtInt(e.beratPDUP)} kg</td>
+      <td class="tr tn">${fmtRp(e.totalOft)}</td>
+      <td class="tr tn" style="color:var(--text3)">${fmtRp(e.totalPf)}</td>
+      <td class="tr tn ${dCls}" style="font-weight:600">${dSign}${fmtRpShort(Math.abs(diffRpKeu))}</td>
+      <td class="tr tn" style="color:var(--accent);font-weight:600">${e.netDiterima>0?fmtRpShort(e.netDiterima):'—'}</td>
+      <td class="tc">${payBadge}</td>
+      <td class="tc">${delBadge}</td>
+      <td class="tc">${docIcon(e.sj)}</td><td class="tc">${docIcon(e.rc)}</td>
+      <td class="tc">${docIcon(e.tr)}</td><td class="tc">${docIcon(e.df)}</td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+function renderDiscFullTable(rowsArr) {
+  const el = document.getElementById('disc-full-table-body');
+  if (!rowsArr.length) { el.innerHTML='<div class="empty">Tidak ada data.</div>'; return; }
+  let html = `<div class="popup-stat-row">
+    <div class="popup-stat"><div class="popup-stat-label">Jumlah Baris</div><div class="popup-stat-val">${rowsArr.length}</div></div>
+  </div>
+  <table><thead><tr>
+    <th>#</th><th>No. SJ</th><th>Tgl</th><th>Offtaker</th><th>Material</th>
+    <th class="tr">Selisih (kg)</th><th class="tr">Selisih (Rp)</th>
+  </tr></thead><tbody>`;
+  rowsArr.forEach((r,i)=>{
+    const sign=r.diff>=0?'+':'';
+    const cls=r.diff>0?'bp':'bn';
+    const signRp=r.diffRp>=0?'+':'';
+    const clsRp=r.diffRp>0?'bp':'bn';
+    const dt=new Date(r.date); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
+    const idx = window._discRowArr ? window._discRowArr.indexOf(r) : i;
+    html+=`<tr class="disc-row-clickable" onclick="closePopup();openDiscDetail(${idx})" title="Klik untuk lihat perbandingan data">
+      <td style="color:var(--text3);font-size:11px">${i+1}</td>
+      <td style="font-size:11px;font-weight:600;color:var(--accent2)">${r.noSJ}</td>
+      <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
+      <td title="${r.offtaker}" style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.offtaker}</td>
+      <td style="font-size:11px;color:var(--text3)">${r.material||'—'}</td>
+      <td class="tr"><span class="badge ${cls}">${sign}${fmtInt(r.diff)} kg</span></td>
+      <td class="tr"><span class="badge ${clsRp}">${signRp}${fmtRpShort(Math.abs(r.diffRp))}</span></td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+function renderPayFullTable(rowsArr) {
+  const el = document.getElementById('pay-full-table-body');
+  if (!rowsArr.length) { el.innerHTML='<div class="empty">Tidak ada data.</div>'; return; }
+  const unpaidDelCount = rowsArr.filter(e=>e.pay==='Unpaid'&&e.del==='Delivered').length;
+  let html = `<div class="popup-stat-row">
+    <div class="popup-stat"><div class="popup-stat-label">Jumlah SJ</div><div class="popup-stat-val">${rowsArr.length}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Unpaid &amp; Delivered</div><div class="popup-stat-val kv-coral">${unpaidDelCount}</div></div>
+  </div>
+  <table><thead><tr>
+    <th>#</th><th>No. SJ</th><th>Tgl</th><th>Offtaker</th>
+    <th class="tr">Total (Proforma)</th>
+    <th class="tc">Bayar</th><th class="tc">Kirim</th>
+  </tr></thead><tbody>`;
+  rowsArr.forEach((e,i)=>{
+    const payBadge = e.pay==='Paid'?'<span class="pay-badge pay-paid">✓</span>':e.pay==='Unpaid'?'<span class="pay-badge pay-unpaid">⏳</span>':'<span class="badge bz">—</span>';
+    const delBadge = e.del==='Completed'?'<span class="pay-badge del-completed">✓</span>':e.del==='Delivered'?'<span class="pay-badge del-delivered">⏳</span>':'<span class="badge bz">—</span>';
+    const dt=new Date(e.date); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
+    const hi = e.pay==='Unpaid'&&e.del==='Delivered'?'style="background:rgba(255,107,135,0.05)"':'';
+    html+=`<tr ${hi}>
+      <td style="color:var(--text3);font-size:11px">${i+1}</td>
+      <td style="font-size:11px;font-weight:600;color:var(--accent2);white-space:nowrap">${e.noSJ}</td>
+      <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
+      <td title="${e.offtaker}" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.offtaker}</td>
+      <td class="tr tn" style="color:var(--amber);font-weight:600;font-size:11px">${e.totalPf>0?fmtRpShort(e.totalPf):'—'}</td>
+      <td class="tc">${payBadge}</td><td class="tc">${delBadge}</td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+buildDropdowns();
+render();
+
+function toggleTheme() {
+  isDarkMode = !isDarkMode;
+  document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  document.getElementById('themeToggleBtn').setAttribute('aria-label', isDarkMode ? 'Switch to light mode' : 'Switch to dark mode');
+  document.getElementById('themeToggleIcon').textContent = isDarkMode ? '☀️' : '🌙';
+  applyChartTheming();
+  render();
+}
+
+</script>
+
+<script>
+// ── PASSWORD GATE ──
+const PW_CORRECT = 'weekendlibur';
+function checkPwGate() {
+  const input = document.getElementById('pw-input');
+  const val = input.value;
+  if (val === PW_CORRECT) {
+    document.getElementById('pw-gate').classList.add('unlocked');
+    document.getElementById('pw-content').classList.add('visible');
+    try { sessionStorage.setItem('cc_ciracas_unlocked', '1'); } catch(e) {}
+    setTimeout(()=>{ document.getElementById('pw-gate').style.display='none'; }, 400);
+  } else {
+    document.getElementById('pw-error').classList.add('visible');
+    input.classList.add('shake');
+    setTimeout(()=>input.classList.remove('shake'), 400);
+  }
+}
+(function(){
+  try {
+    if (sessionStorage.getItem('cc_ciracas_unlocked') === '1') {
+      document.getElementById('pw-gate').style.display='none';
+      document.getElementById('pw-content').classList.add('visible');
+    }
+  } catch(e) {}
+})();
+</script>
+</div>
+</body>
+</html>
