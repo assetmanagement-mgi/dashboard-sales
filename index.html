@@ -2351,15 +2351,15 @@ function openDiscDetail(idx) {
     <!-- Rp comparison -->
     <div class="disc-section-title">💰 Perbandingan Nilai Transaksi <span style="text-transform:none;font-weight:400;letter-spacing:0;color:var(--text3);">(@ ${fmtRp(r.harga)}/kg)</span></div>
     <div class="disc-3col">
-      <div class="disc-rp-side rp-oft">
-        <div class="disc-rp-label">Total (Offtaker)</div>
-        <div class="disc-rp-val">${fmtRp(r.totOft)}</div>
-        <div class="disc-rp-sub">${fmtRp(r.harga)} × ${fmtInt(r.off)} kg</div>
-      </div>
       <div class="disc-rp-side rp-pf">
         <div class="disc-rp-label">Total (Proforma)</div>
         <div class="disc-rp-val" style="color:var(--amber)">${fmtRp(r.totPf)}</div>
         <div class="disc-rp-sub">${fmtRp(r.harga)} × ${fmtInt(r.pdup)} kg</div>
+      </div>
+      <div class="disc-rp-side rp-oft">
+        <div class="disc-rp-label">Total (Offtaker)</div>
+        <div class="disc-rp-val">${fmtRp(r.totOft)}</div>
+        <div class="disc-rp-sub">${fmtRp(r.harga)} × ${fmtInt(r.off)} kg</div>
       </div>
       <div class="disc-result-chip ${rpResultClass}" style="${diffRp===0?'background:'+washBg+';border-color:'+washBorder+';':''}">
         <div class="disc-result-chip-label">Selisih Nilai</div>
@@ -2373,7 +2373,7 @@ function openDiscDetail(idx) {
     <!-- Explanation -->
     <div style="margin-top:14px;padding:12px 14px;background:${explainBg};border:1px solid ${explainBorder};border-radius:10px;font-size:12px;color:var(--text2);line-height:1.7;">
       ${explainKg}
-      Pada selisih berat ${absDiffKg>0?fmtInt(absDiffKg)+' kg':'ini'} dengan harga ${fmtRp(r.harga)}/kg, dampaknya terhadap nilai transaksi adalah <strong>${rpSign}${fmtRpShort(Math.abs(diffRp))}</strong>.
+      Pada selisih berat ${absDiffKg>0?fmtInt(absDiffKg)+' kg':'ini'} dengan harga ${fmtRp(r.harga)}/kg, dampaknya terhadap nilai transaksi adalah <strong>${diffRp>=0?'+':''}${fmtRpShort(diffRp)}</strong>.
     </div>
   `;
 
@@ -2386,6 +2386,15 @@ function openFilteredLog(type, name, extraMaterial) {
   _popupFilteredRows = rows;
   document.getElementById('filtered-popup-title').textContent =
     (type==='offtaker' ? '🏢 Log Offtaker: ' : '📦 Log Material: ') + name + (extraMaterial ? ' — ' + extraMaterial : '');
+  document.getElementById('filtered-search').value = '';
+  _openPopupEl('popup-filtered');
+  renderVolTable(_popupFilteredRows, 'filtered-table-body');
+}
+
+function openSJDetail(noSJ) {
+  const rows = (window._lastRows || []).filter(r => r[10] === noSJ);
+  _popupFilteredRows = rows;
+  document.getElementById('filtered-popup-title').textContent = '🧾 Detail No. SJ: ' + noSJ;
   document.getElementById('filtered-search').value = '';
   _openPopupEl('popup-filtered');
   renderVolTable(_popupFilteredRows, 'filtered-table-body');
@@ -2644,7 +2653,7 @@ function renderPayFullTable(rowsArr) {
     const nomColor = isPaid ? 'var(--green)' : 'var(--coral)';
     const nomLabel = isPaid ? fmtRpShort(nominal) : (nominal>0?fmtRpShort(nominal):'—');
     const nomTitle = isPaid ? 'Net Diterima' : 'Total Proforma';
-    html+=`<tr ${hi}>
+    html+=`<tr class="disc-row-clickable" onclick="closePopup();openSJDetail('${e.noSJ}')" title="Klik untuk lihat detail ${e.noSJ}" ${hi}>
       <td style="color:var(--text3);font-size:11px">${i+1}</td>
       <td style="font-size:11px;font-weight:600;color:var(--accent2);white-space:nowrap">${e.noSJ}</td>
       <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
