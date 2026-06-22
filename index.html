@@ -334,7 +334,7 @@
   .clickable-section { cursor: pointer; transition: color 0.2s; }
   .clickable-section:hover { color: var(--accent); }
   .clickable-section:hover .section-click-hint { opacity: 1; }
-  .section-click-hint { font-size: 10px; font-weight: 600; color: var(--accent); background: rgba(37,99,235,0.10); border: 1px solid rgba(37,99,235,0.28); border-radius: 6px; padding: 2px 8px; margin-left: 6px; opacity: 0; transition: opacity 0.2s; letter-spacing: 0.04em; text-transform: none; }
+  .section-click-hint { font-size: 10px; font-weight: 600; color: var(--accent); background: rgba(37,99,235,0.10); border: 1px solid rgba(37,99,235,0.28); border-radius: 6px; padding: 2px 8px; margin-left: 6px; opacity: 1; transition: opacity 0.2s; letter-spacing: 0.04em; text-transform: none; }
 
   /* POPUP */
   .popup-overlay { display: none; position: fixed; inset: 0; background: rgba(15,15,40,0.55); backdrop-filter: blur(6px); z-index: 2147483640; }
@@ -580,7 +580,7 @@
   html[data-theme="dark"] .section-label { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 0 4px; border-top: 1px solid rgba(255,255,255,0.07); margin-bottom: 14px; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
   html[data-theme="dark"] .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
   html[data-theme="dark"] .empty { padding: 48px 20px; text-align: center; color: var(--text3); font-size: 13px; }
-  html[data-theme="dark"] .section-click-hint { font-size: 10px; font-weight: 600; color: var(--accent); background: rgba(46,232,160,0.12); border: 1px solid rgba(46,232,160,0.3); border-radius: 6px; padding: 2px 8px; margin-left: 6px; opacity: 0; transition: opacity 0.2s; letter-spacing: 0.04em; text-transform: none; }
+  html[data-theme="dark"] .section-click-hint { font-size: 10px; font-weight: 600; color: var(--accent); background: rgba(46,232,160,0.12); border: 1px solid rgba(46,232,160,0.3); border-radius: 6px; padding: 2px 8px; margin-left: 6px; opacity: 1; transition: opacity 0.2s; letter-spacing: 0.04em; text-transform: none; }
   html[data-theme="dark"] .popup-overlay { position: fixed; inset: 0; background: rgba(0,5,20,0.55); backdrop-filter: blur(4px); z-index: 500; }
   html[data-theme="dark"] .popup-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.96); background: #1d2f4c; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; box-shadow: 0 24px 80px rgba(0,5,20,0.55); z-index: 600; width: min(96vw, 1100px); max-height: 85vh; flex-direction: column; overflow: hidden; }
   html[data-theme="dark"] .popup-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; gap: 12px; flex-wrap: wrap; }
@@ -1112,8 +1112,8 @@ const RAW = [
 ["2026-03-17", "PT Kita Olah Indonesia", "BP BL Mambo", 200.0, 192.0, 4500.0, 864000.0, 900000.0, 864000.0, "", "SJ026", "Paid", "Completed", true, true, true, true],
 ["2026-03-17", "PT Kita Olah Indonesia", "BP Oli Mambo", 119.0, 67.0, 4500.0, 301500.0, 535500.0, 301500.0, "", "SJ026", "Paid", "Completed", true, true, true, true],
 ["2026-03-17", "PT Kita Olah Indonesia", "BP Oli Hitam", 31.0, 29.0, 4000.0, 116000.0, 124000.0, 116000.0, "", "SJ026", "Paid", "Completed", true, true, true, true],
-["2026-04-10", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 2749.5, 2720.0, 2625.0, 7140000.0, 7217438.0, 7140000.0, "MGI/APR/2026/001", "SJ027", "Paid", "Completed", true, true, true, true],
-["2026-04-11", "PD Fajar Mandiri", "Tutup Botol", 324.0, 0.0, 5500.0, 0.0, 1782000.0, 0.0, "", "SJ029", "Unpaid", "Completed", true, false, false, true],
+["2026-04-10", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 2749.5, 2502.0, 2625.0, 7140000.0, 7217438.0, 7140000.0, "MGI/APR/2026/001", "SJ027", "Paid", "Completed", true, true, true, true],
+["2026-04-11", "PD Fajar Mandiri", "Tutup Botol", 324.0, 0.0, 5500.0, 0.0, 1782000.0, 0.0, "", "SJ029", "Unpaid", "Completed", true, false, false, false],
 ["2026-04-15", "UD Rahayu Abadi", "Monti", 180.0, 182.0, 4500.0, 819000.0, 810000.0, 819000.0, "MGI/APR/2026/002", "SJ030", "Paid", "Completed", true, true, true, true],
 ["2026-04-15", "UD Rahayu Abadi", "AG Bersih", 214.0, 219.0, 9000.0, 1971000.0, 1926000.0, 1971000.0, "MGI/APR/2026/002", "SJ030", "Paid", "Completed", true, true, true, true],
 ["2026-04-15", "UD Rahayu Abadi", "AG Kotor", 1013.5, 918.0, 5200.0, 4773600.0, 5270200.0, 4773600.0, "MGI/APR/2026/002", "SJ030", "Paid", "Completed", true, true, true, true],
@@ -1127,8 +1127,8 @@ const RAW = [
 ["2026-04-16", "PT Kita Olah Indonesia", "BP Oli Warna", 220.0, 216.0, 4700.0, 1015200.0, 1034000.0, 1015200.0, "MGI/APR/2026/004", "SJ032", "Paid", "Completed", true, true, true, true],
 ["2026-04-16", "PT Kita Olah Indonesia", "BP Oli Hitam", 28.5, 27.0, 4200.0, 113400.0, 119700.0, 113400.0, "MGI/APR/2026/004", "SJ032", "Paid", "Completed", true, true, true, true],
 ["2026-04-16", "PT Kita Olah Indonesia", "BP BLPK", 205.0, 196.0, 6200.0, 1215200.0, 1271000.0, 1215200.0, "MGI/APR/2026/004", "SJ032", "Paid", "Completed", true, true, true, true],
-["2026-04-17", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 2133.0, 2100.0, 2625.0, 5512500.0, 5599125.0, 5512500.0, "MGI/APR/2026/005", "SJ033", "Paid", "Completed", true, true, true, true],
-["2026-04-21", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 1266.0, 1180.0, 2625.0, 3097500.0, 3323250.0, 3097500.0, "MGI/APR/2026/006", "SJ034", "Paid", "Completed", true, true, true, true],
+["2026-04-17", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 2133.0, 1827.0, 2625.0, 5512500.0, 5599125.0, 5512500.0, "MGI/APR/2026/005", "SJ033", "Paid", "Completed", true, true, true, true],
+["2026-04-21", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 1266.0, 1121.0, 2625.0, 3097500.0, 3323250.0, 3097500.0, "MGI/APR/2026/006", "SJ034", "Paid", "Completed", true, true, true, true],
 ["2026-04-23", "PT Eterna Persada Indonesia (Pan Era Group)", "BP PP BN", 140.5, 85.0, 7500.0, 637500.0, 1053750.0, 637500.0, "MGI/APR/2026/007", "SJ035", "Paid", "Completed", true, true, true, true],
 ["2026-04-23", "PT Eterna Persada Indonesia (Pan Era Group)", "BP PP BN Sablon", 47.5, 100.0, 8000.0, 800000.0, 380000.0, 800000.0, "MGI/APR/2026/007", "SJ035", "Paid", "Completed", true, true, true, true],
 ["2026-04-23", "PT Eterna Persada Indonesia (Pan Era Group)", "BP PP Mambo", 652.0, 640.0, 5500.0, 3520000.0, 3586000.0, 3520000.0, "MGI/APR/2026/007", "SJ035", "Paid", "Completed", true, true, true, true],
@@ -1141,7 +1141,7 @@ const RAW = [
 ["2026-04-24", "PT Haka Sentral Plastik", "Cacah PP Mambo", 1994.0, 1933.0, 5300.0, 10244900.0, 10568200.0, 10244900.0, "MGI/APR/2026/008", "SJ037", "Paid", "Completed", true, true, true, true],
 ["2026-04-25", "Lapak Tri", "Kerasan Campur", 1321.5, 1321.5, 1000.0, 1321500.0, 1321500.0, 1057200.0, "MGI/APR/2026/009", "SJ037-1", "Paid", "Completed", true, true, true, true],
 ["2026-04-26", "Lapak Bapak Rocky", "Logam Gabruk", 1107.5, 1107.5, 0.0, 0.0, 0.0, 0.0, "", "SJ038", "Paid", "Completed", true, true, true, true],
-["2026-04-29", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 2106.0, 2030.0, 2625.0, 5328750.0, 5528250.0, 5328750.0, "MGI/APR/2026/010", "SJ039", "Paid", "Completed", true, true, true, true],
+["2026-04-29", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 2106.0, 1969.0, 2625.0, 5328750.0, 5528250.0, 5328750.0, "MGI/APR/2026/010", "SJ039", "Paid", "Completed", true, true, true, true],
 ["2026-04-30", "UD Rahayu Abadi", "AG Kotor", 604.5, 569.0, 5200.0, 2958800.0, 3143400.0, 2952300.0, "MGI/APR/2026/011", "SJ040", "Paid", "Completed", true, true, true, true],
 ["2026-04-30", "UD Rahayu Abadi", "Monti", 118.5, 111.0, 4500.0, 499500.0, 533250.0, 499500.0, "MGI/APR/2026/011", "SJ040", "Paid", "Completed", true, true, true, true],
 ["2026-04-30", "UD Rahayu Abadi", "PP A", 0.0, 20.0, 9000.0, 180000.0, 0.0, 180000.0, "MGI/APR/2026/011", "SJ040", "Paid", "Completed", true, true, true, true],
@@ -1156,7 +1156,7 @@ const RAW = [
 ["2026-05-05", "UD Rahayu Abadi", "Tutup Botol", 83.5, 74.0, 5500.0, 407000.0, 459250.0, 407000.0, "MGI/MEI/2026/003", "SJ044", "Paid", "Completed", true, true, true, true],
 ["2026-05-05", "UD Rahayu Abadi", "PP BN", 307.0, 304.0, 7200.0, 2188800.0, 2210400.0, 2188800.0, "MGI/MEI/2026/003", "SJ044", "Paid", "Completed", true, true, true, true],
 ["2026-05-05", "UD Rahayu Abadi", "PP A", 0.0, 29.0, 9000.0, 261000.0, 0.0, 261000.0, "MGI/MEI/2026/003", "SJ044", "Paid", "Completed", true, true, true, true],
-["2026-05-08", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 1823.0, 2280.0, 2625.0, 5985000.0, 4785375.0, 5985000.0, "MGI/MEI/2026/004", "SJ045", "Paid", "Completed", true, true, true, true],
+["2026-05-08", "Panca Kraft Pratama - Daya Selaras Group", "Kardus", 1823.0, 2006.0, 2625.0, 5985000.0, 4785375.0, 5985000.0, "MGI/MEI/2026/004", "SJ045", "Paid", "Completed", true, true, true, true],
 ["2026-05-09", "UD Rahayu Abadi", "Bodong Warna", 399.0, 157.0, 1700.0, 266900.0, 678300.0, 260400.0, "MGI/MEI/2026/005", "SJ046", "Paid", "Completed", true, true, true, true],
 ["2026-05-09", "UD Rahayu Abadi", "AG Kotor", 217.5, 194.0, 5200.0, 1008800.0, 1131000.0, 1008800.0, "MGI/MEI/2026/005", "SJ046", "Paid", "Completed", true, true, true, true],
 ["2026-05-09", "UD Rahayu Abadi", "Monti", 22.0, 21.0, 4500.0, 94500.0, 99000.0, 94500.0, "MGI/MEI/2026/005", "SJ046", "Paid", "Completed", true, true, true, true],
@@ -1191,18 +1191,18 @@ const RAW = [
 ["2026-05-19", "UD Rafa Putra", "Emberan Besar", 439.0, 408.0, 1700.0, 693600.0, 746300.0, 693600.0, "MGI/MEI/2026/013", "SJ058", "Paid", "Completed", true, true, true, true],
 ["2026-05-19", "BMPS", "BP PET MIX", 3520.0, 3520.0, 8600.0, 30272000.0, 30272000.0, 30272000.0, "MGI/MEI/2026/014", "SJ059", "Paid", "Completed", true, true, true, false],
 ["2026-05-19", "BMPS", "BP Galon Le", 142.0, 140.0, 7200.0, 1008000.0, 1022400.0, 1008000.0, "MGI/MEI/2026/014", "SJ059", "Paid", "Completed", true, true, true, false],
-["2026-05-19", "Lapak Bapak Rocky", "Emberan Besar", 991.5, 991.5, 2300.0, 2280450.0, 2280450.0, 2280450.0, "", "SJ060", "Unpaid", "Completed", true, false, false, true],
-["2026-05-20", "Lapak Bapak Rocky", "Kerasan Campur", 644.5, 644.5, 800.0, 515600.0, 515600.0, 515600.0, "", "SJ061", "Unpaid", "Completed", true, false, false, true],
-["2026-05-20", "Lapak Bapak Rocky", "Emberan Besar", 602.5, 602.5, 2300.0, 1385750.0, 1385750.0, 1385750.0, "", "SJ061", "Unpaid", "Completed", true, false, false, true],
+["2026-05-19", "Lapak Bapak Rocky", "Emberan Besar", 991.5, 0.0, 2300.0, 0.0, 2280450.0, 0.0, "", "SJ060", "Unpaid", "Completed", true, false, false, false],
+["2026-05-20", "Lapak Bapak Rocky", "Kerasan Campur", 644.5, 0.0, 800.0, 0.0, 515600.0, 0.0, "", "SJ061", "Unpaid", "Completed", true, false, false, false],
+["2026-05-20", "Lapak Bapak Rocky", "Emberan Besar", 602.5, 0.0, 2300.0, 0.0, 1385750.0, 0.0, "", "SJ061", "Unpaid", "Completed", true, false, false, false],
 ["2026-05-20", "CV Sido Mulyo", "Kardus", 1497.5, 1497.5, 2200.0, 3294500.0, 3294500.0, 3294500.0, "MGI/MEI/2026/015", "SJ062", "Paid", "Completed", true, true, true, true],
 ["2026-05-20", "CV Sido Mulyo", "Duplek", 248.5, 248.5, 1200.0, 298200.0, 298200.0, 298200.0, "MGI/MEI/2026/015", "SJ062", "Paid", "Completed", true, true, true, true],
 ["2026-05-20", "Lapak Pak Aldi", "Emberan Besar", 477.5, 477.5, 1500.0, 716250.0, 716250.0, 716250.0, "", "SJ063", "Paid", "Completed", true, true, true, true],
 ["2026-05-20", "Lapak Pak Aldi", "Kerasan Campur", 727.0, 727.0, 500.0, 363500.0, 363500.0, 363500.0, "", "SJ063", "Paid", "Completed", true, true, true, true],
-["2026-05-20", "Lapak Pondok Rajeg (Bpk. Rico Imam)", "Kerasan Campur", 225.5, 225.5, 800.0, 180400.0, 180400.0, 180400.0, "", "SJ064", "Unpaid", "Completed", true, false, false, true],
-["2026-05-20", "Lapak Pondok Rajeg (Bpk. Rico Imam)", "Emberan Besar", 742.0, 742.0, 2300.0, 1706600.0, 1706600.0, 1706600.0, "", "SJ064", "Unpaid", "Completed", true, false, false, true],
+["2026-05-20", "Lapak Pondok Rajeg (Bpk. Rico Imam)", "Kerasan Campur", 225.5, 0.0, 800.0, 0.0, 180400.0, 0.0, "", "SJ064", "Unpaid", "Completed", true, false, false, false],
+["2026-05-20", "Lapak Pondok Rajeg (Bpk. Rico Imam)", "Emberan Besar", 742.0, 0.0, 2300.0, 0.0, 1706600.0, 0.0, "", "SJ064", "Unpaid", "Completed", true, false, false, false],
 ["2026-05-21", "CV Sido Mulyo", "Kardus", 1660.0, 1645.0, 2200.0, 3619000.0, 3652000.0, 3619000.0, "MGI/MEI/2026/016", "SJ065", "Paid", "Completed", true, true, true, true],
 ["2026-05-21", "CV Sido Mulyo", "Duplek", 122.5, 117.0, 1200.0, 140400.0, 147000.0, 140400.0, "MGI/MEI/2026/016", "SJ065", "Paid", "Completed", true, true, true, true],
-["2026-05-21", "Lapak Bapak Rocky", "Kerasan Campur", 1521.5, 1521.5, 800.0, 1217200.0, 1217200.0, 1217200.0, "", "SJ066", "Unpaid", "Completed", true, false, false, true],
+["2026-05-21", "Lapak Bapak Rocky", "Kerasan Campur", 1521.5, 0.0, 800.0, 0.0, 1217200.0, 0.0, "", "SJ066", "Unpaid", "Completed", true, false, false, false],
 ["2026-05-23", "CV Sido Mulyo", "Kardus", 970.0, 960.0, 2200.0, 2112000.0, 2134000.0, 2112000.0, "MGI/MEI/2026/017", "SJ067", "Paid", "Completed", true, true, true, true],
 ["2026-05-23", "CV Sido Mulyo", "Duplek", 1460.0, 1445.0, 1200.0, 1734000.0, 1752000.0, 1734000.0, "MGI/MEI/2026/017", "SJ067", "Paid", "Completed", true, true, true, true],
 ["2026-05-23", "CV Sido Mulyo", "Kardus", 1607.0, 1597.0, 2200.0, 3513400.0, 3535400.0, 3513400.0, "MGI/MEI/2026/018", "SJ068", "Paid", "Completed", true, true, true, true],
@@ -1216,20 +1216,20 @@ const RAW = [
 ["2026-05-29", "CV Sido Mulyo", "Kardus", 1115.5, 1100.0, 2200.0, 2420000.0, 2454100.0, 2420000.0, "MGI/MEI/2026/019", "SJ070", "Paid", "Completed", true, true, true, true],
 ["2026-05-29", "CV Sido Mulyo", "Duplek", 1159.0, 1149.0, 1200.0, 1378800.0, 1390800.0, 1378800.0, "MGI/MEI/2026/019", "SJ070", "Paid", "Completed", true, true, true, true],
 ["2026-05-29", "CV Sido Mulyo", "Boncos", 430.5, 420.0, 1000.0, 420000.0, 430500.0, 420000.0, "MGI/MEI/2026/019", "SJ070", "Paid", "Completed", true, true, true, true],
-["2026-05-30", "Lapak Pak Aldi", "Kerasan Campur", 1555.0, 1399.5, 500.0, 699750.0, 777500.0, 699750.0, "", "SJ071", "Unpaid", "Completed", true, false, false, true],
-["2026-05-30", "Lapak Pak Aldi", "Emberan Besar", 363.5, 327.15, 1500.0, 490725.0, 545250.0, 490725.0, "", "SJ071", "Unpaid", "Completed", true, false, false, true],
-["2026-05-30", "Lapak Bapak Rocky", "Bodong Kotor", 482.5, 482.5, 4200.0, 2026500.0, 2026500.0, 2026500.0, "", "SJ072", "Unpaid", "Completed", true, false, false, true],
-["2026-05-30", "Lapak Bapak Rocky", "Pet C Bening", 68.0, 68.0, 2500.0, 170000.0, 170000.0, 170000.0, "", "SJ072", "Unpaid", "Completed", true, false, false, true],
-["2026-05-30", "Lapak Bapak Rocky", "Bodong Warna", 172.0, 172.0, 2000.0, 344000.0, 344000.0, 344000.0, "", "SJ072", "Unpaid", "Completed", true, false, false, true],
-["2026-06-02", "Lapak Bapak Rocky", "Bodong Kotor", 581.5, 581.5, 4200.0, 2442300.0, 2442300.0, 2442300.0, "", "SJ073", "Unpaid", "Completed", true, false, false, true],
-["2026-06-03", "Lapak Bapak Rocky", "Kerasan Campur", 1908.5, 1908.5, 800.0, 1526800.0, 1526800.0, 1526800.0, "", "SJ074", "Unpaid", "Completed", true, false, false, true],
-["2026-06-03", "Lapak Bapak Rocky", "Emberan Besar", 81.0, 81.0, 2300.0, 186300.0, 186300.0, 186300.0, "", "SJ074", "Unpaid", "Completed", true, false, false, true],
-["2026-06-03", "Lapak Pak Aldi", "Emberan Besar", 17.0, 17.0, 1500.0, 25500.0, 25500.0, 25500.0, "", "SJ075", "Unpaid", "Completed", true, false, false, true],
-["2026-06-03", "Lapak Pak Aldi", "Kerasan Campur", 220.0, 220.0, 500.0, 110000.0, 110000.0, 110000.0, "", "SJ075", "Unpaid", "Completed", true, false, false, true],
+["2026-05-30", "Lapak Pak Aldi", "Kerasan Campur", 1555.0, 1555.0, 500.0, 777500.0, 777500.0, 777500.0, "", "SJ071", "Paid", "Completed", true, true, true, true],
+["2026-05-30", "Lapak Pak Aldi", "Emberan Besar", 363.5, 148.0, 1500.0, 222000.0, 545250.0, 222000.0, "", "SJ071", "Paid", "Completed", true, true, true, true],
+["2026-05-30", "Lapak Bapak Rocky", "Bodong Kotor", 482.5, 0.0, 4200.0, 0.0, 2026500.0, 0.0, "", "SJ072", "Unpaid", "Completed", true, false, false, false],
+["2026-05-30", "Lapak Bapak Rocky", "Pet C Bening", 68.0, 0.0, 2500.0, 0.0, 170000.0, 0.0, "", "SJ072", "Unpaid", "Completed", true, false, false, false],
+["2026-05-30", "Lapak Bapak Rocky", "Bodong Warna", 172.0, 0.0, 2000.0, 0.0, 344000.0, 0.0, "", "SJ072", "Unpaid", "Completed", true, false, false, false],
+["2026-06-02", "Lapak Bapak Rocky", "Bodong Kotor", 581.5, 0.0, 4200.0, 0.0, 2442300.0, 0.0, "", "SJ073", "Unpaid", "Completed", true, false, false, false],
+["2026-06-03", "Lapak Bapak Rocky", "Kerasan Campur", 1908.5, 0.0, 800.0, 0.0, 1526800.0, 0.0, "", "SJ074", "Unpaid", "Completed", true, false, false, false],
+["2026-06-03", "Lapak Bapak Rocky", "Emberan Besar", 81.0, 0.0, 2300.0, 0.0, 186300.0, 0.0, "", "SJ074", "Unpaid", "Completed", true, false, false, false],
+["2026-06-03", "Lapak Pak Aldi", "Emberan Besar", 17.0, 0.0, 1500.0, 0.0, 25500.0, 0.0, "", "SJ075", "Unpaid", "Completed", true, false, false, false],
+["2026-06-03", "Lapak Pak Aldi", "Kerasan Campur", 220.0, 0.0, 500.0, 0.0, 110000.0, 0.0, "", "SJ075", "Unpaid", "Completed", true, false, false, false],
 ["2026-06-03", "Lapak Pak Aldi", "BP AG Kotor", 1088.0, 1056.0, 4000.0, 4224000.0, 4352000.0, 4224000.0, "MGI/MEI/2026/020", "SJ076", "Paid", "Completed", true, true, true, true],
 ["2026-06-04", "CV Sido Mulyo", "Kardus", 1962.5, 1947.0, 2200.0, 4283400.0, 4317500.0, 4283400.0, "MGI/MEI/2026/021", "SJ077", "Paid", "Completed", true, true, true, true],
 ["2026-06-04", "CV Sido Mulyo", "Duplek", 166.0, 166.0, 1200.0, 199200.0, 199200.0, 199200.0, "MGI/MEI/2026/021", "SJ077", "Paid", "Completed", true, true, true, true],
-["2026-06-05", "Lapak Bapak Rocky", "Bodong Kotor", 751.0, 751.0, 4200.0, 3154200.0, 3154200.0, 3154200.0, "", "SJ078", "Unpaid", "Completed", true, false, false, true],
+["2026-06-05", "Lapak Bapak Rocky", "Bodong Kotor", 751.0, 0.0, 4200.0, 0.0, 3154200.0, 0.0, "", "SJ078", "Unpaid", "Completed", true, false, false, false],
 ["2026-06-06", "CV Sido Mulyo", "Kardus", 1843.5, 1824.0, 2200.0, 4012800.0, 4055700.0, 4012800.0, "", "SJ079", "Paid", "Completed", true, true, true, true],
 ["2026-06-06", "CV Sido Mulyo", "Duplek", 349.5, 334.0, 1200.0, 400800.0, 419400.0, 400800.0, "", "SJ079", "Paid", "Completed", true, true, true, true],
 ["2026-06-08", "PT Eterna Persada Indonesia (Pan Era Group)", "BP Naso", 395.0, 330.0, 9000.0, 2970000.0, 3555000.0, 2970000.0, "", "SJ081", "Paid", "Completed", true, true, true, true],
@@ -1237,8 +1237,8 @@ const RAW = [
 ["2026-06-08", "PT Eterna Persada Indonesia (Pan Era Group)", "BP BLPK", 477.5, 475.0, 8000.0, 3800000.0, 3820000.0, 3800000.0, "", "SJ081", "Paid", "Completed", true, true, true, true],
 ["2026-06-08", "PT Eterna Persada Indonesia (Pan Era Group)", "BP BL Warna", 766.0, 585.0, 6300.0, 3685500.0, 5362000.0, 3685500.0, "", "SJ081", "Paid", "Completed", true, true, true, true],
 ["2026-06-08", "PT Eterna Persada Indonesia (Pan Era Group)", "BP BL Warna", 0.0, 60.0, 5800.0, 348000.0, 0.0, 348000.0, "", "SJ081", "Paid", "Completed", true, true, true, true],
-["2026-06-08", "Lapak Bapak Rocky", "Kerasan Campur", 1764.5, 1764.5, 800.0, 1411600.0, 1411600.0, 1411600.0, "", "SJ082", "Unpaid", "Completed", true, false, false, true],
-["2026-06-09", "Lapak Bapak Rocky", "Bodong Kotor", 517.0, 517.0, 4200.0, 2171400.0, 2171400.0, 2171400.0, "", "SJ083", "Unpaid", "Completed", true, false, false, true],
+["2026-06-08", "Lapak Bapak Rocky", "Kerasan Campur", 1764.5, 0.0, 800.0, 0.0, 1411600.0, 0.0, "", "SJ082", "Unpaid", "Completed", true, false, false, false],
+["2026-06-09", "Lapak Bapak Rocky", "Bodong Kotor", 517.0, 0.0, 4200.0, 0.0, 2171400.0, 0.0, "", "SJ083", "Unpaid", "Completed", true, false, false, false],
 ["2026-06-09", "BMPS", "BP PET MIX", 3808.5, 3880.0, 9300.0, 36084000.0, 35419050.0, 36084000.0, "", "SJ084", "Paid", "Completed", true, true, true, false],
 ["2026-06-09", "BMPS", "BP PET BM", 147.0, 140.0, 8700.0, 1218000.0, 1278900.0, 1218000.0, "", "SJ084", "Paid", "Completed", true, true, true, false],
 ["2026-06-09", "BMPS", "BP PET BN", 134.0, 140.0, 9700.0, 1358000.0, 1299800.0, 1358000.0, "", "SJ084", "Paid", "Completed", true, true, true, false],
@@ -1253,21 +1253,23 @@ const RAW = [
 ["2026-06-11", "UD Rahayu Abadi", "BP Sprite", 106.5, 62.0, 3500.0, 217000.0, 372750.0, 217000.0, "", "SJ086", "Paid", "Completed", true, true, true, true],
 ["2026-06-11", "UD Rahayu Abadi", "BP Mizone", 50.5, 12.0, 3500.0, 42000.0, 176750.0, 42000.0, "", "SJ086", "Paid", "Completed", true, true, true, true],
 ["2026-06-11", "UD Rahayu Abadi", "Tutup Botol", 77.0, 77.0, 5500.0, 423500.0, 423500.0, 423500.0, "", "SJ086", "Paid", "Completed", true, true, true, true],
-["2026-06-12", "Lapak Pak Aldi", "Kerasan Campur", 1755.0, 1755.0, 500.0, 877500.0, 877500.0, 877500.0, "", "SJ087", "Unpaid", "Completed", true, false, false, true],
-["2026-06-12", "Lapak Pak Aldi", "Emberan Besar", 26.0, 26.0, 1500.0, 39000.0, 39000.0, 39000.0, "", "SJ087", "Unpaid", "Completed", true, false, false, true],
+["2026-06-12", "Lapak Pak Aldi", "Kerasan Campur", 1755.0, 0.0, 500.0, 0.0, 877500.0, 0.0, "", "SJ087", "Unpaid", "Completed", true, false, false, false],
+["2026-06-12", "Lapak Pak Aldi", "Emberan Besar", 26.0, 0.0, 1500.0, 0.0, 39000.0, 0.0, "", "SJ087", "Unpaid", "Completed", true, false, false, false],
 ["2026-06-13", "CV Sido Mulyo", "Kardus", 1359.5, 1344.0, 2200.0, 2956800.0, 2990900.0, 2956800.0, "", "SJ088", "Paid", "Completed", true, true, true, true],
 ["2026-06-13", "CV Sido Mulyo", "Duplek", 374.5, 367.0, 1200.0, 440400.0, 449400.0, 440400.0, "", "SJ088", "Paid", "Completed", true, true, true, true],
 ["2026-06-13", "CV Sido Mulyo", "Boncos", 141.0, 136.0, 1000.0, 136000.0, 141000.0, 136000.0, "", "SJ088", "Paid", "Completed", true, true, true, true],
 ["2026-06-15", "PT Elite Recycling Indonesia (Pan Era Group)", "BP PP Mambo", 664.75, 655.0, 4800.0, 3144000.0, 2858425.0, 3144000.0, "", "SJ089", "Paid", "Completed", true, true, true, true],
 ["2026-06-15", "PT Elite Recycling Indonesia (Pan Era Group)", "BP PP Mambo", 664.75, 690.0, 4300.0, 2967000.0, 2858425.0, 2967000.0, "", "SJ089", "Paid", "Completed", true, true, true, true],
-["2026-06-16", "Lapak Bapak Rocky", "Kerasan Campur", 1352.5, 1352.5, 800.0, 1082000.0, 1082000.0, 1082000.0, "", "SJ090", "Unpaid", "Completed", true, false, false, true],
-["2026-06-16", "Lapak Bapak Rocky", "Kerasan Campur", 2034.0, 2034.0, 800.0, 1627200.0, 1627200.0, 1627200.0, "", "SJ091", "Unpaid", "Completed", true, false, false, true],
+["2026-06-16", "Lapak Bapak Rocky", "Kerasan Campur", 1352.5, 0.0, 800.0, 0.0, 1082000.0, 0.0, "", "SJ090", "Unpaid", "Completed", true, false, false, false],
+["2026-06-16", "Lapak Bapak Rocky", "Kerasan Campur", 2034.0, 0.0, 800.0, 0.0, 1627200.0, 0.0, "", "SJ091", "Unpaid", "Completed", true, false, false, false],
 ["2026-06-18", "CV Sido Mulyo", "Kardus", 1718.5, 1703.0, 2200.0, 3746600.0, 3780700.0, 3746600.0, "", "SJ092", "Paid", "Completed", true, true, true, true],
 ["2026-06-18", "CV Sido Mulyo", "Duplek", 147.0, 140.0, 1200.0, 168000.0, 176400.0, 168000.0, "", "SJ092", "Paid", "Completed", true, true, true, true],
 ["2026-06-18", "BMPS", "BP PET Mix", 3046.0, 0.0, 9300.0, 0.0, 28327800.0, 0.0, "", "SJ093", "Unpaid", "Completed", true, false, false, false],
 ["2026-06-18", "BMPS", "BP Galon Le", 850.5, 0.0, 7700.0, 0.0, 6548850.0, 0.0, "", "SJ093", "Unpaid", "Completed", true, false, false, false],
-["2026-06-19", "Lapak Bapak Rocky", "Kerasan Campur", 1937.0, 1937.0, 800.0, 1549600.0, 1549600.0, 1549600.0, "", "SJ094", "Unpaid", "Completed", true, false, false, false],
-["2026-06-19", "Lapak Bapak Rocky", "Emberan Besar", 21.0, 21.0, 2300.0, 48300.0, 48300.0, 48300.0, "", "SJ094", "Unpaid", "Completed", true, false, false, false],
+["2026-06-19", "Lapak Bapak Rocky", "Kerasan Campur", 1937.0, 0.0, 800.0, 0.0, 1549600.0, 0.0, "", "SJ094", "Unpaid", "Completed", true, false, false, false],
+["2026-06-19", "Lapak Bapak Rocky", "Emberan Besar", 21.0, 0.0, 2300.0, 0.0, 48300.0, 0.0, "", "SJ094", "Unpaid", "Completed", true, false, false, false],
+["2026-06-22", "Lapak Pak Aldi", "Kerasan Campur", 1842.5, 0.0, 800.0, 0.0, 921250.0, 0.0, "", "SJ095", "Unpaid", "Completed", true, false, false, false],
+["2026-06-22", "Lapak Pak Aldi", "Emberan Besar", 153.0, 0.0, 2300.0, 0.0, 229500.0, 0.0, "", "SJ095", "Unpaid", "Completed", true, false, false, false]
 ];
 
 const COLORS = [
@@ -2191,9 +2193,10 @@ function render() {
     const sjMap2 = {};
     rows.forEach(r=>{
       const key = r[10] || ('__NOSJ__'+r[0]+'__'+r[1]+'__'+r[9]);
-      if (!sjMap2[key]) sjMap2[key]={noSJ:r[10]||'—',inv:r[9]||'—',date:r[0],offtaker:r[1],lines:0,totalPf:0,pay:r[11],del:r[12],sj:r[13],rc:r[14],tr:r[15],df:r[16]};
+      if (!sjMap2[key]) sjMap2[key]={noSJ:r[10]||'—',inv:r[9]||'—',date:r[0],offtaker:r[1],lines:0,totalPf:0,netDiterima:0,pay:r[11],del:r[12],sj:r[13],rc:r[14],tr:r[15],df:r[16]};
       sjMap2[key].lines++;
       sjMap2[key].totalPf += (r[7]||0);
+      sjMap2[key].netDiterima += (r[8]||0);
     });
     const allSJ2 = Object.values(sjMap2);
     const unpaidDel2 = allSJ2.filter(e=>e.pay==='Unpaid'&&e.del==='Delivered').sort((a,b)=>b.date.localeCompare(a.date));
@@ -2616,13 +2619,19 @@ function renderPayFullTable(rowsArr) {
   const el = document.getElementById('pay-full-table-body');
   if (!rowsArr.length) { el.innerHTML='<div class="empty">Tidak ada data.</div>'; return; }
   const unpaidDelCount = rowsArr.filter(e=>e.pay==='Unpaid'&&e.del==='Delivered').length;
+  const paidRows = rowsArr.filter(e=>e.pay==='Paid');
+  const unpaidRows = rowsArr.filter(e=>e.pay==='Unpaid');
+  const totalNetPaid = paidRows.reduce((s,e)=>s+(e.netDiterima||0),0);
+  const totalPfUnpaid = unpaidRows.reduce((s,e)=>s+(e.totalPf||0),0);
   let html = `<div class="popup-stat-row">
     <div class="popup-stat"><div class="popup-stat-label">Jumlah SJ</div><div class="popup-stat-val">${rowsArr.length}</div></div>
     <div class="popup-stat"><div class="popup-stat-label">Unpaid &amp; Delivered</div><div class="popup-stat-val kv-coral">${unpaidDelCount}</div></div>
+    <div class="popup-stat" style="border-left:3px solid var(--green)"><div class="popup-stat-label">Net Diterima — Paid (${paidRows.length} SJ)</div><div class="popup-stat-val kv-green">${fmtRp(totalNetPaid)}</div></div>
+    <div class="popup-stat" style="border-left:3px solid var(--coral)"><div class="popup-stat-label">Total Proforma — Unpaid (${unpaidRows.length} SJ)</div><div class="popup-stat-val kv-coral">${fmtRp(totalPfUnpaid)}</div></div>
   </div>
   <table><thead><tr>
     <th>#</th><th>No. SJ</th><th>Tgl</th><th>Offtaker</th>
-    <th class="tr">Total (Proforma)</th>
+    <th class="tr">Nominal</th>
     <th class="tc">Bayar</th><th class="tc">Kirim</th>
   </tr></thead><tbody>`;
   rowsArr.forEach((e,i)=>{
@@ -2630,12 +2639,17 @@ function renderPayFullTable(rowsArr) {
     const delBadge = e.del==='Completed'?'<span class="pay-badge del-completed">✓</span>':e.del==='Delivered'?'<span class="pay-badge del-delivered">⏳</span>':'<span class="badge bz">—</span>';
     const dt=new Date(e.date); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
     const hi = e.pay==='Unpaid'&&e.del==='Delivered'?'style="background:rgba(255,107,135,0.05)"':'';
+    const isPaid = e.pay==='Paid';
+    const nominal = isPaid ? (e.netDiterima>0?e.netDiterima:0) : (e.totalPf||0);
+    const nomColor = isPaid ? 'var(--green)' : 'var(--coral)';
+    const nomLabel = isPaid ? fmtRpShort(nominal) : (nominal>0?fmtRpShort(nominal):'—');
+    const nomTitle = isPaid ? 'Net Diterima' : 'Total Proforma';
     html+=`<tr ${hi}>
       <td style="color:var(--text3);font-size:11px">${i+1}</td>
       <td style="font-size:11px;font-weight:600;color:var(--accent2);white-space:nowrap">${e.noSJ}</td>
       <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
       <td title="${e.offtaker}" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.offtaker}</td>
-      <td class="tr tn" style="color:var(--amber);font-weight:600;font-size:11px">${e.totalPf>0?fmtRpShort(e.totalPf):'—'}</td>
+      <td class="tr tn" style="color:${nomColor};font-weight:600;font-size:11px" title="${nomTitle}">${nomLabel}</td>
       <td class="tc">${payBadge}</td><td class="tc">${delBadge}</td>
     </tr>`;
   });
