@@ -230,6 +230,49 @@
   .btn-reset { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20); border-radius: var(--radius-sm); color: var(--text2); font-size: 12px; font-family: inherit; padding: 8px 14px; cursor: pointer; transition: all 0.2s; align-self: flex-end; white-space: nowrap; }
   .btn-reset:hover { border-color: rgba(255,107,135,0.4); color: var(--coral); background: rgba(255,107,135,0.07); }
 
+  /* ── NEW DATE PICKER (dp-*) ── */
+  .dp-wrap { position: relative; }
+  .dp-trigger-btn { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.65); border: 1px solid rgba(37,99,235,0.22); border-radius: var(--radius-sm); color: #0f0f1a; font-size: 13px; font-family: inherit; padding: 8px 14px; cursor: pointer; min-width: 220px; transition: all 0.2s; user-select: none; white-space: nowrap; justify-content: space-between; }
+  .dp-trigger-btn:hover, .dp-trigger-btn.open { border-color: rgba(37,99,235,0.45); background: rgba(255,255,255,0.85); box-shadow: 0 0 0 3px rgba(37,99,235,0.10); }
+  .dp-label-text { flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dp-caret { opacity: .5; font-size: 10px; flex-shrink: 0; transition: transform 0.2s; }
+  .dp-trigger-btn.open .dp-caret { transform: rotate(180deg); }
+  .dp-panel { display: none; position: fixed; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.90); border-radius: 16px; box-shadow: 0 20px 60px rgba(37,99,235,0.18); z-index: 300; width: 320px; max-width: calc(100vw - 24px); padding: 16px; font-family: inherit; max-height: calc(100vh - 24px); overflow-y: auto; }
+  .dp-panel.open { display: block; }
+  .dp-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 295; }
+  .dp-backdrop.open { display: block; }
+  .dp-preset-row { display: flex; gap: 6px; margin-bottom: 14px; }
+  .dp-preset { background: rgba(255,255,255,0.70); border: 1px solid rgba(37,99,235,0.20); border-radius: 20px; color: var(--text2); font-family: inherit; font-size: 12px; font-weight: 500; padding: 5px 13px; cursor: pointer; transition: all .15s; flex: 1; }
+  .dp-preset:hover { color: var(--accent); border-color: rgba(37,99,235,0.4); background: rgba(37,99,235,0.06); }
+  .dp-preset.active { background: linear-gradient(135deg, rgba(37,99,235,0.22), rgba(59,130,246,0.16)); border-color: rgba(37,99,235,0.5); color: var(--accent); font-weight: 700; }
+  .dp-range-display { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .dp-range-col { flex: 1; min-width: 0; }
+  .dp-range-caption { font-size: 9.5px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; white-space: nowrap; }
+  .dp-range-box { background: rgba(255,255,255,0.70); border: 1px solid rgba(37,99,235,0.22); border-radius: 8px; padding: 7px 10px; font-size: 12px; color: var(--text); cursor: pointer; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dp-range-arrow { color: var(--text3); margin-top: 18px; flex-shrink: 0; }
+  .dp-cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .dp-nav-btn { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20); color: var(--text2); font-size: 16px; cursor: pointer; padding: 2px 8px; border-radius: 6px; transition: background .15s; }
+  .dp-nav-btn:hover { background: rgba(37,99,235,0.08); color: var(--accent); }
+  .dp-month-label { font-size: 13px; font-weight: 700; color: var(--text); }
+  .dp-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+  .dp-hint-text { font-size: 10.5px; color: var(--text3); text-align: center; margin-top: 10px; }
+  .dp-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; border-top: 1px solid rgba(37,99,235,0.10); padding-top: 12px; }
+  .dp-btn-clear { background: none; border: 1px solid rgba(37,99,235,0.22); border-radius: 8px; color: var(--text2); font-family: inherit; font-size: 12px; font-weight: 600; padding: 7px 18px; cursor: pointer; transition: border-color .15s, color .15s; }
+  .dp-btn-clear:hover { border-color: rgba(225,29,90,0.4); color: var(--coral); }
+  .dp-btn-apply { background: linear-gradient(135deg, rgba(37,99,235,0.85), rgba(59,130,246,0.80)); border: none; border-radius: 8px; color: #fff; font-family: inherit; font-size: 12px; font-weight: 700; padding: 7px 22px; cursor: pointer; }
+  .dp-btn-apply:hover { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+  .dp-day-hdr { font-size: 9px; font-weight: 700; color: var(--text3); padding: 4px 2px; text-align: center; }
+  .dp-day { width: 100%; aspect-ratio: 1; border: none; background: none; color: var(--text2); font-family: inherit; font-size: 11.5px; border-radius: 50%; cursor: pointer; transition: all .12s; display: flex; align-items: center; justify-content: center; position: relative; }
+  .dp-day:hover:not(:disabled) { background: rgba(37,99,235,0.08); color: var(--accent); }
+  .dp-day.today::after { content: '·'; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 14px; color: var(--accent); line-height: 0; }
+  .dp-day.in-range { background: rgba(37,99,235,0.10); color: var(--accent); border-radius: 0; }
+  .dp-day.range-start, .dp-day.range-end { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; color: #fff !important; border-radius: 50% !important; font-weight: 700; }
+  .dp-day.range-start { border-radius: 50% 0 0 50% !important; }
+  .dp-day.range-end { border-radius: 0 50% 50% 0 !important; }
+  .dp-day.range-start.range-end { border-radius: 50% !important; }
+  .dp-day:disabled { color: var(--text3); cursor: default; opacity: .4; }
+  .dp-day.other-month { opacity: .3; }
+
   .main { padding: 24px 28px; max-width: 1440px; margin: 0 auto; }
 
   /* KPI */
@@ -633,6 +676,40 @@
 </head>
 <body>
 
+<!-- DATE PICKER PANEL — direct child of body so no stacking context hijacks fixed positioning -->
+<div id="dp-panel" class="dp-panel" onclick="event.stopPropagation()">
+  <div class="dp-preset-row">
+    <button class="dp-preset active" data-preset="all" onclick="dpPreset('all',this)">Semua</button>
+    <button class="dp-preset" data-preset="today" onclick="dpPreset('today',this)">Hari Ini</button>
+    <button class="dp-preset" data-preset="range" onclick="dpPreset('range',this)">Periode</button>
+  </div>
+  <div id="dp-range-display" class="dp-range-display" style="display:none">
+    <div class="dp-range-col">
+      <div class="dp-range-caption">TANGGAL MULAI</div>
+      <div id="dp-from-lbl" class="dp-range-box" onclick="dpFocusFrom()">—</div>
+    </div>
+    <div class="dp-range-arrow">→</div>
+    <div class="dp-range-col">
+      <div class="dp-range-caption">TANGGAL AKHIR</div>
+      <div id="dp-to-lbl" class="dp-range-box" onclick="dpFocusTo()">—</div>
+    </div>
+  </div>
+  <div id="dp-cal-wrap" style="display:none">
+    <div class="dp-cal-nav">
+      <button class="dp-nav-btn" onclick="dpNavMonth(-1)">◀</button>
+      <span id="dp-month-label" class="dp-month-label"></span>
+      <button class="dp-nav-btn" onclick="dpNavMonth(1)">▶</button>
+    </div>
+    <div id="dp-cal-grid" class="dp-cal-grid"></div>
+  </div>
+  <div id="dp-hint" class="dp-hint-text">Menampilkan semua data</div>
+  <div class="dp-footer">
+    <button class="dp-btn-clear" onclick="dpClear()">Hapus</button>
+    <button class="dp-btn-apply" onclick="dpApply()">Terapkan</button>
+  </div>
+</div>
+<div id="dp-backdrop" class="dp-backdrop" onclick="closeDatePicker()"></div>
+
 <div class="orb-mid"></div>
 
 <div class="header">
@@ -655,72 +732,12 @@
   <!-- Bulan / Tanggal — Range picker -->
   <div class="filter-group">
     <span class="filter-label">📅 Bulan / Tanggal</span>
-    <div class="dd-wrap" id="cal-picker-wrap">
-      <div class="cal-trigger" id="cal-trigger" onclick="toggleCalPanel()">
-        <span class="cal-trigger-icon">📅</span>
-        <span class="cal-trigger-txt placeholder" id="cal-trigger-txt">Semua tanggal</span>
-        <span class="cal-count-badge" id="cal-count-badge" style="display:none"></span>
-        <span class="cal-trigger-arrow">▼</span>
-      </div>
-      <div class="cal-panel" id="cal-panel">
-
-        <!-- Mode tabs -->
-        <div class="rp-tabs">
-          <button class="rp-tab active" id="rp-tab-all"    onclick="rpSetMode('all',this)">Semua</button>
-          <button class="rp-tab"        id="rp-tab-today"  onclick="rpSetMode('today',this)">Hari Ini</button>
-          <button class="rp-tab"        id="rp-tab-range"  onclick="rpSetMode('range',this)">📆 Rentang</button>
-          <button class="rp-tab"        id="rp-tab-custom" onclick="rpSetMode('custom',this)">Custom</button>
-        </div>
-
-        <!-- Today info bar -->
-        <div class="rp-today-bar" id="rp-today-bar"></div>
-
-        <!-- Date Range Picker (Start → End) -->
-        <div class="rp-daterange-wrap" id="rp-daterange-wrap">
-          <div class="rp-daterange-label">Dari Tanggal</div>
-          <input type="date" id="rp-date-from" class="rp-date-input" oninput="rpDateRangeChange()" />
-          <div class="rp-daterange-arrow">→</div>
-          <div class="rp-daterange-label">Sampai Tanggal</div>
-          <input type="date" id="rp-date-to" class="rp-date-input" oninput="rpDateRangeChange()" />
-          <div class="rp-daterange-info" id="rp-daterange-info"></div>
-        </div>
-
-        <!-- View toggle: Per Bulan / Per Hari (shown in Custom mode) -->
-        <div class="rp-view-toggle" id="rp-view-toggle">
-          <button class="rp-view-btn active" id="rp-vt-month" onclick="rpSetView('month',this)">📅 Per Bulan</button>
-          <button class="rp-view-btn"        id="rp-vt-day"   onclick="rpSetView('day',this)">🗓️ Per Hari</button>
-        </div>
-
-        <!-- MONTH GRID -->
-        <div class="rp-month-wrap" id="rp-month-wrap">
-          <div class="rp-year-nav">
-            <button class="rp-year-btn" onclick="rpNavYear(-1)">◀◀</button>
-            <span class="rp-year-label" id="rp-year-label">2026</span>
-            <button class="rp-year-btn" onclick="rpNavYear(1)">▶▶</button>
-          </div>
-          <div class="rp-month-grid" id="rp-month-grid"></div>
-        </div>
-
-        <!-- DAY GRID -->
-        <div class="rp-day-wrap" id="rp-day-wrap">
-          <div class="rp-day-nav">
-            <button class="rp-day-nav-btn" onclick="rpNavMonth(-1)">◀</button>
-            <span class="rp-day-nav-label" id="rp-day-nav-label"></span>
-            <button class="rp-day-nav-btn" onclick="rpNavMonth(1)">▶</button>
-          </div>
-          <div class="rp-dow-row" id="rp-dow-row"></div>
-          <div class="rp-day-grid" id="rp-day-grid"></div>
-        </div>
-
-        <!-- Preview bar -->
-        <div class="rp-preview" id="rp-preview"></div>
-
-        <!-- Actions -->
-        <div class="rp-actions">
-          <button class="rp-btn rp-btn-clear" onclick="rpClear()">Hapus</button>
-          <button class="rp-btn rp-btn-apply" onclick="rpApply()">Terapkan</button>
-        </div>
-      </div>
+    <div class="dp-wrap" id="dp-wrap">
+      <button class="dp-trigger-btn" id="dp-trigger" onclick="toggleDatePicker()">
+        <span>📅</span>
+        <span id="dp-label" class="dp-label-text">Semua tanggal</span>
+        <span class="dp-caret">▼</span>
+      </button>
     </div>
   </div>
 
@@ -1352,17 +1369,17 @@ let currentDocFilter = 'all';
 
 // (date counts pre-computed in rpInit section below)
 
-// ── RANGE PICKER STATE ──
-let rpMode = 'all';
-let rpCalView = 'month'; // 'month' | 'day'
-let rpViewYear = new Date().getFullYear();
-let rpViewMonth = new Date().getMonth();
-let rpDateFrom = null;
-let rpDateTo   = null;
-let rpPickingEnd = false;
-let rpSelMonths = new Set(); // "YYYY-MM" keys selected in month view
-let rpSelDays   = new Set(); // "YYYY-MM-DD" keys selected in day view
+// ── DATE PICKER STATE ──
+let dpMode = 'all';
+let dpCalYear, dpCalMonth;
+let dpSelFrom = null, dpSelTo = null;
+let dpPickingFrom = false, dpPickingTo = false;
+let dateFrom = null, dateTo = null;
 
+const DP_MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const DP_DAYS_HDR  = ['MIN','SEN','SEL','RAB','KAM','JUM','SAB'];
+
+// legacy aliases used elsewhere
 const MONTH_SHORT = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 const MONTH_FULL  = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const DOW_SHORT   = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
@@ -1376,7 +1393,176 @@ RAW.forEach(r => {
   _monthCounts[mk] = (_monthCounts[mk] || 0) + 1;
 });
 
-function rpInit() { rpRenderCurrentView(); }
+function rpInit() { /* no-op: replaced by dp picker */ }
+
+// ── NEW DATE PICKER FUNCTIONS ──
+function positionDatePanel() {
+  const panel = document.getElementById('dp-panel');
+  const trigger = document.getElementById('dp-trigger');
+  const r = trigger.getBoundingClientRect();
+  const panelWidth = panel.offsetWidth || 320;
+  let left = r.right - panelWidth;
+  left = Math.max(12, Math.min(left, window.innerWidth - panelWidth - 12));
+  let top = r.bottom + 8;
+  const maxTop = window.innerHeight - 12;
+  panel.style.maxHeight = Math.max(200, maxTop - top) + 'px';
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+}
+
+function openDatePicker() {
+  const panel = document.getElementById('dp-panel');
+  const now = new Date();
+  dpCalYear = now.getFullYear();
+  dpCalMonth = now.getMonth();
+  dpRenderCal();
+  panel.classList.add('open');
+  document.getElementById('dp-backdrop').classList.add('open');
+  document.getElementById('dp-trigger').classList.add('open');
+  requestAnimationFrame(positionDatePanel);
+}
+
+function closeDatePicker() {
+  document.getElementById('dp-panel').classList.remove('open');
+  document.getElementById('dp-backdrop').classList.remove('open');
+  document.getElementById('dp-trigger').classList.remove('open');
+}
+
+function toggleDatePicker() {
+  const panel = document.getElementById('dp-panel');
+  panel.classList.contains('open') ? closeDatePicker() : openDatePicker();
+}
+
+function dpPreset(mode, btn) {
+  dpMode = mode;
+  document.querySelectorAll('.dp-preset').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cal = document.getElementById('dp-cal-wrap');
+  const hint = document.getElementById('dp-hint');
+  const rangeDisplay = document.getElementById('dp-range-display');
+  if (mode === 'all') {
+    dpSelFrom = null; dpSelTo = null;
+    cal.style.display = 'none';
+    rangeDisplay.style.display = 'none';
+    hint.textContent = 'Menampilkan semua data';
+  } else if (mode === 'today') {
+    const t = new Date(); t.setHours(0,0,0,0);
+    dpSelFrom = new Date(t); dpSelTo = new Date(t); dpSelTo.setHours(23,59,59,0);
+    cal.style.display = 'none';
+    rangeDisplay.style.display = 'none';
+    hint.textContent = 'Data hari ini dipilih';
+    dpUpdateLabels();
+  } else if (mode === 'range') {
+    cal.style.display = 'block';
+    rangeDisplay.style.display = 'flex';
+    hint.textContent = 'Klik tanggal mulai, lalu tanggal akhir';
+    dpPickingFrom = true; dpPickingTo = false;
+    dpRenderCal();
+  }
+}
+
+function dpNavMonth(dir) {
+  dpCalMonth += dir;
+  if (dpCalMonth > 11) { dpCalMonth = 0; dpCalYear++; }
+  if (dpCalMonth < 0)  { dpCalMonth = 11; dpCalYear--; }
+  dpRenderCal();
+}
+
+function dpRenderCal() {
+  document.getElementById('dp-month-label').textContent = `${DP_MONTHS_ID[dpCalMonth]} ${dpCalYear}`;
+  const grid = document.getElementById('dp-cal-grid');
+  const today = new Date(); today.setHours(0,0,0,0);
+  let html = DP_DAYS_HDR.map(d => `<div class="dp-day-hdr" style="color:${d==='MIN'?'var(--coral)':'var(--text3)'}">${d}</div>`).join('');
+  const first = new Date(dpCalYear, dpCalMonth, 1).getDay();
+  const daysInMonth = new Date(dpCalYear, dpCalMonth + 1, 0).getDate();
+  const prevDays = new Date(dpCalYear, dpCalMonth, 0).getDate();
+  for (let i = 0; i < first; i++) {
+    html += `<div class="dp-day other-month" style="pointer-events:none">${prevDays - first + 1 + i}</div>`;
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dt = new Date(dpCalYear, dpCalMonth, d);
+    const isToday = dt.getTime() === today.getTime();
+    const from = dpSelFrom ? new Date(dpSelFrom.getFullYear(), dpSelFrom.getMonth(), dpSelFrom.getDate()) : null;
+    const to   = dpSelTo   ? new Date(dpSelTo.getFullYear(),   dpSelTo.getMonth(),   dpSelTo.getDate())   : null;
+    let cls = 'dp-day';
+    if (isToday) cls += ' today';
+    if (from && dt.getTime() === from.getTime()) cls += ' range-start';
+    if (to   && dt.getTime() === to.getTime())   cls += ' range-end';
+    if (from && to && dt > from && dt < to) cls += ' in-range';
+    html += `<button class="${cls}" onclick="dpClickDay(${dpCalYear},${dpCalMonth},${d})">${d}</button>`;
+  }
+  const total = first + daysInMonth;
+  const remainder = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let i = 1; i <= remainder; i++) {
+    html += `<div class="dp-day other-month" style="pointer-events:none">${i}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function dpClickDay(y, m, d) {
+  if (dpPickingFrom || (!dpSelFrom && !dpSelTo)) {
+    dpSelFrom = new Date(y, m, d, 0, 0, 0);
+    dpSelTo = null;
+    dpPickingFrom = false; dpPickingTo = true;
+    document.getElementById('dp-hint').textContent = 'Sekarang pilih tanggal akhir';
+  } else {
+    const clicked = new Date(y, m, d, 23, 59, 59);
+    if (dpSelFrom && clicked < dpSelFrom) {
+      dpSelTo = new Date(dpSelFrom.getFullYear(), dpSelFrom.getMonth(), dpSelFrom.getDate(), 23, 59, 59);
+      dpSelFrom = new Date(y, m, d, 0, 0, 0);
+    } else {
+      dpSelTo = clicked;
+    }
+    dpPickingTo = false;
+    document.getElementById('dp-hint').textContent = 'Rentang terpilih · klik kotak di atas untuk mengubah';
+  }
+  dpUpdateLabels();
+  dpRenderCal();
+}
+
+function dpFocusFrom() { dpPickingFrom = true; dpPickingTo = false; document.getElementById('dp-hint').textContent = 'Pilih tanggal mulai'; }
+function dpFocusTo()   { dpPickingFrom = false; dpPickingTo = true; document.getElementById('dp-hint').textContent = 'Pilih tanggal akhir'; }
+
+function dpUpdateLabels() {
+  const fmt2 = d => { if (!d) return '—'; const days=['Min','Sen','Sel','Rab','Kam','Jum','Sab']; return `${days[d.getDay()]}, ${d.getDate()} ${DP_MONTHS_ID[d.getMonth()].slice(0,3)} ${d.getFullYear()}`; };
+  document.getElementById('dp-from-lbl').textContent = dpSelFrom ? fmt2(dpSelFrom) : '—';
+  document.getElementById('dp-to-lbl').textContent   = dpSelTo   ? fmt2(dpSelTo)   : '—';
+  const lbl = document.getElementById('dp-label');
+  if (!dpSelFrom && !dpSelTo) { lbl.textContent = 'Semua tanggal'; return; }
+  if (dpSelFrom && dpSelTo) {
+    const same = dpSelFrom.toDateString() === dpSelTo.toDateString();
+    lbl.textContent = same ? fmt2(dpSelFrom) : `${dpSelFrom.getDate()} ${DP_MONTHS_ID[dpSelFrom.getMonth()].slice(0,3)} – ${dpSelTo.getDate()} ${DP_MONTHS_ID[dpSelTo.getMonth()].slice(0,3)} ${dpSelTo.getFullYear()}`;
+  } else if (dpSelFrom) {
+    lbl.textContent = fmt2(dpSelFrom);
+  }
+}
+
+function dpClear() {
+  dpSelFrom = null; dpSelTo = null;
+  dateFrom = null; dateTo = null;
+  dpMode = 'all';
+  document.querySelectorAll('.dp-preset').forEach(b => b.classList.remove('active'));
+  document.querySelector('.dp-preset[data-preset="all"]').classList.add('active');
+  document.getElementById('dp-range-display').style.display = 'none';
+  document.getElementById('dp-cal-wrap').style.display = 'none';
+  document.getElementById('dp-hint').textContent = 'Menampilkan semua data';
+  document.getElementById('dp-label').textContent = 'Semua tanggal';
+  closeDatePicker();
+  render();
+}
+
+function dpApply() {
+  dateFrom = dpSelFrom || null;
+  dateTo   = dpSelTo   || null;
+  dpUpdateLabels();
+  closeDatePicker();
+  render();
+}
+
+window.addEventListener('resize', () => {
+  const panel = document.getElementById('dp-panel');
+  if (panel && panel.classList.contains('open')) positionDatePanel();
+});
 
 function rpSetMode(mode, btn) {
   rpMode = mode;
@@ -1791,7 +1977,7 @@ function setPeriod(p, btn) {
 }
 
 function resetFilters() {
-  rpClear();
+  dpClear();
   ['dd-offtaker','dd-material'].forEach(id=>{ ddSelected[id].clear(); populateDd(id,ddAll[id]); updateDdTrigger(id); });
   currentDocFilter = 'all';
   ['doc-filter-all','doc-filter-complete','doc-filter-partial'].forEach(id=>{
@@ -1814,20 +2000,18 @@ function getFilteredRows() {
   const selMat = ddSelected['dd-material'];
   return RAW.filter(r=>{
     // ── Date filter ──
-    if (rpMode === 'today') {
+    if (dpMode === 'today') {
       const t = new Date();
       const todayStr = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
       if (r[0] !== todayStr) return false;
-    } else if (rpMode === 'range') {
-      const from = document.getElementById('rp-date-from').value;
-      const to   = document.getElementById('rp-date-to').value;
-      if (from && r[0] < from) return false;
-      if (to   && r[0] > to)   return false;
-    } else if (rpMode === 'custom') {
-      if (rpCalView === 'month') {
-        if (rpSelMonths.size > 0 && !rpSelMonths.has(r[0].slice(0,7))) return false;
-      } else {
-        if (rpSelDays.size > 0 && !rpSelDays.has(r[0])) return false;
+    } else if (dpMode === 'range') {
+      if (dateFrom) {
+        const rowDate = new Date(r[0]+'T00:00:00');
+        if (rowDate < dateFrom) return false;
+      }
+      if (dateTo) {
+        const rowDate = new Date(r[0]+'T23:59:59');
+        if (rowDate > dateTo) return false;
       }
     }
     // ── Other filters ──
@@ -2109,30 +2293,20 @@ function render() {
   }
 
   // ── TREND (volume) — smart grouping based on active filter ──
-  // Determine grouping key: daily if narrow day range, otherwise monthly
   let groupFn, labelFn, trendTitleSuffix, revTitleSuffix;
-  const isDayRange = rpMode === 'custom' && rpCalView === 'day' && rpSelDays.size > 0;
-  const isSingleMonth = rpMode === 'custom' && rpCalView === 'month' && rpSelMonths.size === 1;
 
-  if (isDayRange) {
-    // Group by day
+  // Determine if the selected range spans ≤ 31 days → show daily bars
+  const rangeSpanDays = (dateFrom && dateTo)
+    ? Math.round((dateTo - dateFrom) / (1000*60*60*24)) + 1
+    : null;
+  const useDaily = dpMode === 'today' || (dpMode === 'range' && rangeSpanDays !== null && rangeSpanDays <= 31);
+
+  if (useDaily) {
     groupFn = r => r[0];
     labelFn = k => { const dt=new Date(k+'T00:00:00'); return dt.getDate()+' '+MONTH_NAME[dt.getMonth()]; };
-    trendTitleSuffix = 'per hari (kg PDUP)';
-    revTitleSuffix   = 'per hari (Rp)';
-  } else if (isSingleMonth) {
-    // Group by day within that month
-    groupFn = r => r[0];
-    labelFn = k => { const dt=new Date(k+'T00:00:00'); return dt.getDate()+' '+MONTH_NAME[dt.getMonth()]; };
-    trendTitleSuffix = 'per hari — '+([...rpSelMonths][0].split('-').reverse().map((v,i)=>i===0?MONTH_NAME[parseInt(v)-1]:v).join(' '))+' (kg PDUP)';
-    revTitleSuffix   = 'per hari — '+([...rpSelMonths][0].split('-').reverse().map((v,i)=>i===0?MONTH_NAME[parseInt(v)-1]:v).join(' '))+' (Rp)';
-  } else if (rpMode === 'today') {
-    groupFn = r => r[0];
-    labelFn = k => { const dt=new Date(k+'T00:00:00'); return dt.getDate()+' '+MONTH_NAME[dt.getMonth()]; };
-    trendTitleSuffix = 'hari ini (kg PDUP)';
-    revTitleSuffix   = 'hari ini (Rp)';
+    trendTitleSuffix = dpMode === 'today' ? 'hari ini (kg PDUP)' : 'per hari (kg PDUP)';
+    revTitleSuffix   = dpMode === 'today' ? 'hari ini (Rp)'      : 'per hari (Rp)';
   } else {
-    // Default: group by month
     groupFn = r => getMonthKey(r[0]);
     labelFn = k => periodLabel(k);
     trendTitleSuffix = 'per bulan (kg PDUP)';
