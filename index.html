@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Dashboard CC Ciracas — Sales</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -322,6 +324,10 @@
   .card-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .toggle-btn { background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20); border-radius: 8px; color: var(--text2); font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
   .toggle-btn:hover { background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.4); color: var(--accent); }
+  .dl-btn { background: linear-gradient(135deg, rgba(225,29,90,0.16), rgba(217,119,6,0.14)); border: 1px solid rgba(225,29,90,0.35); border-radius: 8px; color: var(--coral); font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all 0.15s; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .dl-btn:hover { background: linear-gradient(135deg, rgba(225,29,90,0.26), rgba(217,119,6,0.22)); border-color: rgba(225,29,90,0.55); box-shadow: 0 2px 10px rgba(225,29,90,0.18); }
+  .dl-btn:disabled { opacity: 0.55; cursor: wait; }
+  .dl-btn.dl-btn-lg { font-size: 12px; padding: 8px 16px; border-radius: 10px; }
   .detail-table-wrap { max-height: 360px; overflow-y: auto; transition: max-height 0.2s ease; }
   .detail-table-wrap.expanded { max-height: 720px; }
 
@@ -995,7 +1001,12 @@
       <div class="table-wrap detail-table-wrap" id="discTableWrap"><div id="discTable"></div></div>
     </div>
     <div class="card">
-      <div class="card-title">Transaksi — Unpaid &amp; Delivered <button class="toggle-btn" id="payToggle" onclick="openPayFullPopup()">Lihat Semua</button></div>
+      <div class="card-title">Transaksi — Unpaid &amp; Delivered
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="dl-btn" id="unpaidDlBtn" onclick="downloadUnpaidReport()" title="Unduh laporan transaksi Unpaid dalam format PDF">⬇ PDF Unpaid</button>
+          <button class="toggle-btn" id="payToggle" onclick="openPayFullPopup()">Lihat Semua</button>
+        </div>
+      </div>
       <div class="table-wrap detail-table-wrap" id="payTableWrap"><div id="payTable"></div></div>
     </div>
   </div>
@@ -1090,6 +1101,7 @@
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
       <input class="popup-search" id="pay-full-search" placeholder="Cari No. SJ / offtaker…" oninput="filterPopupTable('pay-full')">
+      <button class="dl-btn" id="payFullDlBtn" onclick="downloadUnpaidReport()" title="Unduh laporan transaksi Unpaid dalam format PDF">⬇ Unduh PDF Unpaid</button>
       <button class="popup-close" onclick="closePopup()">✕</button>
     </div>
   </div>
@@ -2574,6 +2586,113 @@ function setPayFilter(mode, skipTabUpdate) {
   document.getElementById('pay-full-search').value = '';
   renderPayFullTable(filtered);
 }
+// ─── DOWNLOAD REPORT: UNPAID TRANSACTIONS (PDF) ─────────────
+function downloadUnpaidReport() {
+  const btns = [document.getElementById('unpaidDlBtn'), document.getElementById('payFullDlBtn')].filter(Boolean);
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    alert('Pustaka PDF belum siap dimuat. Silakan coba lagi sebentar lagi.');
+    return;
+  }
+  btns.forEach(b => { b.disabled = true; b.textContent = '⏳ Menyiapkan…'; });
+
+  try {
+    const source = (window._lastSjEntries && window._lastSjEntries.length) ? window._lastSjEntries : (window._payRowArr || []);
+    const unpaid = source
+      .filter(e => e.payStatus === 'Unpaid' || e.pay === 'Unpaid')
+      .map(e => ({
+        noSJ: e.noSJ || '—',
+        invoiceNo: e.invoiceNo || e.inv || '—',
+        date: e.date,
+        offtaker: e.offtaker || '—',
+        delStatus: e.delStatus || e.del || '—',
+        beratPDUP: e.beratPDUP || 0,
+        totalPf: e.totalPf || 0
+      }))
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+    if (!unpaid.length) {
+      alert('Tidak ada transaksi dengan status Unpaid untuk filter saat ini.');
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const margin = 32;
+    const now = new Date();
+    const genStr = now.getDate() + ' ' + MONTH_NAME[now.getMonth()] + ' ' + now.getFullYear() + ', ' +
+      String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+    // Header
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(15);
+    doc.setTextColor(15, 15, 26);
+    doc.text('CC Ciracas — Laporan Transaksi Unpaid', margin, 40);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(74, 72, 120);
+    doc.text('Dibuat: ' + genStr, margin, 56);
+    doc.text('Total transaksi Unpaid: ' + unpaid.length + ' SJ', margin, 70);
+
+    const totalPf = unpaid.reduce((s, e) => s + (e.totalPf || 0), 0);
+    const totalKg = unpaid.reduce((s, e) => s + (e.beratPDUP || 0), 0);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(225, 29, 90);
+    doc.text('Total Nilai Unpaid (Proforma): ' + fmtRp(totalPf), pageW - margin, 56, { align: 'right' });
+    doc.setTextColor(15, 15, 26);
+    doc.text('Total Berat PDUP: ' + fmtInt(totalKg) + ' kg', pageW - margin, 70, { align: 'right' });
+
+    const body = unpaid.map((e, i) => {
+      const dt = e.date ? new Date(e.date) : null;
+      const dtStr = dt ? (dt.getDate() + ' ' + MONTH_NAME[dt.getMonth()] + ' ' + dt.getFullYear()) : '—';
+      return [
+        i + 1,
+        e.noSJ,
+        dtStr,
+        e.offtaker,
+        e.invoiceNo,
+        fmtInt(e.beratPDUP) + ' kg',
+        fmtRp(e.totalPf),
+        e.delStatus
+      ];
+    });
+
+    doc.autoTable({
+      startY: 84,
+      margin: { left: margin, right: margin },
+      head: [['#', 'No. SJ', 'Tanggal', 'Offtaker', 'No. Invoice', 'Berat PDUP', 'Total Proforma', 'Status Kirim']],
+      body: body,
+      foot: [['', '', '', '', '', fmtInt(totalKg) + ' kg', fmtRp(totalPf), '']],
+      theme: 'grid',
+      styles: { font: 'helvetica', fontSize: 8.5, cellPadding: 5, textColor: [15, 15, 26], lineColor: [220, 224, 235], lineWidth: 0.5 },
+      headStyles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold' },
+      footStyles: { fillColor: [255, 241, 244], textColor: [225, 29, 90], fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [246, 249, 255] },
+      columnStyles: {
+        0: { cellWidth: 24 },
+        5: { halign: 'right' },
+        6: { halign: 'right' },
+        7: { halign: 'center' }
+      },
+      didDrawPage: (data) => {
+        const pageCount = doc.internal.getNumberOfPages();
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 165);
+        doc.text('Halaman ' + doc.internal.getCurrentPageInfo().pageNumber + ' / ' + pageCount, pageW - margin, doc.internal.pageSize.getHeight() - 16, { align: 'right' });
+      }
+    });
+
+    const fname = 'Laporan-Unpaid-CCCiracas-' + now.getFullYear() +
+      String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0') + '.pdf';
+    doc.save(fname);
+  } catch (err) {
+    console.error(err);
+    alert('Gagal membuat laporan PDF: ' + err.message);
+  } finally {
+    btns.forEach(b => { b.disabled = false; b.textContent = b.id === 'payFullDlBtn' ? '⬇ Unduh PDF Unpaid' : '⬇ PDF Unpaid'; });
+  }
+}
+
 // ── DISC SORT STATE ──
 window._discSortKey = window._discSortKey || 'kg';   // 'kg' | 'rp' | 'date'
 window._discSortDir = window._discSortDir || 'asc';  // 'asc' | 'desc'
