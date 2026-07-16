@@ -641,9 +641,10 @@
   html[data-theme="dark"] .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
   html[data-theme="dark"] .empty { padding: 48px 20px; text-align: center; color: var(--text3); font-size: 13px; }
   html[data-theme="dark"] .section-click-hint { font-size: 10px; font-weight: 600; color: var(--accent); background: rgba(46,232,160,0.12); border: 1px solid rgba(46,232,160,0.3); border-radius: 6px; padding: 2px 8px; margin-left: 6px; opacity: 1; transition: opacity 0.2s; letter-spacing: 0.04em; text-transform: none; }
-  html[data-theme="dark"] .popup-overlay { position: fixed; inset: 0; background: rgba(0,5,20,0.55); backdrop-filter: blur(4px); z-index: 500; }
-  html[data-theme="dark"] .popup-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.96); background: #1d2f4c; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; box-shadow: 0 24px 80px rgba(0,5,20,0.55); z-index: 600; width: min(96vw, 1100px); max-height: 85vh; flex-direction: column; overflow: hidden; }
-  html[data-theme="dark"] .popup-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; gap: 12px; flex-wrap: wrap; background: #1d2f4c; box-shadow: none; }
+  html[data-theme="dark"] .popup-overlay { position: fixed; inset: 0; background: rgba(0,5,20,0.55); backdrop-filter: blur(4px); z-index: 2147483640; }
+  html[data-theme="dark"] .popup-modal { display: none; position: fixed; inset: 0; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; background: #182946; border: none; border-radius: 0; box-shadow: none; z-index: 2147483645; flex-direction: column; overflow: hidden; margin: 0; padding: 0; transform: none; }
+  html[data-theme="dark"] .popup-modal.open { display: flex; animation: popIn 0.2s ease; }
+  html[data-theme="dark"] .popup-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 28px 13px; border-bottom: 1.5px solid rgba(255,255,255,0.1); flex-shrink: 0; gap: 12px; flex-wrap: wrap; background: #1d2f4c; box-shadow: 0 2px 12px rgba(0,5,20,0.25); }
   html[data-theme="dark"] .popup-title { color: var(--text); }
   html[data-theme="dark"] .popup-search { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 9px; color: var(--text); font-size: 12.5px; font-family: inherit; padding: 7px 12px; outline: none; min-width: 220px; transition: border-color 0.2s; }
   html[data-theme="dark"] .popup-search:focus { border-color: rgba(46,232,160,0.5); background: rgba(255,255,255,0.12); }
@@ -1137,280 +1138,280 @@
   }
   applyChartTheming();
 const RAW = [
-["2026-01-06","Panca Kraft Pratama - UWAAA","Kardus",1180.5,1183,0,1183,2350,2350,2350,2774175,2780050,0,5000,2775050,"","MGI/JAN/2026/001","SJ001","Paid","Completed",true,true,true,true],
-["2026-01-30","Lapak Tri","Kerasan Campur",2195,2195,0,2195,1300,1300,1300,2853500,2853500,146500,0,3000000,"","MGI/JAN/2026/002","SJ004","Paid","Completed",true,true,true,true],
-["2026-02-03","PD Fajar Mandiri","Tutup Botol",184,184,0,184,5500,5500,5500,1012000,1012000,0,0,1012000,"","MGI/FEB/2026/001","SJ005","Paid","Completed",true,true,true,true],
-["2026-02-03","Buana Plast","Cacah PP BN Sablon",625,625,0,625,7000,7000,7000,4375000,4375000,0,0,4375000,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true],
-["2026-02-03","Buana Plast","Cacah PP Mambo + Abu",106,106,0,106,4500,4500,4500,477000,477000,0,0,477000,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true],
-["2026-02-03","Buana Plast","Cacah PP Warna",1055,1055,0,1055,5500,5500,5500,5802500,5802500,0,0,5802500,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true],
-["2026-02-03","Haka Sentral Plastik","Cacah PP PK",149,149,0,149,8500,8500,8500,1266500,1266500,0,0,1266500,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true],
-["2026-02-03","Haka Sentral Plastik","Cacah PP Hitam",475,475,0,475,5000,5000,5000,2375000,2375000,0,0,2375000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true],
-["2026-02-03","Haka Sentral Plastik","Cacah PP Mambo",105,105,0,105,5000,5000,5000,525000,525000,0,0,525000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true],
-["2026-02-06","BMPS","BP PET MIX",3922,3415.96,0,3415.96,6200,6200,6200,24316400,21178952,0,0,21178952,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false],
-["2026-02-06","BMPS","BP PET BN",378.5,369,0,369,6700,6700,6700,2535950,2472300,0,0,2472300,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false],
-["2026-02-06","BMPS","BP PET BM",0,265,0,265,5700,5700,5700,0,1510500,0,0,1510500,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false],
-["2026-02-06","BMPS","BP PET GALON LE",356,353,0,353,5600,5600,5600,1993600,1976800,0,0,1976800,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false],
-["2026-02-06","BMPS","BP AG Bersih",185.5,184,0,184,7000,7000,7000,1298500,1288000,0,0,1288000,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false],
-["2026-02-06","BMPS","BP AG Kotor",239,254,0,254,4500,4500,4500,1075500,1143000,0,0,1143000,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false],
-["2026-02-09","Panca Kraft Pratama - Daya Selaras Group","Kardus",2682,2726,0,2726,2550,2550,2550,6839100,6951300,0,0,6951300,"","MGI/FEB/2026/006","SJ009","Paid","Completed",true,true,true,true],
-["2026-02-10","PD Fajar Mandiri","Tutup Botol",56,55,0,55,5500,5500,5500,308000,302500,0,0,302500,"","MGI/FEB/2026/005","SJ010","Paid","Completed",true,true,true,true],
-["2026-02-21","PD Fajar Mandiri","Keleman PP",255,255,0,255,2000,2000,2000,510000,510000,0,0,510000,"","MGI/FEB/2026/007","SJ011","Paid","Completed",true,true,true,true],
-["2026-02-23","Lapak Tri","Gabruk Kecil",1924,1924,0,1924,800,800,800,1539200,1539200,0,0,1539200,"","MGI/FEB/2026/007","SJ012","Paid","Completed",true,true,true,true],
-["2026-02-23","Lapak Tri","",510,451,0,451,800,800,800,408000,360800,0,0,360800,"","MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true],
-["2026-02-23","Lapak Tri","PETC Warna",48.5,0,0,0,0,0,0,0,0,0,0,0,"","MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true],
-["2026-02-25","Panca Kraft Pratama - Daya Selaras Group","Kardus",1805.5,1794,0,1794,2550,2550,2550,4604025,4574700,0,0,4574700,"","MGI/FEB/2026/009","SJ013","Paid","Completed",true,true,true,true],
-["2026-03-03","PT Kita Olah Indonesia","BP Naso",582,574,0,574,6500,6500,6500,3783000,3731000,0,0,3731000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
-["2026-03-03","PT Kita Olah Indonesia","BP BLPK",297,291,0,291,6000,6000,6000,1782000,1746000,0,0,1746000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
-["2026-03-03","PT Kita Olah Indonesia","BP BL Warna",168,183,0,183,5000,5000,5000,840000,915000,0,0,915000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
-["2026-03-03","PT Kita Olah Indonesia","BP BL Merah",64,64,0,64,5000,5000,5000,320000,320000,0,0,320000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
-["2026-03-03","PT Kita Olah Indonesia","BP BL Hitam",57,55,0,55,4000,4000,4000,228000,220000,0,0,220000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true],
-["2026-03-04","Buana Plast","Cacah PP BN",599.5,599,0,599,9500,9500,9500,5695250,5690500,0,0,5690500,"","","SJ016","Paid","Completed",true,true,true,true],
-["2026-03-04","Buana Plast","Cacah PP Warna",1391,1390,0,1390,5500,5500,5500,7650500,7645000,0,0,7645000,"","","SJ016","Paid","Completed",true,true,true,true],
-["2026-03-05","PT Indah Kiat - Uwaaa","Duplek",1534,1280.4,0,1280.4,1550,1550,1550,2377700,1984620,0,0,1984620,"","","SJ015","Paid","Completed",true,true,true,true],
-["2026-03-06","BMPS","BP PET MIX",2467.5,2579.95,0,2579.95,6800,6800,6800,16779000,17543660,0,0,17543660,"","","SJ019","Paid","Completed",true,true,true,false],
-["2026-03-06","BMPS","BP Galon Le",1094.5,1100,0,1100,5600,5600,5600,6129200,6160000,0,0,6160000,"","","SJ019","Paid","Completed",true,true,true,false],
-["2026-03-06","Haka Sentral Plastik","Cacah PP Hitam",729.5,749,0,749,5000,5000,5000,3647500,3745000,0,0,3745000,"","","SJ018","Paid","Completed",true,true,true,true],
-["2026-03-06","Haka Sentral Plastik","Cacah PP PK",401.5,383,0,383,8500,8500,8500,3412750,3255500,0,0,3255500,"","","SJ018","Paid","Completed",true,true,true,true],
-["2026-03-07","PT Kita Olah Indonesia","BP AG Bersih",170.5,170,0,170,6000,6000,6000,1023000,1020000,0,0,1020000,"","","SJ017","Paid","Completed",true,true,true,true],
-["2026-03-07","PT Kita Olah Indonesia","BP AG Kotor",1076.5,1045,0,1045,3000,3000,3000,3229500,3135000,0,0,3135000,"","","SJ017","Paid","Completed",true,true,true,true],
-["2026-03-07","PT Kita Olah Indonesia","BP Monti",248.5,240,0,240,2500,2500,2500,621250,600000,0,0,600000,"","","SJ017","Paid","Completed",true,true,true,true],
-["2026-03-07","PT Kita Olah Indonesia","BP BL Warna",214,211,0,211,5000,5000,5000,1070000,1055000,0,0,1055000,"","","SJ017","Paid","Completed",true,true,true,true],
-["2026-03-07","PT Kita Olah Indonesia","BP Oli Warna",113,113,0,113,5000,5000,5000,565000,565000,0,0,565000,"","","SJ017","Paid","Completed",true,true,true,true],
-["2026-03-07","PT Kita Olah Indonesia","BP Oli Hitam",13.5,13,0,13,4000,4000,4000,54000,52000,0,0,52000,"","","SJ017","Paid","Completed",true,true,true,true],
-["2026-03-07","PT Kita Olah Indonesia","BP Facial Wash",60,50,0,50,1500,1500,1500,90000,75000,0,0,75000,"","","SJ017","Paid","Completed",true,true,true,true],
-["2026-03-11","PD Fajar Mandiri","Tutup Botol",120,118,0,118,5500,5500,5500,660000,649000,0,0,649000,"","","SJ021","Paid","Completed",true,true,true,true],
-["2026-03-12","Panca Kraft Pratama - Daya Selaras Group","Kardus",1449,1320,0,1320,2550,2550,2550,3694950,3366000,0,0,3366000,"","","SJ022","Paid","Completed",true,true,true,true],
-["2026-03-14","Lapak Tri","Boncos",2605,2130,0,2130,900,900,900,2344500,1917000,0,0,1917000,"","","SJ024","Paid","Completed",true,true,true,true],
-["2026-03-16","Buana Plast","Cacah PP BN",257,257,0,257,9500,9500,9500,2441500,2441500,0,0,2441500,"","","SJ025","Paid","Completed",true,true,true,true],
-["2026-03-16","Buana Plast","Cacah PP Warna Biru",66,66,0,66,5500,5500,5500,363000,363000,0,0,363000,"","","SJ025","Paid","Completed",true,true,true,true],
-["2026-03-16","Buana Plast","Cacah PP Mambo",780.5,780,0,780,5000,5000,5000,3902500,3900000,0,0,3900000,"","","SJ025","Paid","Completed",true,true,true,true],
-["2026-03-16","Buana Plast","Cacah PP Sablon",105.5,105,0,105,7000,7000,7000,738500,735000,0,0,735000,"","","SJ025","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP Monti",20.5,17,0,17,2500,2500,2500,51250,42500,0,0,42500,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP AG Bersih",61,60,0,60,6000,6000,6000,366000,360000,0,0,360000,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP AG Kotor",184,179,0,179,3000,3000,3000,552000,537000,0,0,537000,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP Facial Wash",43,34,0,34,1500,1500,1500,64500,51000,0,0,51000,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP Naso",143,139,0,139,6500,6500,6500,929500,903500,0,0,903500,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP BLPK",325.5,316,0,316,6000,6000,6000,1953000,1896000,0,0,1896000,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP BL Mambo",200,192,0,192,4500,4500,4500,900000,864000,0,0,864000,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP Oli Mambo",119,67,0,67,4500,4500,4500,535500,301500,0,0,301500,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-03-17","PT Kita Olah Indonesia","BP Oli Hitam",31,29,0,29,4000,4000,4000,124000,116000,0,0,116000,"","","SJ026","Paid","Completed",true,true,true,true],
-["2026-04-10","Panca Kraft Pratama - Daya Selaras Group","Kardus",2749.5,2720,218,2502,2625,2625,2625,7217438,7140000,0,0,7140000,"Potongan 8% karena barang lembab","MGI/APR/2026/001","SJ027","Paid","Completed",true,true,true,true],
-["2026-04-11","PD Fajar Mandiri","Tutup Botol",324,0,0,0,5500,5500,5500,1782000,0,0,0,0,"","","SJ029","Unpaid","Completed",true,false,false,false],
-["2026-04-15","UD Rahayu Abadi","Monti",180,182,0,182,4500,4500,4500,810000,819000,0,0,819000,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
-["2026-04-15","UD Rahayu Abadi","AG Bersih",214,219,0,219,9000,9000,9000,1926000,1971000,0,0,1971000,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
-["2026-04-15","UD Rahayu Abadi","AG Kotor",1013.5,918,0,918,5200,5200,5200,5270200,4773600,0,0,4773600,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
-["2026-04-15","UD Rahayu Abadi","PP BN",767,746,0,746,7200,7200,7200,5522400,5371200,0,0,5371200,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
-["2026-04-15","UD Rahayu Abadi","Naso",13,13,0,13,6300,6300,6300,81900,81900,0,0,81900,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true],
-["2026-04-15","BMPS","BP PET BM",1312.5,1340,0,1340,7000,7000,7000,9187500,9380000,0,0,9380000,"","MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,false],
-["2026-04-15","BMPS","BP PET BN",2331,2320,0,2320,8000,8000,8000,18648000,18560000,0,0,18560000,"","MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,false],
-["2026-04-15","BMPS","BP Galon Le",545,600,0,600,6000,6000,6000,3270000,3600000,0,0,3600000,"","MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,false],
-["2026-04-16","PT Kita Olah Indonesia","BP Naso",272,268,0,268,6700,6700,6700,1822400,1795600,3000,0,1798600,"Kelebihan TF","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
-["2026-04-16","PT Kita Olah Indonesia","BP BL Warna",253.5,249,0,249,5200,5200,5200,1318200,1294800,0,0,1294800,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
-["2026-04-16","PT Kita Olah Indonesia","BP Oli Warna",220,216,0,216,4700,4700,4700,1034000,1015200,0,0,1015200,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
-["2026-04-16","PT Kita Olah Indonesia","BP Oli Hitam",28.5,27,0,27,4200,4200,4200,119700,113400,0,0,113400,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
-["2026-04-16","PT Kita Olah Indonesia","BP BLPK",205,196,0,196,6200,6200,6200,1271000,1215200,0,0,1215200,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true],
-["2026-04-17","Panca Kraft Pratama - Daya Selaras Group","Kardus",2133,2100,273,1827,2625,2625,2625,5599125,5512500,0,0,5512500,"Potongan 13%","MGI/APR/2026/005","SJ033","Paid","Completed",true,true,true,true],
-["2026-04-21","Panca Kraft Pratama - Daya Selaras Group","Kardus",1266,1180,59,1121,2625,2625,2625,3323250,3097500,0,0,3097500,"Potongan 5%","MGI/APR/2026/006","SJ034","Paid","Completed",true,true,true,true],
-["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN",140.5,85,0,85,7500,7500,7500,1053750,637500,0,0,637500,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
-["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN Sablon",47.5,100,0,100,8000,8000,8000,380000,800000,0,0,800000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
-["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP Mambo",652,640,0,640,5500,5500,5500,3586000,3520000,0,0,3520000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
-["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP BL Mambo",90,90,0,90,5500,5500,5500,495000,495000,0,0,495000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
-["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP Oli Mambo",69.5,70,0,70,6500,6500,6500,451750,455000,0,0,455000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true],
-["2026-04-23","Lapak Bapak Rocky","Logam Gabruk",503.5,503.5,0,503.5,3500,0,0,1762250,0,0,0,0,"","","SJ036","Paid","Completed",true,true,true,true],
-["2026-04-24","PT Haka Sentral Plastik","Cacah PP PK",255,255,0,255,9500,9500,9500,2422500,2422500,0,0,2422500,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
-["2026-04-24","PT Haka Sentral Plastik","Cacah PP Hitam",532,532,0,532,5500,5500,5500,2926000,2926000,0,0,2926000,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
-["2026-04-24","PT Haka Sentral Plastik","Cacah Falkon",527,552,0,552,5300,5300,5300,2793100,2925600,0,0,2925600,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
-["2026-04-24","PT Haka Sentral Plastik","Cacah PP Mambo",1994,1933,0,1933,5300,5300,5300,10568200,10244900,0,0,10244900,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true],
-["2026-04-25","Lapak Tri","Kerasan Campur",1321.5,1321.5,0,1321.5,1000,1000,1000,1321500,1321500,0,264300,1057200,"Potongan 20%","MGI/APR/2026/009","SJ037-1","Paid","Completed",true,true,true,true],
-["2026-04-26","Lapak Bapak Rocky","Logam Gabruk",1107.5,1107.5,0,1107.5,3500,0,0,3876250,0,0,0,0,"","","SJ038","Paid","Completed",true,true,true,true],
-["2026-04-29","Panca Kraft Pratama - Daya Selaras Group","Kardus",2106,2030,61,1969,2625,2625,2625,5528250,5328750,0,0,5328750,"Potongan 3%","MGI/APR/2026/010","SJ039","Paid","Completed",true,true,true,true],
-["2026-04-30","UD Rahayu Abadi","AG Kotor",604.5,569,0,569,5200,5200,5200,3143400,2958800,0,6500,2952300,"Potongan di biaya admin bank","MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true],
-["2026-04-30","UD Rahayu Abadi","Monti",118.5,111,0,111,4500,4500,4500,533250,499500,0,0,499500,"","MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true],
-["2026-04-30","UD Rahayu Abadi","PP A",0,20,0,20,9000,9000,9000,0,180000,0,0,180000,"","MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true],
-["2026-04-30","PT Eterna Persada Indonesia (Pan Era Group)","BP PP Warna",403,405,0,405,6000,6000,6000,2418000,2430000,0,0,2430000,"","MGI/APR/2026/012","SJ041","Paid","Completed",true,true,true,true],
-["2026-04-30","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN",158,155,0,155,9000,9000,9000,1422000,1395000,0,0,1395000,"","MGI/APR/2026/012","SJ041","Paid","Completed",true,true,true,true],
-["2026-05-04","Lapak Tri","Kerasan Campur",2245,2245,0,2245,1000,1000,1000,2245000,2245000,0,449000,1796000,"Potongan 20%","MGI/MEI/2026/001","SJ042","Paid","Completed",true,true,true,true],
-["2026-05-04","PT Mitra Plastik Nusantara","BP PET MIX",3194,3220,0,3220,8300,8300,8300,26510200,26726000,0,0,26726000,"","MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,false],
-["2026-05-04","PT Mitra Plastik Nusantara","BP Galon",552,540,0,540,6700,6700,6700,3698400,3618000,0,0,3618000,"","MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,false],
-["2026-05-04","PT Mitra Plastik Nusantara","BP PET GALON LE",292,279.99,0,279.99,8700,8700,8700,2540400,2435913,0,0,2435913,"","MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,false],
-["2026-05-05","UD Rahayu Abadi","AG Bersih",230.5,317,0,317,5200,5200,5200,1198600,1648400,0,6500,1641900,"Potongan di biaya admin bank","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
-["2026-05-05","UD Rahayu Abadi","Monti",52,50,0,50,4500,4500,4500,234000,225000,0,0,225000,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
-["2026-05-05","UD Rahayu Abadi","Tutup Botol",83.5,74,0,74,5500,5500,5500,459250,407000,0,0,407000,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
-["2026-05-05","UD Rahayu Abadi","PP BN",307,304,0,304,7200,7200,7200,2210400,2188800,0,0,2188800,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
-["2026-05-05","UD Rahayu Abadi","PP A",0,29,0,29,9000,9000,9000,0,261000,0,0,261000,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true],
-["2026-05-08","Panca Kraft Pratama - Daya Selaras Group","Kardus",1823,2280,274,2006,2625,2625,2625,4785375,5985000,0,0,5985000,"","MGI/MEI/2026/004","SJ045","Paid","Completed",true,true,true,true],
-["2026-05-09","UD Rahayu Abadi","Bodong Warna",399,157,0,157,1700,1700,1700,678300,266900,0,6500,260400,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
-["2026-05-09","UD Rahayu Abadi","AG Kotor",217.5,194,0,194,5200,5200,5200,1131000,1008800,0,0,1008800,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
-["2026-05-09","UD Rahayu Abadi","Monti",22,21,0,21,4500,4500,4500,99000,94500,0,0,94500,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
-["2026-05-09","UD Rahayu Abadi","Tutup Botol",99.5,97,0,97,5500,5500,5500,547250,533500,0,0,533500,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true],
-["2026-05-09","CV Sido Mulyo","Duplek",962.5,962,0,962,1000,1000,1000,962500,962000,0,0,962000,"","MGI/MEI/2026/006","SJ047","Paid","Completed",true,true,true,true],
-["2026-05-09","CV Sido Mulyo","Kardus",817.5,817,0,817,2200,2200,2200,1798500,1797400,0,0,1797400,"","MGI/MEI/2026/006","SJ047","Paid","Completed",true,true,true,true],
-["2026-05-12","PT Kita Olah Indonesia","Bodong Kotor",286,286,0,286,3500,3500,3500,1001000,1001000,0,0,1001000,"","MGI/MEI/2026/009","SJ048","Paid","Completed",true,true,true,true],
-["2026-05-12","PT Kita Olah Indonesia","Bodong Warna",275.5,275.5,0,275.5,1700,1700,1700,468350,468350,0,0,468350,"","MGI/MEI/2026/009","SJ048","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Bening 2",205,205,0,205,9000,9000,9000,1845000,1845000,0,2500,1842500,"Potongan Biaya Admin","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Mambo Mainan Kotor",75,75,0,75,5300,5300,5300,397500,397500,0,0,397500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Mambo khusus 2",60,60,0,60,7000,7000,7000,420000,420000,0,0,420000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Mambo Kotor",275,275,0,275,6500,6500,6500,1787500,1787500,0,0,1787500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Putih 2",170,170,0,170,8000,8000,8000,1360000,1360000,0,0,1360000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press Bening Thinwall 1",355,355,0,355,10000,10000,10000,3550000,3550000,0,0,3550000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press Mambo 2",1105,1105,0,1105,5500,5500,5500,6077500,6077500,0,0,6077500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press Mambo Kotor",85,85,0,85,5000,5000,5000,425000,425000,0,0,425000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press White 1",415,415,0,415,8500,8500,8500,3527500,3527500,0,0,3527500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true],
-["2026-05-16","PT Kita Olah Indonesia","Bodong Kotor",606,367,0,367,3500,3500,3500,2121000,1284500,0,0,1284500,"","MGI/MEI/2026/008","SJ050","Paid","Completed",true,true,true,true],
-["2026-05-18","PT Kita Olah Indonesia","Bodong Kotor",595.5,473,0,473,3500,3500,3500,2084250,1655500,0,0,1655500,"","MGI/MEI/2026/009","SJ051","Paid","Completed",true,true,true,true],
-["2026-05-18","PT Kita Olah Indonesia","Bodong Warna",54,38,0,38,1700,1700,1700,91800,64600,0,0,64600,"","MGI/MEI/2026/009","SJ051","Paid","Completed",true,true,true,true],
-["2026-05-18","UD Rafa Putra","Kerasan Campur",719,719,0,719,800,800,800,575200,575200,0,0,575200,"","MGI/MEI/2026/010","SJ053","Paid","Completed",true,true,true,true],
-["2026-05-18","UD Rafa Putra","Kerasan Halus",67,67,0,67,300,300,300,20100,20100,0,0,20100,"","MGI/MEI/2026/010","SJ053","Paid","Completed",true,true,true,true],
-["2026-05-18","UD Rafa Putra","Kerasan Campur",600,600,0,600,800,800,800,480000,480000,0,0,480000,"","MGI/MEI/2026/011","SJ056","Paid","Completed",true,true,true,true],
-["2026-05-18","UD Rafa Putra","Kerasan Halus",218,218,0,218,300,300,300,65400,65400,0,0,65400,"","MGI/MEI/2026/011","SJ056","Paid","Completed",true,true,true,true],
-["2026-05-18","Lapak Bapak Rocky","Kerasan Campur",1398.5,1398.5,0,1398.5,800,800,800,1118800,1118800,0,0,1118800,"","","SJ054","Paid","Completed",true,true,true,true],
-["2026-05-18","Lapak Pak Aldi","Kerasan Campur (Kasar)",651.5,651.5,0,651.5,0,0,0,0,0,0,0,0,"","","SJ055","Paid","Completed",true,true,true,true],
-["2026-05-18","Lapak Pak Aldi","Emberan Besar",474.5,474.5,0,474.5,1500,1500,1500,711750,711750,0,0,711750,"","","SJ055","Paid","Completed",true,true,true,true],
-["2026-05-18","Lapak Pak Aldi","Kerasan Campur (Halus)",58,58,0,58,0,0,0,0,0,0,0,0,"","","SJ055","Paid","Completed",true,true,true,true],
-["2026-05-19","PT Doa Ibu Terlaksana","Gabruk",1186,1186,0,1186,2300,2300,2300,2727800,2727800,0,0,2727800,"","","SJ052","Paid","Completed",true,true,true,true],
-["2026-05-19","UD Rafa Putra","Kerasan Campur",90,84,0,84,800,800,800,72000,67200,0,0,67200,"","MGI/MEI/2026/012","SJ057","Paid","Completed",true,true,true,true],
-["2026-05-19","UD Rafa Putra","Emberan Besar",368,342,0,342,1700,1700,1700,625600,581400,0,0,581400,"","MGI/MEI/2026/012","SJ057","Paid","Completed",true,true,true,true],
-["2026-05-19","UD Rafa Putra","Emberan Besar",439,408,0,408,1700,1700,1700,746300,693600,0,0,693600,"","MGI/MEI/2026/013","SJ058","Paid","Completed",true,true,true,true],
-["2026-05-19","BMPS","BP PET MIX",3520,3520,0,3520,8600,8600,8600,30272000,30272000,0,0,30272000,"","MGI/MEI/2026/014","SJ059","Paid","Completed",true,true,true,false],
-["2026-05-19","BMPS","BP Galon Le",142,140,0,140,7200,7200,7200,1022400,1008000,0,0,1008000,"","MGI/MEI/2026/014","SJ059","Paid","Completed",true,true,true,false],
-["2026-05-19","Lapak Bapak Rocky","Emberan Besar",991.5,0,0,0,2300,2300,2300,2280450,0,0,0,0,"","","SJ060","Unpaid","Completed",true,false,false,false],
-["2026-05-20","Lapak Bapak Rocky","Kerasan Campur",644.5,0,0,0,800,800,800,515600,0,0,0,0,"","","SJ061","Unpaid","Completed",true,false,false,false],
-["2026-05-20","Lapak Bapak Rocky","Emberan Besar",602.5,0,0,0,2300,2300,2300,1385750,0,0,0,0,"","","SJ061","Unpaid","Completed",true,false,false,false],
-["2026-05-20","CV Sido Mulyo","Kardus",1497.5,1497.5,0,1497.5,2200,2200,2200,3294500,3294500,0,0,3294500,"","MGI/MEI/2026/015","SJ062","Paid","Completed",true,true,true,true],
-["2026-05-20","CV Sido Mulyo","Duplek",248.5,248.5,0,248.5,1200,1200,1200,298200,298200,0,0,298200,"","MGI/MEI/2026/015","SJ062","Paid","Completed",true,true,true,true],
-["2026-05-20","Lapak Pak Aldi","Emberan Besar",477.5,477.5,0,477.5,1500,1500,1500,716250,716250,0,0,716250,"","","SJ063","Paid","Completed",true,true,true,true],
-["2026-05-20","Lapak Pak Aldi","Kerasan Campur",727,727,0,727,500,500,500,363500,363500,0,0,363500,"","","SJ063","Paid","Completed",true,true,true,true],
-["2026-05-20","Lapak Pondok Rajeg (Bpk. Rico Imam)","Kerasan Campur",225.5,0,0,0,800,800,800,180400,0,0,0,0,"","","SJ064","Unpaid","Completed",true,false,false,false],
-["2026-05-20","Lapak Pondok Rajeg (Bpk. Rico Imam)","Emberan Besar",742,0,0,0,2300,2300,2300,1706600,0,0,0,0,"","","SJ064","Unpaid","Completed",true,false,false,false],
-["2026-05-21","CV Sido Mulyo","Kardus",1660,1645,0,1645,2200,2200,2200,3652000,3619000,0,0,3619000,"","MGI/MEI/2026/016","SJ065","Paid","Completed",true,true,true,true],
-["2026-05-21","CV Sido Mulyo","Duplek",122.5,117,0,117,1200,1200,1200,147000,140400,0,0,140400,"","MGI/MEI/2026/016","SJ065","Paid","Completed",true,true,true,true],
-["2026-05-21","Lapak Bapak Rocky","Kerasan Campur",1521.5,0,0,0,800,800,800,1217200,0,0,0,0,"","","SJ066","Unpaid","Completed",true,false,false,false],
-["2026-05-23","CV Sido Mulyo","Kardus",970,960,0,960,2200,2200,2200,2134000,2112000,0,0,2112000,"","MGI/MEI/2026/017","SJ067","Paid","Completed",true,true,true,true],
-["2026-05-23","CV Sido Mulyo","Duplek",1460,1445,0,1445,1200,1200,1200,1752000,1734000,0,0,1734000,"","MGI/MEI/2026/017","SJ067","Paid","Completed",true,true,true,true],
-["2026-05-23","CV Sido Mulyo","Kardus",1607,1597,0,1597,2200,2200,2200,3535400,3513400,0,0,3513400,"","MGI/MEI/2026/018","SJ068","Paid","Completed",true,true,true,true],
-["2026-05-23","CV Sido Mulyo","Duplek",41,41,0,41,1200,1200,1200,49200,49200,0,0,49200,"","MGI/MEI/2026/018","SJ068","Paid","Completed",true,true,true,true],
-["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","BP PP PK",448.5,0,0,0,7000,0,0,3139500,0,0,0,0,"","","SJ069","Paid","Completed",true,true,true,true],
-["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Bening 3",458.5,450,0,450,9000,8600,8600,4126500,3870000,0,0,3870000,"","","SJ069","Paid","Completed",true,true,true,true],
-["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Mambo 3",2332,2335,0,2335,4800,5000,5000,11193600,11675000,0,0,11675000,"","","SJ069","Paid","Completed",true,true,true,true],
-["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Merah 2",102.5,100,0,100,5300,6000,6000,543250,600000,0,0,600000,"","","SJ069","Paid","Completed",true,true,true,true],
-["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Biru 2",49.5,50,0,50,5300,6000,6000,262350,300000,0,0,300000,"","","SJ069","Paid","Completed",true,true,true,true],
-["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Warna 3",70.5,75,0,75,8000,5500,5500,564000,412500,0,0,412500,"","","SJ069","Paid","Completed",true,true,true,true],
-["2026-05-29","CV Sido Mulyo","Kardus",1115.5,1100,0,1100,2200,2200,2200,2454100,2420000,0,0,2420000,"","MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true],
-["2026-05-29","CV Sido Mulyo","Duplek",1159,1149,0,1149,1200,1200,1200,1390800,1378800,0,0,1378800,"","MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true],
-["2026-05-29","CV Sido Mulyo","Boncos",430.5,420,0,420,1000,1000,1000,430500,420000,0,0,420000,"","MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true],
-["2026-05-30","Lapak Pak Aldi","Kerasan Campur",1555,1555,0,1555,500,500,500,777500,777500,0,0,777500,"","","SJ071","Paid","Completed",true,true,true,true],
-["2026-05-30","Lapak Pak Aldi","Emberan Besar",363.5,148,0,148,1500,1500,1500,545250,222000,0,0,222000,"","","SJ071","Paid","Completed",true,true,true,true],
-["2026-05-30","Lapak Bapak Rocky","Bodong Kotor",482.5,0,0,0,4200,4200,4200,2026500,0,0,0,0,"","","SJ072","Unpaid","Completed",true,false,false,false],
-["2026-05-30","Lapak Bapak Rocky","Pet C Bening",68,0,0,0,2500,2500,2500,170000,0,0,0,0,"","","SJ072","Unpaid","Completed",true,false,false,false],
-["2026-05-30","Lapak Bapak Rocky","Bodong Warna",172,0,0,0,2000,2000,2000,344000,0,0,0,0,"","","SJ072","Unpaid","Completed",true,false,false,false],
-["2026-06-02","Lapak Bapak Rocky","Bodong Kotor",581.5,0,0,0,4200,4200,4200,2442300,0,0,0,0,"","","SJ073","Unpaid","Completed",true,false,false,false],
-["2026-06-03","Lapak Bapak Rocky","Kerasan Campur",1908.5,0,0,0,800,800,800,1526800,0,0,0,0,"","","SJ074","Unpaid","Completed",true,false,false,false],
-["2026-06-03","Lapak Bapak Rocky","Emberan Besar",81,0,0,0,2300,2300,2300,186300,0,0,0,0,"","","SJ074","Unpaid","Completed",true,false,false,false],
-["2026-06-03","Lapak Pak Aldi","Emberan Besar",17,17,0,17,1500,1500,1500,25500,25500,0,0,25500,"","","SJ075","Paid","Completed",true,false,true,false],
-["2026-06-03","Lapak Pak Aldi","Kerasan Campur",220,220,0,220,500,500,500,110000,110000,0,0,110000,"","","SJ075","Paid","Completed",true,false,true,false],
-["2026-06-03","Lapak Pak Aldi","BP AG Kotor",1088,1056,0,1056,4000,4000,4000,4352000,4224000,0,0,4224000,"","MGI/MEI/2026/020","SJ076","Paid","Completed",true,true,true,true],
-["2026-06-04","CV Sido Mulyo","Kardus",1962.5,1947,0,1947,2200,2200,2200,4317500,4283400,0,0,4283400,"","MGI/MEI/2026/021","SJ077","Paid","Completed",true,true,true,true],
-["2026-06-04","CV Sido Mulyo","Duplek",166,166,0,166,1200,1200,1200,199200,199200,0,0,199200,"","MGI/MEI/2026/021","SJ077","Paid","Completed",true,true,true,true],
-["2026-06-05","Lapak Bapak Rocky","Bodong Kotor",751,0,0,0,4200,4200,4200,3154200,0,0,0,0,"","","SJ078","Unpaid","Completed",true,false,false,false],
-["2026-06-06","CV Sido Mulyo","Kardus",1843.5,1824,0,1824,2200,2200,2200,4055700,4012800,0,0,4012800,"","","SJ079","Paid","Completed",true,true,true,true],
-["2026-06-06","CV Sido Mulyo","Duplek",349.5,334,0,334,1200,1200,1200,419400,400800,0,0,400800,"","","SJ079","Paid","Completed",true,true,true,true],
-["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Bening 2",395,330,0,330,9000,9000,9000,3555000,2970000,0,0,2970000,"","","SJ081","Paid","Completed",true,true,true,true],
-["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Bening Kotor",0,60,0,60,0,8000,8000,0,480000,0,0,480000,"","","SJ081","Paid","Completed",true,true,true,true],
-["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Putih 2",477.5,475,0,475,8000,8000,8000,3820000,3800000,0,0,3800000,"","","SJ081","Paid","Completed",true,true,true,true],
-["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Mambo Mainan 1",766,585,0,585,7000,6300,6300,5362000,3685500,0,0,3685500,"","","SJ081","Paid","Completed",true,true,true,true],
-["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Mambo Mainan 2",0,60,0,60,0,5800,5800,0,348000,0,0,348000,"","","SJ081","Paid","Completed",true,true,true,true],
-["2026-06-08","Lapak Bapak Rocky","Kerasan Campur",1764.5,0,0,0,800,800,800,1411600,0,0,0,0,"","","SJ082","Unpaid","Completed",true,false,false,false],
-["2026-06-09","Lapak Bapak Rocky","Bodong Kotor",517,0,0,0,4200,4200,4200,2171400,0,0,0,0,"","","SJ083","Unpaid","Completed",true,false,false,false],
-["2026-06-09","BMPS","BP PET MIX",3808.5,3880,0,3880,9300,9300,9300,35419050,36084000,0,0,36084000,"","","SJ084","Paid","Completed",true,true,true,false],
-["2026-06-09","BMPS","BP PET BM",147,140,0,140,8700,8700,8700,1278900,1218000,0,0,1218000,"","","SJ084","Paid","Completed",true,true,true,false],
-["2026-06-09","BMPS","BP PET BN",134,140,0,140,9700,9700,9700,1299800,1358000,0,0,1358000,"","","SJ084","Paid","Completed",true,true,true,false],
-["2026-06-09","BMPS","BP Galon Le",431.5,440,0,440,7700,7700,7700,3322550,3388000,0,0,3388000,"","","SJ084","Paid","Completed",true,true,true,false],
-["2026-06-10","CV Sido Mulyo","Kardus",1387,1377,0,1377,2200,2200,2200,3051400,3029400,0,0,3029400,"","","SJ085","Paid","Completed",true,true,true,true],
-["2026-06-10","CV Sido Mulyo","Duplek",473.5,466,0,466,1200,1200,1200,568200,559200,0,0,559200,"","","SJ085","Paid","Completed",true,true,true,true],
-["2026-06-10","CV Sido Mulyo","Boncos",270.5,255,0,255,1000,1000,1000,270500,255000,0,0,255000,"","","SJ085","Paid","Completed",true,true,true,true],
-["2026-06-11","UD Rahayu Abadi","AG Kotor",84.5,84.5,0,84.5,4700,4700,4700,397150,397150,0,0,397150,"","","SJ086","Paid","Completed",true,true,true,true],
-["2026-06-11","UD Rahayu Abadi","Bodong Warna",211,154,0,154,2500,2500,2500,527500,385000,0,0,385000,"","","SJ086","Paid","Completed",true,true,true,true],
-["2026-06-11","UD Rahayu Abadi","BP AG Kotor",920,851.5,0,851.5,4700,4700,4700,4324000,4002050,0,0,4002050,"","","SJ086","Paid","Completed",true,true,true,true],
-["2026-06-11","UD Rahayu Abadi","BP Milku",187.5,113,0,113,3000,3000,3000,562500,339000,0,0,339000,"","","SJ086","Paid","Completed",true,true,true,true],
-["2026-06-11","UD Rahayu Abadi","BP Sprite",106.5,62,0,62,3500,3500,3500,372750,217000,0,0,217000,"","","SJ086","Paid","Completed",true,true,true,true],
-["2026-06-11","UD Rahayu Abadi","BP Mizone",50.5,12,0,12,3500,3500,3500,176750,42000,0,0,42000,"","","SJ086","Paid","Completed",true,true,true,true],
-["2026-06-11","UD Rahayu Abadi","Tutup Botol",77,77,0,77,5500,5500,5500,423500,423500,0,0,423500,"","","SJ086","Paid","Completed",true,true,true,true],
-["2026-06-12","Lapak Pak Aldi","Kerasan Campur",1755,1755,0,1755,500,500,500,877500,877500,0,0,877500,"","","SJ087","Paid","Completed",true,false,true,false],
-["2026-06-12","Lapak Pak Aldi","Emberan Besar",26,26,0,26,1500,1500,1500,39000,39000,0,0,39000,"","","SJ087","Paid","Completed",true,false,true,false],
-["2026-06-13","CV Sido Mulyo","Kardus",1359.5,1344,0,1344,2200,2200,2200,2990900,2956800,0,0,2956800,"","","SJ088","Paid","Completed",true,true,true,true],
-["2026-06-13","CV Sido Mulyo","Duplek",374.5,367,0,367,1200,1200,1200,449400,440400,0,0,440400,"","","SJ088","Paid","Completed",true,true,true,true],
-["2026-06-13","CV Sido Mulyo","Boncos",141,136,0,136,1000,1000,1000,141000,136000,0,0,136000,"","","SJ088","Paid","Completed",true,true,true,true],
-["2026-06-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Mambo 2",664.75,655,0,655,4300,4800,4800,2858425,3144000,0,0,3144000,"","","SJ089","Paid","Completed",true,true,true,true],
-["2026-06-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Mambo 3",664.75,690,0,690,4300,4300,4300,2858425,2967000,0,0,2967000,"","","SJ089","Paid","Completed",true,true,true,true],
-["2026-06-16","Lapak Bapak Rocky","Kerasan Campur",1352.5,0,0,0,800,800,800,1082000,0,0,0,0,"","","SJ090","Unpaid","Completed",true,false,false,false],
-["2026-06-16","Lapak Bapak Rocky","Kerasan Campur",2034,0,0,0,800,800,800,1627200,0,0,0,0,"","","SJ091","Unpaid","Completed",true,false,false,false],
-["2026-06-18","CV Sido Mulyo","Kardus",1718.5,1703,0,1703,2200,2200,2200,3780700,3746600,0,0,3746600,"","","SJ092","Paid","Completed",true,true,true,true],
-["2026-06-18","CV Sido Mulyo","Duplek",147,140,0,140,1200,1200,1200,176400,168000,0,0,168000,"","","SJ092","Paid","Completed",true,true,true,true],
-["2026-06-18","BMPS","BP PET Mix",3046,3140,0,3140,9300,9300,9300,28327800,29202000,0,0,29202000,"","","SJ093","Paid","Completed",true,true,true,false],
-["2026-06-18","BMPS","BP Galon Le",850.5,880,0,880,7700,7700,7700,6548850,6776000,0,0,6776000,"","","SJ093","Paid","Completed",true,true,true,false],
-["2026-06-19","Lapak Bapak Rocky","Kerasan Campur",1937,0,0,0,800,800,800,1549600,0,0,0,0,"","","SJ094","Unpaid","Completed",true,false,false,false],
-["2026-06-19","Lapak Bapak Rocky","Emberan Besar",21,0,0,0,2300,2300,2300,48300,0,0,0,0,"","","SJ094","Unpaid","Completed",true,false,false,false],
-["2026-06-22","Lapak Pak Aldi","Kerasan Campur",1842.5,1593.9,0,1593.9,500,500,500,921250,796950,0,0,796950,"","","SJ095","Unpaid","Completed",true,false,false,false],
-["2026-06-22","Lapak Pak Aldi","Emberan Besar",153,132.3,0,132.3,1500,1500,1500,229500,198450,0,0,198450,"","","SJ095","Unpaid","Completed",true,false,false,false],
-["2026-06-25","CV Sido Mulyo","Kardus",1619,1600,0,1600,2200,2200,2200,3561800,3520000,0,0,3520000,"","","SJ096","Paid","Completed",true,true,true,false],
-["2026-06-25","CV Sido Mulyo","Duplek",90.5,90,0,90,1200,1200,1200,108600,108000,0,0,108000,"","","SJ096","Paid","Completed",true,true,true,false],
-["2026-06-25","CV Sido Mulyo","Boncos",124,115,0,115,1000,1000,1000,124000,115000,0,0,115000,"","","SJ096","Paid","Completed",true,true,true,false],
-["2026-06-26","Lapak Pak Aldi","Kerasan Campur",2280.5,2280.5,0,2280.5,500,500,500,1140250,1140250,0,0,1140250,"","","SJ097","Paid","Completed",true,false,true,false],
-["2026-06-27","CV Sido Mulyo","Kardus",1821,1800,0,1800,2200,2200,2200,4006200,3960000,0,0,3960000,"","","SJ098","Paid","Completed",true,true,true,false],
-["2026-06-27","CV Sido Mulyo","Duplek",673.5,660,0,660,1200,1200,1200,808200,792000,0,0,792000,"","","SJ098","Paid","Completed",true,true,true,false],
-["2026-06-27","CV Sido Mulyo","Boncos",123.5,120,0,120,1000,1000,1000,123500,120000,0,0,120000,"","","SJ098","Paid","Completed",true,true,true,false],
-["2026-06-29","UD Rahayu Abadi","AG Kotor",852,861,0,861,4700,4500,4500,4004400,3874500,0,0,3874500,"","","SJ099","Paid","Completed",true,true,true,false],
-["2026-06-29","UD Rahayu Abadi","Milku",44,8,0,8,3000,3000,3000,132000,24000,0,0,24000,"","","SJ099","Paid","Completed",true,true,true,false],
-["2026-06-29","UD Rahayu Abadi","Mizone",49,0,0,0,3500,0,0,171500,0,0,0,0,"","","SJ099","Paid","Completed",true,true,true,false],
-["2026-06-29","UD Rahayu Abadi","Bodong Warna",234.5,243,0,243,2500,2500,2500,586250,607500,0,0,607500,"","","SJ099","Paid","Completed",true,true,true,false],
-["2026-06-29","UD Rahayu Abadi","Monti",22.5,183,0,183,4000,3800,3800,90000,695400,0,0,695400,"","","SJ099","Paid","Completed",true,true,true,false],
-["2026-06-29","UD Rahayu Abadi","Bodong Kotor",18.5,0,0,0,4000,0,0,74000,0,0,0,0,"","","SJ099","Paid","Completed",true,true,true,false],
-["2026-06-29","UD Rahayu Abadi","AG Kotor",285.5,0,0,0,4700,0,0,1341850,0,0,0,0,"","","SJ099","Paid","Completed",true,true,true,false],
-["2026-06-29","BMPS","BP PET Mix",3302.5,3260,0,3260,9300,9300,9300,30713250,30318000,0,0,30318000,"","","SJ100","Paid","Completed",true,true,true,false],
-["2026-06-29","BMPS","BP Galon Le",1012.5,1020,0,1020,7700,7700,7700,7796250,7854000,0,0,7854000,"","","SJ100","Paid","Completed",true,true,true,false],
-["2026-06-30","Lapak Bapak Rocky","",63,0,0,0,5200,0,0,327600,0,200000,500000,-300000,"","","SJ101","Paid","Completed",true,true,true,false],
-["2026-06-30","Lapak Bapak Rocky","",625.5,1565.5,0,1565.5,2800,2800,2800,1751400,4383400,0,0,4383400,"","","SJ101","Paid","Completed",true,true,true,false],
-["2026-06-30","Lapak Bapak Rocky","",1108.5,0,0,0,5200,0,0,5764200,0,0,0,0,"","","SJ101","Paid","Completed",true,true,true,false],
-["2026-06-30","Lapak Bapak Rocky","",0,10,0,10,0,22500,22500,0,225000,0,0,225000,"","","SJ101","Paid","Completed",true,true,true,false],
-["2026-06-30","Lapak Bapak Rocky","",0,25,0,25,0,24500,24500,0,612500,0,0,612500,"","","SJ101","Paid","Completed",true,true,true,false],
-["2026-06-30","Lapak Bapak Rocky","",0,13,0,13,0,23350,23350,0,303550,0,0,303550,"","","SJ101","Paid","Completed",true,true,true,false],
-["2026-06-30","Lapak Bapak Rocky","",0,10.5,0,10.5,0,14500,14500,0,152250,0,0,152250,"","","SJ101","Paid","Completed",true,true,true,false],
-["2026-07-02","CV Sido Mulyo","Kardus",649,636,0,636,2200,2200,2200,1427800,1399200,0,0,1399200,"","","SJ102","Paid","Completed",true,true,true,false],
-["2026-07-02","CV Sido Mulyo","Duplek",829,800,0,800,1200,1200,1200,994800,960000,0,0,960000,"","","SJ102","Paid","Completed",true,true,true,false],
-["2026-07-03","CV Berkat Sinar Harapan","Cacah PP BN",880.5,880.5,0,880.5,9400,9400,9400,8276700,8276700,0,0,8276700,"","","SJ104","Paid","Completed",true,false,true,false],
-["2026-07-03","CV Berkat Sinar Harapan","Cacah PP Mambo",553,553,0,553,5700,5700,5700,3152100,3152100,0,0,3152100,"","","SJ104","Paid","Completed",true,false,true,false],
-["2026-07-03","CV Berkat Sinar Harapan","Cacah PP Hitam",678.5,678.5,0,678.5,5700,5700,5700,3867450,3867450,0,0,3867450,"","","SJ104","Paid","Completed",true,false,true,false],
-["2026-07-03","CV Berkat Sinar Harapan","BP PP Hitam",1214,1214,0,1214,3200,3200,3200,3884800,3884800,0,0,3884800,"","","SJ104","Paid","Completed",true,false,true,false],
-["2026-07-04","CV Sido Mulyo","Kardus",1635,1602,0,1602,2200,2200,2200,3597000,3524400,0,0,3524400,"","","SJ105","Paid","Completed",true,true,true,false],
-["2026-07-04","CV Sido Mulyo","Kardus",523.5,512,0,512,2200,2200,2200,1151700,1126400,0,0,1126400,"","","SJ106","Paid","Completed",true,true,true,false],
-["2026-07-04","CV Sido Mulyo","Duplek",711.5,696,0,696,1200,1200,1200,853800,835200,0,0,835200,"","","SJ106","Paid","Completed",true,true,true,false],
-["2026-07-04","CV Sido Mulyo","Boncos",159,149,0,149,1000,1000,1000,159000,149000,0,0,149000,"","","SJ106","Paid","Completed",true,true,true,false],
-["2026-07-06","Lapak Pak Aldi","Kerasan Campur",1329,1329,0,1329,500,500,500,664500,664500,0,0,664500,"","","SJ107","Unpaid","Completed",true,false,false,false],
-["2026-07-09","CV Sido Mulyo","Kardus",1560,1528,0,1528,2200,2200,2200,3432000,3361600,0,0,3361600,"","","SJ108","Paid","Completed",true,true,true,false],
-["2026-07-09","CV Sido Mulyo","Duplek",328.5,321,0,321,1200,1200,1200,394200,385200,0,0,385200,"","","SJ108","Paid","Completed",true,true,true,false],
-["2026-07-10","Haka Sentral Plastik","BP Gabruk",3764.5,3610,0,3610,3500,3500,3500,13175750,12635000,0,0,12635000,"","","SJ109","Paid","Completed",true,true,true,false],
-["2026-07-10","CV Sido Mulyo","Kardus",749.5,734,0,734,2200,2200,2200,1648900,1614800,0,0,1614800,"","","SJ110","Paid","Completed",true,true,true,false],
-["2026-07-10","CV Sido Mulyo","Duplek",507.5,496,0,496,1200,1200,1200,609000,595200,0,0,595200,"","","SJ110","Paid","Completed",true,true,true,false],
-["2026-07-10","BMPS","BP PET Mix",3370,3320,0,3320,9300,9300,9300,31341000,30876000,0,0,30876000,"","","SJ111","Paid","Completed",true,true,true,false],
-["2026-07-10","BMPS","BP PET BN",131,140,0,140,9700,9700,9700,1270700,1358000,0,0,1358000,"","","SJ111","Paid","Completed",true,true,true,false],
-["2026-07-10","BMPS","BP Galon Le",217.5,220,0,220,7700,7700,7700,1674750,1694000,0,0,1694000,"","","SJ111","Paid","Completed",true,true,false,false],
-["2026-07-13","UD Rahayu Abadi","AG Kotor",142.5,91,0,91,4000,4000,4000,570000,364000,0,0,364000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","Monti",0,30,0,30,0,3800,3800,0,114000,0,0,114000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","Tutup Botol",306.5,306,0,306,5500,5500,5500,1685750,1683000,0,0,1683000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","Bodong Warna",90,50,0,50,2000,2000,2000,180000,100000,0,0,100000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","Mizone",104.5,106,0,106,3500,3500,3500,365750,371000,0,0,371000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","Sprite",53.5,86,0,86,3500,3000,3000,187250,258000,0,0,258000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","BP Sprite",358.5,354,0,354,3500,3500,3500,1254750,1239000,0,0,1239000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","Milku",66.5,47,0,47,3000,3000,3000,199500,141000,0,0,141000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-13","UD Rahayu Abadi","BP Milku",174.5,170,0,170,3000,3500,3500,523500,595000,0,0,595000,"","","SJ112","Paid","Completed",true,true,true,false],
-["2026-07-14","Lapak Pak Aldi","Kerasan Campur",429.5,429.5,0,429.5,500,500,500,214750,214750,0,0,214750,"","","SJ113","Unpaid","Completed",true,false,false,false],
-["2026-07-14","Lapak Pak Aldi","Emberan Besar",294,294,0,294,1500,1500,1500,441000,441000,0,0,441000,"","","SJ113","Unpaid","Completed",true,false,false,false],
-["2026-07-14","Lapak Pak Aldi","Kaleng",12,12,0,12,2800,2800,2800,33600,33600,0,0,33600,"","","SJ113","Unpaid","Completed",true,false,false,false],
-["2026-07-14","CV Sido Mulyo","Duplek",653.5,633,0,633,1200,1200,1200,784200,759600,0,0,759600,"","","SJ114","Paid","Completed",true,true,true,false],
-["2026-07-14","CV Sido Mulyo","Boncos",251,226,0,226,1000,1000,1000,251000,226000,0,0,226000,"","","SJ114","Paid","Completed",true,true,true,false],
-["2026-07-15","Lapak Pak Aldi","Kaleng",1223.5,1223.5,0,1223.5,2800,2800,2800,3425800,3425800,0,0,3425800,"","","SJ115","Unpaid","Completed",true,false,false,false],
-["2026-07-15","Lapak Pak Aldi","Besi Rongsok",270,270,0,270,4700,4700,4700,1269000,1269000,0,0,1269000,"","","SJ115","Unpaid","Completed",true,false,false,false],
-["2026-07-15","Lapak Pak Aldi","Alumunium Rongsok",7.5,7.5,0,7.5,24000,24000,24000,180000,180000,0,0,180000,"","","SJ115","Unpaid","Completed",true,false,false,false]
+["2026-01-06","Panca Kraft Pratama - UWAAA","Kardus",1180.5,1183,0,1183,2350,2350,2350,2774175,2780050,0,5000,2775050,"","MGI/JAN/2026/001","SJ001","Paid","Completed",true,true,true,true,""],
+["2026-01-30","Lapak Tri","Kerasan Campur",2195,2195,0,2195,1300,1300,1300,2853500,2853500,146500,0,3000000,"","MGI/JAN/2026/002","SJ004","Paid","Completed",true,true,true,true,""],
+["2026-02-03","PD Fajar Mandiri","Tutup Botol",184,184,0,184,5500,5500,5500,1012000,1012000,0,0,1012000,"","MGI/FEB/2026/001","SJ005","Paid","Completed",true,true,true,true,""],
+["2026-02-03","Buana Plast","Cacah PP BN Sablon",625,625,0,625,7000,7000,7000,4375000,4375000,0,0,4375000,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true,""],
+["2026-02-03","Buana Plast","Cacah PP Mambo + Abu",106,106,0,106,4500,4500,4500,477000,477000,0,0,477000,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true,""],
+["2026-02-03","Buana Plast","Cacah PP Warna",1055,1055,0,1055,5500,5500,5500,5802500,5802500,0,0,5802500,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true,""],
+["2026-02-03","Haka Sentral Plastik","Cacah PP PK",149,149,0,149,8500,8500,8500,1266500,1266500,0,0,1266500,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
+["2026-02-03","Haka Sentral Plastik","Cacah PP Hitam",475,475,0,475,5000,5000,5000,2375000,2375000,0,0,2375000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
+["2026-02-03","Haka Sentral Plastik","Cacah PP Mambo",105,105,0,105,5000,5000,5000,525000,525000,0,0,525000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
+["2026-02-06","BMPS","BP PET MIX",3922,3415.96,0,3415.96,6200,6200,6200,24316400,21178952,0,0,21178952,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
+["2026-02-06","BMPS","BP PET BN",378.5,369,0,369,6700,6700,6700,2535950,2472300,0,0,2472300,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
+["2026-02-06","BMPS","BP PET BM",0,265,0,265,5700,5700,5700,0,1510500,0,0,1510500,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
+["2026-02-06","BMPS","BP PET GALON LE",356,353,0,353,5600,5600,5600,1993600,1976800,0,0,1976800,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
+["2026-02-06","BMPS","BP AG Bersih",185.5,184,0,184,7000,7000,7000,1298500,1288000,0,0,1288000,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
+["2026-02-06","BMPS","BP AG Kotor",239,254,0,254,4500,4500,4500,1075500,1143000,0,0,1143000,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
+["2026-02-09","Panca Kraft Pratama - Daya Selaras Group","Kardus",2682,2726,0,2726,2550,2550,2550,6839100,6951300,0,0,6951300,"","MGI/FEB/2026/006","SJ009","Paid","Completed",true,true,true,true,""],
+["2026-02-10","PD Fajar Mandiri","Tutup Botol",56,55,0,55,5500,5500,5500,308000,302500,0,0,302500,"","MGI/FEB/2026/005","SJ010","Paid","Completed",true,true,true,true,""],
+["2026-02-21","PD Fajar Mandiri","Keleman PP",255,255,0,255,2000,2000,2000,510000,510000,0,0,510000,"","MGI/FEB/2026/007","SJ011","Paid","Completed",true,true,true,true,""],
+["2026-02-23","Lapak Tri","Gabruk Kecil",1924,1924,0,1924,800,800,800,1539200,1539200,0,0,1539200,"","MGI/FEB/2026/007","SJ012","Paid","Completed",true,true,true,true,""],
+["2026-02-23","Lapak Tri","",510,451,0,451,800,800,800,408000,360800,0,0,360800,"","MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true,""],
+["2026-02-23","Lapak Tri","PETC Warna",48.5,0,0,0,0,0,0,0,0,0,0,0,"","MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true,""],
+["2026-02-25","Panca Kraft Pratama - Daya Selaras Group","Kardus",1805.5,1794,0,1794,2550,2550,2550,4604025,4574700,0,0,4574700,"","MGI/FEB/2026/009","SJ013","Paid","Completed",true,true,true,true,""],
+["2026-03-03","PT Kita Olah Indonesia","BP Naso",582,574,0,574,6500,6500,6500,3783000,3731000,0,0,3731000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true,""],
+["2026-03-03","PT Kita Olah Indonesia","BP BLPK",297,291,0,291,6000,6000,6000,1782000,1746000,0,0,1746000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true,""],
+["2026-03-03","PT Kita Olah Indonesia","BP BL Warna",168,183,0,183,5000,5000,5000,840000,915000,0,0,915000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true,""],
+["2026-03-03","PT Kita Olah Indonesia","BP BL Merah",64,64,0,64,5000,5000,5000,320000,320000,0,0,320000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true,""],
+["2026-03-03","PT Kita Olah Indonesia","BP BL Hitam",57,55,0,55,4000,4000,4000,228000,220000,0,0,220000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true,""],
+["2026-03-04","Buana Plast","Cacah PP BN",599.5,599,0,599,9500,9500,9500,5695250,5690500,0,0,5690500,"","","SJ016","Paid","Completed",true,true,true,true,""],
+["2026-03-04","Buana Plast","Cacah PP Warna",1391,1390,0,1390,5500,5500,5500,7650500,7645000,0,0,7645000,"","","SJ016","Paid","Completed",true,true,true,true,""],
+["2026-03-05","PT Indah Kiat - Uwaaa","Duplek",1534,1280.4,0,1280.4,1550,1550,1550,2377700,1984620,0,0,1984620,"","","SJ015","Paid","Completed",true,true,true,true,""],
+["2026-03-06","BMPS","BP PET MIX",2467.5,2579.95,0,2579.95,6800,6800,6800,16779000,17543660,0,0,17543660,"","","SJ019","Paid","Completed",true,true,true,false,""],
+["2026-03-06","BMPS","BP Galon Le",1094.5,1100,0,1100,5600,5600,5600,6129200,6160000,0,0,6160000,"","","SJ019","Paid","Completed",true,true,true,false,""],
+["2026-03-06","Haka Sentral Plastik","Cacah PP Hitam",729.5,749,0,749,5000,5000,5000,3647500,3745000,0,0,3745000,"","","SJ018","Paid","Completed",true,true,true,true,""],
+["2026-03-06","Haka Sentral Plastik","Cacah PP PK",401.5,383,0,383,8500,8500,8500,3412750,3255500,0,0,3255500,"","","SJ018","Paid","Completed",true,true,true,true,""],
+["2026-03-07","PT Kita Olah Indonesia","BP AG Bersih",170.5,170,0,170,6000,6000,6000,1023000,1020000,0,0,1020000,"","","SJ017","Paid","Completed",true,true,true,true,""],
+["2026-03-07","PT Kita Olah Indonesia","BP AG Kotor",1076.5,1045,0,1045,3000,3000,3000,3229500,3135000,0,0,3135000,"","","SJ017","Paid","Completed",true,true,true,true,""],
+["2026-03-07","PT Kita Olah Indonesia","BP Monti",248.5,240,0,240,2500,2500,2500,621250,600000,0,0,600000,"","","SJ017","Paid","Completed",true,true,true,true,""],
+["2026-03-07","PT Kita Olah Indonesia","BP BL Warna",214,211,0,211,5000,5000,5000,1070000,1055000,0,0,1055000,"","","SJ017","Paid","Completed",true,true,true,true,""],
+["2026-03-07","PT Kita Olah Indonesia","BP Oli Warna",113,113,0,113,5000,5000,5000,565000,565000,0,0,565000,"","","SJ017","Paid","Completed",true,true,true,true,""],
+["2026-03-07","PT Kita Olah Indonesia","BP Oli Hitam",13.5,13,0,13,4000,4000,4000,54000,52000,0,0,52000,"","","SJ017","Paid","Completed",true,true,true,true,""],
+["2026-03-07","PT Kita Olah Indonesia","BP Facial Wash",60,50,0,50,1500,1500,1500,90000,75000,0,0,75000,"","","SJ017","Paid","Completed",true,true,true,true,""],
+["2026-03-11","PD Fajar Mandiri","Tutup Botol",120,118,0,118,5500,5500,5500,660000,649000,0,0,649000,"","","SJ021","Paid","Completed",true,true,true,true,""],
+["2026-03-12","Panca Kraft Pratama - Daya Selaras Group","Kardus",1449,1320,0,1320,2550,2550,2550,3694950,3366000,0,0,3366000,"","","SJ022","Paid","Completed",true,true,true,true,""],
+["2026-03-14","Lapak Tri","Boncos",2605,2130,0,2130,900,900,900,2344500,1917000,0,0,1917000,"","","SJ024","Paid","Completed",true,true,true,true,""],
+["2026-03-16","Buana Plast","Cacah PP BN",257,257,0,257,9500,9500,9500,2441500,2441500,0,0,2441500,"","","SJ025","Paid","Completed",true,true,true,true,""],
+["2026-03-16","Buana Plast","Cacah PP Warna Biru",66,66,0,66,5500,5500,5500,363000,363000,0,0,363000,"","","SJ025","Paid","Completed",true,true,true,true,""],
+["2026-03-16","Buana Plast","Cacah PP Mambo",780.5,780,0,780,5000,5000,5000,3902500,3900000,0,0,3900000,"","","SJ025","Paid","Completed",true,true,true,true,""],
+["2026-03-16","Buana Plast","Cacah PP Sablon",105.5,105,0,105,7000,7000,7000,738500,735000,0,0,735000,"","","SJ025","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP Monti",20.5,17,0,17,2500,2500,2500,51250,42500,0,0,42500,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP AG Bersih",61,60,0,60,6000,6000,6000,366000,360000,0,0,360000,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP AG Kotor",184,179,0,179,3000,3000,3000,552000,537000,0,0,537000,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP Facial Wash",43,34,0,34,1500,1500,1500,64500,51000,0,0,51000,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP Naso",143,139,0,139,6500,6500,6500,929500,903500,0,0,903500,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP BLPK",325.5,316,0,316,6000,6000,6000,1953000,1896000,0,0,1896000,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP BL Mambo",200,192,0,192,4500,4500,4500,900000,864000,0,0,864000,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP Oli Mambo",119,67,0,67,4500,4500,4500,535500,301500,0,0,301500,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-03-17","PT Kita Olah Indonesia","BP Oli Hitam",31,29,0,29,4000,4000,4000,124000,116000,0,0,116000,"","","SJ026","Paid","Completed",true,true,true,true,""],
+["2026-04-10","Panca Kraft Pratama - Daya Selaras Group","Kardus",2749.5,2720,218,2502,2625,2625,2625,7217438,7140000,0,0,7140000,"Potongan 8% karena barang lembab","MGI/APR/2026/001","SJ027","Paid","Completed",true,true,true,true,""],
+["2026-04-11","PD Fajar Mandiri","Tutup Botol",324,0,0,0,5500,5500,5500,1782000,0,0,0,0,"","","SJ029","Unpaid","Completed",true,false,false,false,""],
+["2026-04-15","UD Rahayu Abadi","Monti",180,182,0,182,4500,4500,4500,810000,819000,0,0,819000,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true,""],
+["2026-04-15","UD Rahayu Abadi","AG Bersih",214,219,0,219,9000,9000,9000,1926000,1971000,0,0,1971000,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true,""],
+["2026-04-15","UD Rahayu Abadi","AG Kotor",1013.5,918,0,918,5200,5200,5200,5270200,4773600,0,0,4773600,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true,""],
+["2026-04-15","UD Rahayu Abadi","PP BN",767,746,0,746,7200,7200,7200,5522400,5371200,0,0,5371200,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true,""],
+["2026-04-15","UD Rahayu Abadi","Naso",13,13,0,13,6300,6300,6300,81900,81900,0,0,81900,"","MGI/APR/2026/002","SJ030","Paid","Completed",true,true,true,true,""],
+["2026-04-15","BMPS","BP PET BM",1312.5,1340,0,1340,7000,7000,7000,9187500,9380000,0,0,9380000,"","MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,false,""],
+["2026-04-15","BMPS","BP PET BN",2331,2320,0,2320,8000,8000,8000,18648000,18560000,0,0,18560000,"","MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,false,""],
+["2026-04-15","BMPS","BP Galon Le",545,600,0,600,6000,6000,6000,3270000,3600000,0,0,3600000,"","MGI/APR/2026/003","SJ031","Paid","Completed",true,true,true,false,""],
+["2026-04-16","PT Kita Olah Indonesia","BP Naso",272,268,0,268,6700,6700,6700,1822400,1795600,3000,0,1798600,"Kelebihan TF","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true,""],
+["2026-04-16","PT Kita Olah Indonesia","BP BL Warna",253.5,249,0,249,5200,5200,5200,1318200,1294800,0,0,1294800,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true,""],
+["2026-04-16","PT Kita Olah Indonesia","BP Oli Warna",220,216,0,216,4700,4700,4700,1034000,1015200,0,0,1015200,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true,""],
+["2026-04-16","PT Kita Olah Indonesia","BP Oli Hitam",28.5,27,0,27,4200,4200,4200,119700,113400,0,0,113400,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true,""],
+["2026-04-16","PT Kita Olah Indonesia","BP BLPK",205,196,0,196,6200,6200,6200,1271000,1215200,0,0,1215200,"","MGI/APR/2026/004","SJ032","Paid","Completed",true,true,true,true,""],
+["2026-04-17","Panca Kraft Pratama - Daya Selaras Group","Kardus",2133,2100,273,1827,2625,2625,2625,5599125,5512500,0,0,5512500,"Potongan 13%","MGI/APR/2026/005","SJ033","Paid","Completed",true,true,true,true,""],
+["2026-04-21","Panca Kraft Pratama - Daya Selaras Group","Kardus",1266,1180,59,1121,2625,2625,2625,3323250,3097500,0,0,3097500,"Potongan 5%","MGI/APR/2026/006","SJ034","Paid","Completed",true,true,true,true,""],
+["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN",140.5,85,0,85,7500,7500,7500,1053750,637500,0,0,637500,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true,""],
+["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN Sablon",47.5,100,0,100,8000,8000,8000,380000,800000,0,0,800000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true,""],
+["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP PP Mambo",652,640,0,640,5500,5500,5500,3586000,3520000,0,0,3520000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true,""],
+["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP BL Mambo",90,90,0,90,5500,5500,5500,495000,495000,0,0,495000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true,""],
+["2026-04-23","PT Eterna Persada Indonesia (Pan Era Group)","BP Oli Mambo",69.5,70,0,70,6500,6500,6500,451750,455000,0,0,455000,"","MGI/APR/2026/007","SJ035","Paid","Completed",true,true,true,true,""],
+["2026-04-23","Lapak Bapak Rocky","Logam Gabruk",503.5,503.5,0,503.5,3500,0,0,1762250,0,0,0,0,"","","SJ036","Paid","Completed",true,true,true,true,""],
+["2026-04-24","PT Haka Sentral Plastik","Cacah PP PK",255,255,0,255,9500,9500,9500,2422500,2422500,0,0,2422500,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true,""],
+["2026-04-24","PT Haka Sentral Plastik","Cacah PP Hitam",532,532,0,532,5500,5500,5500,2926000,2926000,0,0,2926000,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true,""],
+["2026-04-24","PT Haka Sentral Plastik","Cacah Falkon",527,552,0,552,5300,5300,5300,2793100,2925600,0,0,2925600,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true,""],
+["2026-04-24","PT Haka Sentral Plastik","Cacah PP Mambo",1994,1933,0,1933,5300,5300,5300,10568200,10244900,0,0,10244900,"","MGI/APR/2026/008","SJ037","Paid","Completed",true,true,true,true,""],
+["2026-04-25","Lapak Tri","Kerasan Campur",1321.5,1321.5,0,1321.5,1000,1000,1000,1321500,1321500,0,264300,1057200,"Potongan 20%","MGI/APR/2026/009","SJ037-1","Paid","Completed",true,true,true,true,""],
+["2026-04-26","Lapak Bapak Rocky","Logam Gabruk",1107.5,1107.5,0,1107.5,3500,0,0,3876250,0,0,0,0,"","","SJ038","Paid","Completed",true,true,true,true,""],
+["2026-04-29","Panca Kraft Pratama - Daya Selaras Group","Kardus",2106,2030,61,1969,2625,2625,2625,5528250,5328750,0,0,5328750,"Potongan 3%","MGI/APR/2026/010","SJ039","Paid","Completed",true,true,true,true,""],
+["2026-04-30","UD Rahayu Abadi","AG Kotor",604.5,569,0,569,5200,5200,5200,3143400,2958800,0,6500,2952300,"Potongan di biaya admin bank","MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true,""],
+["2026-04-30","UD Rahayu Abadi","Monti",118.5,111,0,111,4500,4500,4500,533250,499500,0,0,499500,"","MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true,""],
+["2026-04-30","UD Rahayu Abadi","PP A",0,20,0,20,9000,9000,9000,0,180000,0,0,180000,"","MGI/APR/2026/011","SJ040","Paid","Completed",true,true,true,true,""],
+["2026-04-30","PT Eterna Persada Indonesia (Pan Era Group)","BP PP Warna",403,405,0,405,6000,6000,6000,2418000,2430000,0,0,2430000,"","MGI/APR/2026/012","SJ041","Paid","Completed",true,true,true,true,""],
+["2026-04-30","PT Eterna Persada Indonesia (Pan Era Group)","BP PP BN",158,155,0,155,9000,9000,9000,1422000,1395000,0,0,1395000,"","MGI/APR/2026/012","SJ041","Paid","Completed",true,true,true,true,""],
+["2026-05-04","Lapak Tri","Kerasan Campur",2245,2245,0,2245,1000,1000,1000,2245000,2245000,0,449000,1796000,"Potongan 20%","MGI/MEI/2026/001","SJ042","Paid","Completed",true,true,true,true,""],
+["2026-05-04","PT Mitra Plastik Nusantara","BP PET MIX",3194,3220,0,3220,8300,8300,8300,26510200,26726000,0,0,26726000,"","MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,false,""],
+["2026-05-04","PT Mitra Plastik Nusantara","BP Galon",552,540,0,540,6700,6700,6700,3698400,3618000,0,0,3618000,"","MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,false,""],
+["2026-05-04","PT Mitra Plastik Nusantara","BP PET GALON LE",292,279.99,0,279.99,8700,8700,8700,2540400,2435913,0,0,2435913,"","MGI/MEI/2026/002","SJ043","Paid","Completed",true,true,true,false,""],
+["2026-05-05","UD Rahayu Abadi","AG Bersih",230.5,317,0,317,5200,5200,5200,1198600,1648400,0,6500,1641900,"Potongan di biaya admin bank","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true,""],
+["2026-05-05","UD Rahayu Abadi","Monti",52,50,0,50,4500,4500,4500,234000,225000,0,0,225000,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true,""],
+["2026-05-05","UD Rahayu Abadi","Tutup Botol",83.5,74,0,74,5500,5500,5500,459250,407000,0,0,407000,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true,""],
+["2026-05-05","UD Rahayu Abadi","PP BN",307,304,0,304,7200,7200,7200,2210400,2188800,0,0,2188800,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true,""],
+["2026-05-05","UD Rahayu Abadi","PP A",0,29,0,29,9000,9000,9000,0,261000,0,0,261000,"","MGI/MEI/2026/003","SJ044","Paid","Completed",true,true,true,true,""],
+["2026-05-08","Panca Kraft Pratama - Daya Selaras Group","Kardus",1823,2280,274,2006,2625,2625,2625,4785375,5985000,0,0,5985000,"","MGI/MEI/2026/004","SJ045","Paid","Completed",true,true,true,true,""],
+["2026-05-09","UD Rahayu Abadi","Bodong Warna",399,157,0,157,1700,1700,1700,678300,266900,0,6500,260400,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true,""],
+["2026-05-09","UD Rahayu Abadi","AG Kotor",217.5,194,0,194,5200,5200,5200,1131000,1008800,0,0,1008800,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true,""],
+["2026-05-09","UD Rahayu Abadi","Monti",22,21,0,21,4500,4500,4500,99000,94500,0,0,94500,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true,""],
+["2026-05-09","UD Rahayu Abadi","Tutup Botol",99.5,97,0,97,5500,5500,5500,547250,533500,0,0,533500,"","MGI/MEI/2026/005","SJ046","Paid","Completed",true,true,true,true,""],
+["2026-05-09","CV Sido Mulyo","Duplek",962.5,962,0,962,1000,1000,1000,962500,962000,0,0,962000,"","MGI/MEI/2026/006","SJ047","Paid","Completed",true,true,true,true,""],
+["2026-05-09","CV Sido Mulyo","Kardus",817.5,817,0,817,2200,2200,2200,1798500,1797400,0,0,1797400,"","MGI/MEI/2026/006","SJ047","Paid","Completed",true,true,true,true,""],
+["2026-05-12","PT Kita Olah Indonesia","Bodong Kotor",286,286,0,286,3500,3500,3500,1001000,1001000,0,0,1001000,"","MGI/MEI/2026/009","SJ048","Paid","Completed",true,true,true,true,""],
+["2026-05-12","PT Kita Olah Indonesia","Bodong Warna",275.5,275.5,0,275.5,1700,1700,1700,468350,468350,0,0,468350,"","MGI/MEI/2026/009","SJ048","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Bening 2",205,205,0,205,9000,9000,9000,1845000,1845000,0,2500,1842500,"Potongan Biaya Admin","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Mambo Mainan Kotor",75,75,0,75,5300,5300,5300,397500,397500,0,0,397500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Mambo khusus 2",60,60,0,60,7000,7000,7000,420000,420000,0,0,420000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Mambo Kotor",275,275,0,275,6500,6500,6500,1787500,1787500,0,0,1787500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP HDPE Press Blow Putih 2",170,170,0,170,8000,8000,8000,1360000,1360000,0,0,1360000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press Bening Thinwall 1",355,355,0,355,10000,10000,10000,3550000,3550000,0,0,3550000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press Mambo 2",1105,1105,0,1105,5500,5500,5500,6077500,6077500,0,0,6077500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press Mambo Kotor",85,85,0,85,5000,5000,5000,425000,425000,0,0,425000,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Press White 1",415,415,0,415,8500,8500,8500,3527500,3527500,0,0,3527500,"","MGI/MEI/2026/007","SJ049","Paid","Completed",true,true,true,true,""],
+["2026-05-16","PT Kita Olah Indonesia","Bodong Kotor",606,367,0,367,3500,3500,3500,2121000,1284500,0,0,1284500,"","MGI/MEI/2026/008","SJ050","Paid","Completed",true,true,true,true,""],
+["2026-05-18","PT Kita Olah Indonesia","Bodong Kotor",595.5,473,0,473,3500,3500,3500,2084250,1655500,0,0,1655500,"","MGI/MEI/2026/009","SJ051","Paid","Completed",true,true,true,true,""],
+["2026-05-18","PT Kita Olah Indonesia","Bodong Warna",54,38,0,38,1700,1700,1700,91800,64600,0,0,64600,"","MGI/MEI/2026/009","SJ051","Paid","Completed",true,true,true,true,""],
+["2026-05-18","UD Rafa Putra","Kerasan Campur",719,719,0,719,800,800,800,575200,575200,0,0,575200,"","MGI/MEI/2026/010","SJ053","Paid","Completed",true,true,true,true,""],
+["2026-05-18","UD Rafa Putra","Kerasan Halus",67,67,0,67,300,300,300,20100,20100,0,0,20100,"","MGI/MEI/2026/010","SJ053","Paid","Completed",true,true,true,true,""],
+["2026-05-18","UD Rafa Putra","Kerasan Campur",600,600,0,600,800,800,800,480000,480000,0,0,480000,"","MGI/MEI/2026/011","SJ056","Paid","Completed",true,true,true,true,""],
+["2026-05-18","UD Rafa Putra","Kerasan Halus",218,218,0,218,300,300,300,65400,65400,0,0,65400,"","MGI/MEI/2026/011","SJ056","Paid","Completed",true,true,true,true,""],
+["2026-05-18","Lapak Bapak Rocky","Kerasan Campur",1398.5,1398.5,0,1398.5,800,800,800,1118800,1118800,0,0,1118800,"","","SJ054","Paid","Completed",true,true,true,true,""],
+["2026-05-18","Lapak Pak Aldi","Kerasan Campur (Kasar)",651.5,651.5,0,651.5,0,0,0,0,0,0,0,0,"","","SJ055","Paid","Completed",true,true,true,true,""],
+["2026-05-18","Lapak Pak Aldi","Emberan Besar",474.5,474.5,0,474.5,1500,1500,1500,711750,711750,0,0,711750,"","","SJ055","Paid","Completed",true,true,true,true,""],
+["2026-05-18","Lapak Pak Aldi","Kerasan Campur (Halus)",58,58,0,58,0,0,0,0,0,0,0,0,"","","SJ055","Paid","Completed",true,true,true,true,""],
+["2026-05-19","PT Doa Ibu Terlaksana","Gabruk",1186,1186,0,1186,2300,2300,2300,2727800,2727800,0,0,2727800,"","","SJ052","Paid","Completed",true,true,true,true,""],
+["2026-05-19","UD Rafa Putra","Kerasan Campur",90,84,0,84,800,800,800,72000,67200,0,0,67200,"","MGI/MEI/2026/012","SJ057","Paid","Completed",true,true,true,true,""],
+["2026-05-19","UD Rafa Putra","Emberan Besar",368,342,0,342,1700,1700,1700,625600,581400,0,0,581400,"","MGI/MEI/2026/012","SJ057","Paid","Completed",true,true,true,true,""],
+["2026-05-19","UD Rafa Putra","Emberan Besar",439,408,0,408,1700,1700,1700,746300,693600,0,0,693600,"","MGI/MEI/2026/013","SJ058","Paid","Completed",true,true,true,true,""],
+["2026-05-19","BMPS","BP PET MIX",3520,3520,0,3520,8600,8600,8600,30272000,30272000,0,0,30272000,"","MGI/MEI/2026/014","SJ059","Paid","Completed",true,true,true,false,""],
+["2026-05-19","BMPS","BP Galon Le",142,140,0,140,7200,7200,7200,1022400,1008000,0,0,1008000,"","MGI/MEI/2026/014","SJ059","Paid","Completed",true,true,true,false,""],
+["2026-05-19","Lapak Bapak Rocky","Emberan Besar",991.5,0,0,0,2300,2300,2300,2280450,0,0,0,0,"","","SJ060","Unpaid","Completed",true,false,false,false,""],
+["2026-05-20","Lapak Bapak Rocky","Kerasan Campur",644.5,0,0,0,800,800,800,515600,0,0,0,0,"","","SJ061","Unpaid","Completed",true,false,false,false,""],
+["2026-05-20","Lapak Bapak Rocky","Emberan Besar",602.5,0,0,0,2300,2300,2300,1385750,0,0,0,0,"","","SJ061","Unpaid","Completed",true,false,false,false,""],
+["2026-05-20","CV Sido Mulyo","Kardus",1497.5,1497.5,0,1497.5,2200,2200,2200,3294500,3294500,0,0,3294500,"","MGI/MEI/2026/015","SJ062","Paid","Completed",true,true,true,true,""],
+["2026-05-20","CV Sido Mulyo","Duplek",248.5,248.5,0,248.5,1200,1200,1200,298200,298200,0,0,298200,"","MGI/MEI/2026/015","SJ062","Paid","Completed",true,true,true,true,""],
+["2026-05-20","Lapak Pak Aldi","Emberan Besar",477.5,477.5,0,477.5,1500,1500,1500,716250,716250,0,0,716250,"","","SJ063","Paid","Completed",true,true,true,true,""],
+["2026-05-20","Lapak Pak Aldi","Kerasan Campur",727,727,0,727,500,500,500,363500,363500,0,0,363500,"","","SJ063","Paid","Completed",true,true,true,true,""],
+["2026-05-20","Lapak Pondok Rajeg (Bpk. Rico Imam)","Kerasan Campur",225.5,0,0,0,800,800,800,180400,0,0,0,0,"","","SJ064","Unpaid","Completed",true,false,false,false,""],
+["2026-05-20","Lapak Pondok Rajeg (Bpk. Rico Imam)","Emberan Besar",742,0,0,0,2300,2300,2300,1706600,0,0,0,0,"","","SJ064","Unpaid","Completed",true,false,false,false,""],
+["2026-05-21","CV Sido Mulyo","Kardus",1660,1645,0,1645,2200,2200,2200,3652000,3619000,0,0,3619000,"","MGI/MEI/2026/016","SJ065","Paid","Completed",true,true,true,true,""],
+["2026-05-21","CV Sido Mulyo","Duplek",122.5,117,0,117,1200,1200,1200,147000,140400,0,0,140400,"","MGI/MEI/2026/016","SJ065","Paid","Completed",true,true,true,true,""],
+["2026-05-21","Lapak Bapak Rocky","Kerasan Campur",1521.5,0,0,0,800,800,800,1217200,0,0,0,0,"","","SJ066","Unpaid","Completed",true,false,false,false,""],
+["2026-05-23","CV Sido Mulyo","Kardus",970,960,0,960,2200,2200,2200,2134000,2112000,0,0,2112000,"","MGI/MEI/2026/017","SJ067","Paid","Completed",true,true,true,true,""],
+["2026-05-23","CV Sido Mulyo","Duplek",1460,1445,0,1445,1200,1200,1200,1752000,1734000,0,0,1734000,"","MGI/MEI/2026/017","SJ067","Paid","Completed",true,true,true,true,""],
+["2026-05-23","CV Sido Mulyo","Kardus",1607,1597,0,1597,2200,2200,2200,3535400,3513400,0,0,3513400,"","MGI/MEI/2026/018","SJ068","Paid","Completed",true,true,true,true,""],
+["2026-05-23","CV Sido Mulyo","Duplek",41,41,0,41,1200,1200,1200,49200,49200,0,0,49200,"","MGI/MEI/2026/018","SJ068","Paid","Completed",true,true,true,true,""],
+["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","BP PP PK",448.5,0,0,0,7000,0,0,3139500,0,0,0,0,"","","SJ069","Paid","Completed",true,true,true,true,""],
+["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Bening 3",458.5,450,0,450,9000,8600,8600,4126500,3870000,0,0,3870000,"","","SJ069","Paid","Completed",true,true,true,true,""],
+["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Mambo 3",2332,2335,0,2335,4800,5000,5000,11193600,11675000,0,0,11675000,"","","SJ069","Paid","Completed",true,true,true,true,""],
+["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Merah 2",102.5,100,0,100,5300,6000,6000,543250,600000,0,0,600000,"","","SJ069","Paid","Completed",true,true,true,true,""],
+["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Biru 2",49.5,50,0,50,5300,6000,6000,262350,300000,0,0,300000,"","","SJ069","Paid","Completed",true,true,true,true,""],
+["2026-05-28","PT Elite Recycling Indonesia (Pan Era Group)","PP Press Warna 3",70.5,75,0,75,8000,5500,5500,564000,412500,0,0,412500,"","","SJ069","Paid","Completed",true,true,true,true,""],
+["2026-05-29","CV Sido Mulyo","Kardus",1115.5,1100,0,1100,2200,2200,2200,2454100,2420000,0,0,2420000,"","MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true,""],
+["2026-05-29","CV Sido Mulyo","Duplek",1159,1149,0,1149,1200,1200,1200,1390800,1378800,0,0,1378800,"","MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true,""],
+["2026-05-29","CV Sido Mulyo","Boncos",430.5,420,0,420,1000,1000,1000,430500,420000,0,0,420000,"","MGI/MEI/2026/019","SJ070","Paid","Completed",true,true,true,true,""],
+["2026-05-30","Lapak Pak Aldi","Kerasan Campur",1555,1555,0,1555,500,500,500,777500,777500,0,0,777500,"","","SJ071","Paid","Completed",true,true,true,true,""],
+["2026-05-30","Lapak Pak Aldi","Emberan Besar",363.5,148,0,148,1500,1500,1500,545250,222000,0,0,222000,"","","SJ071","Paid","Completed",true,true,true,true,""],
+["2026-05-30","Lapak Bapak Rocky","Bodong Kotor",482.5,0,0,0,4200,4200,4200,2026500,0,0,0,0,"","","SJ072","Unpaid","Completed",true,false,false,false,""],
+["2026-05-30","Lapak Bapak Rocky","Pet C Bening",68,0,0,0,2500,2500,2500,170000,0,0,0,0,"","","SJ072","Unpaid","Completed",true,false,false,false,""],
+["2026-05-30","Lapak Bapak Rocky","Bodong Warna",172,0,0,0,2000,2000,2000,344000,0,0,0,0,"","","SJ072","Unpaid","Completed",true,false,false,false,""],
+["2026-06-02","Lapak Bapak Rocky","Bodong Kotor",581.5,0,0,0,4200,4200,4200,2442300,0,0,0,0,"","","SJ073","Unpaid","Completed",true,false,false,false,""],
+["2026-06-03","Lapak Bapak Rocky","Kerasan Campur",1908.5,0,0,0,800,800,800,1526800,0,0,0,0,"","","SJ074","Unpaid","Completed",true,false,false,false,""],
+["2026-06-03","Lapak Bapak Rocky","Emberan Besar",81,0,0,0,2300,2300,2300,186300,0,0,0,0,"","","SJ074","Unpaid","Completed",true,false,false,false,""],
+["2026-06-03","Lapak Pak Aldi","Emberan Besar",17,17,0,17,1500,1500,1500,25500,25500,0,0,25500,"","","SJ075","Paid","Completed",true,false,true,false,""],
+["2026-06-03","Lapak Pak Aldi","Kerasan Campur",220,220,0,220,500,500,500,110000,110000,0,0,110000,"","","SJ075","Paid","Completed",true,false,true,false,""],
+["2026-06-03","Lapak Pak Aldi","BP AG Kotor",1088,1056,0,1056,4000,4000,4000,4352000,4224000,0,0,4224000,"","MGI/MEI/2026/020","SJ076","Paid","Completed",true,true,true,true,""],
+["2026-06-04","CV Sido Mulyo","Kardus",1962.5,1947,0,1947,2200,2200,2200,4317500,4283400,0,0,4283400,"","MGI/MEI/2026/021","SJ077","Paid","Completed",true,true,true,true,""],
+["2026-06-04","CV Sido Mulyo","Duplek",166,166,0,166,1200,1200,1200,199200,199200,0,0,199200,"","MGI/MEI/2026/021","SJ077","Paid","Completed",true,true,true,true,""],
+["2026-06-05","Lapak Bapak Rocky","Bodong Kotor",751,0,0,0,4200,4200,4200,3154200,0,0,0,0,"","","SJ078","Unpaid","Completed",true,false,false,false,""],
+["2026-06-06","CV Sido Mulyo","Kardus",1843.5,1824,0,1824,2200,2200,2200,4055700,4012800,0,0,4012800,"","","SJ079","Paid","Completed",true,true,true,true,""],
+["2026-06-06","CV Sido Mulyo","Duplek",349.5,334,0,334,1200,1200,1200,419400,400800,0,0,400800,"","","SJ079","Paid","Completed",true,true,true,true,""],
+["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Bening 2",395,330,0,330,9000,9000,9000,3555000,2970000,0,0,2970000,"","","SJ081","Paid","Completed",true,true,true,true,""],
+["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Bening Kotor",0,60,0,60,0,8000,8000,0,480000,0,0,480000,"","","SJ081","Paid","Completed",true,true,true,true,""],
+["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Putih 2",477.5,475,0,475,8000,8000,8000,3820000,3800000,0,0,3800000,"","","SJ081","Paid","Completed",true,true,true,true,""],
+["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Mambo Mainan 1",766,585,0,585,7000,6300,6300,5362000,3685500,0,0,3685500,"","","SJ081","Paid","Completed",true,true,true,true,""],
+["2026-06-08","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Mambo Mainan 2",0,60,0,60,0,5800,5800,0,348000,0,0,348000,"","","SJ081","Paid","Completed",true,true,true,true,""],
+["2026-06-08","Lapak Bapak Rocky","Kerasan Campur",1764.5,0,0,0,800,800,800,1411600,0,0,0,0,"","","SJ082","Unpaid","Completed",true,false,false,false,""],
+["2026-06-09","Lapak Bapak Rocky","Bodong Kotor",517,0,0,0,4200,4200,4200,2171400,0,0,0,0,"","","SJ083","Unpaid","Completed",true,false,false,false,""],
+["2026-06-09","BMPS","BP PET MIX",3808.5,3880,0,3880,9300,9300,9300,35419050,36084000,0,0,36084000,"","","SJ084","Paid","Completed",true,true,true,false,""],
+["2026-06-09","BMPS","BP PET BM",147,140,0,140,8700,8700,8700,1278900,1218000,0,0,1218000,"","","SJ084","Paid","Completed",true,true,true,false,""],
+["2026-06-09","BMPS","BP PET BN",134,140,0,140,9700,9700,9700,1299800,1358000,0,0,1358000,"","","SJ084","Paid","Completed",true,true,true,false,""],
+["2026-06-09","BMPS","BP Galon Le",431.5,440,0,440,7700,7700,7700,3322550,3388000,0,0,3388000,"","","SJ084","Paid","Completed",true,true,true,false,""],
+["2026-06-10","CV Sido Mulyo","Kardus",1387,1377,0,1377,2200,2200,2200,3051400,3029400,0,0,3029400,"","","SJ085","Paid","Completed",true,true,true,true,""],
+["2026-06-10","CV Sido Mulyo","Duplek",473.5,466,0,466,1200,1200,1200,568200,559200,0,0,559200,"","","SJ085","Paid","Completed",true,true,true,true,""],
+["2026-06-10","CV Sido Mulyo","Boncos",270.5,255,0,255,1000,1000,1000,270500,255000,0,0,255000,"","","SJ085","Paid","Completed",true,true,true,true,""],
+["2026-06-11","UD Rahayu Abadi","AG Kotor",84.5,84.5,0,84.5,4700,4700,4700,397150,397150,0,0,397150,"","","SJ086","Paid","Completed",true,true,true,true,""],
+["2026-06-11","UD Rahayu Abadi","Bodong Warna",211,154,0,154,2500,2500,2500,527500,385000,0,0,385000,"","","SJ086","Paid","Completed",true,true,true,true,""],
+["2026-06-11","UD Rahayu Abadi","BP AG Kotor",920,851.5,0,851.5,4700,4700,4700,4324000,4002050,0,0,4002050,"","","SJ086","Paid","Completed",true,true,true,true,""],
+["2026-06-11","UD Rahayu Abadi","BP Milku",187.5,113,0,113,3000,3000,3000,562500,339000,0,0,339000,"","","SJ086","Paid","Completed",true,true,true,true,""],
+["2026-06-11","UD Rahayu Abadi","BP Sprite",106.5,62,0,62,3500,3500,3500,372750,217000,0,0,217000,"","","SJ086","Paid","Completed",true,true,true,true,""],
+["2026-06-11","UD Rahayu Abadi","BP Mizone",50.5,12,0,12,3500,3500,3500,176750,42000,0,0,42000,"","","SJ086","Paid","Completed",true,true,true,true,""],
+["2026-06-11","UD Rahayu Abadi","Tutup Botol",77,77,0,77,5500,5500,5500,423500,423500,0,0,423500,"","","SJ086","Paid","Completed",true,true,true,true,""],
+["2026-06-12","Lapak Pak Aldi","Kerasan Campur",1755,1755,0,1755,500,500,500,877500,877500,0,0,877500,"","","SJ087","Paid","Completed",true,false,true,false,""],
+["2026-06-12","Lapak Pak Aldi","Emberan Besar",26,26,0,26,1500,1500,1500,39000,39000,0,0,39000,"","","SJ087","Paid","Completed",true,false,true,false,""],
+["2026-06-13","CV Sido Mulyo","Kardus",1359.5,1344,0,1344,2200,2200,2200,2990900,2956800,0,0,2956800,"","","SJ088","Paid","Completed",true,true,true,true,""],
+["2026-06-13","CV Sido Mulyo","Duplek",374.5,367,0,367,1200,1200,1200,449400,440400,0,0,440400,"","","SJ088","Paid","Completed",true,true,true,true,""],
+["2026-06-13","CV Sido Mulyo","Boncos",141,136,0,136,1000,1000,1000,141000,136000,0,0,136000,"","","SJ088","Paid","Completed",true,true,true,true,""],
+["2026-06-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Mambo 2",664.75,655,0,655,4300,4800,4800,2858425,3144000,0,0,3144000,"","","SJ089","Paid","Completed",true,true,true,true,""],
+["2026-06-15","PT Elite Recycling Indonesia (Pan Era Group)","BP PP Mambo 3",664.75,690,0,690,4300,4300,4300,2858425,2967000,0,0,2967000,"","","SJ089","Paid","Completed",true,true,true,true,""],
+["2026-06-16","Lapak Bapak Rocky","Kerasan Campur",1352.5,0,0,0,800,800,800,1082000,0,0,0,0,"","","SJ090","Unpaid","Completed",true,false,false,false,""],
+["2026-06-16","Lapak Bapak Rocky","Kerasan Campur",2034,0,0,0,800,800,800,1627200,0,0,0,0,"","","SJ091","Unpaid","Completed",true,false,false,false,""],
+["2026-06-18","CV Sido Mulyo","Kardus",1718.5,1703,0,1703,2200,2200,2200,3780700,3746600,0,0,3746600,"","","SJ092","Paid","Completed",true,true,true,true,""],
+["2026-06-18","CV Sido Mulyo","Duplek",147,140,0,140,1200,1200,1200,176400,168000,0,0,168000,"","","SJ092","Paid","Completed",true,true,true,true,""],
+["2026-06-18","BMPS","BP PET Mix",3046,3140,0,3140,9300,9300,9300,28327800,29202000,0,0,29202000,"","","SJ093","Paid","Completed",true,true,true,false,""],
+["2026-06-18","BMPS","BP Galon Le",850.5,880,0,880,7700,7700,7700,6548850,6776000,0,0,6776000,"","","SJ093","Paid","Completed",true,true,true,false,""],
+["2026-06-19","Lapak Bapak Rocky","Kerasan Campur",1937,0,0,0,800,800,800,1549600,0,0,0,0,"","","SJ094","Unpaid","Completed",true,false,false,false,""],
+["2026-06-19","Lapak Bapak Rocky","Emberan Besar",21,0,0,0,2300,2300,2300,48300,0,0,0,0,"","","SJ094","Unpaid","Completed",true,false,false,false,""],
+["2026-06-22","Lapak Pak Aldi","Kerasan Campur",1842.5,1593.9,0,1593.9,500,500,500,921250,796950,0,0,796950,"","","SJ095","Unpaid","Completed",true,false,false,false,""],
+["2026-06-22","Lapak Pak Aldi","Emberan Besar",153,132.3,0,132.3,1500,1500,1500,229500,198450,0,0,198450,"","","SJ095","Unpaid","Completed",true,false,false,false,""],
+["2026-06-25","CV Sido Mulyo","Kardus",1619,1600,0,1600,2200,2200,2200,3561800,3520000,0,0,3520000,"","","SJ096","Paid","Completed",true,true,true,false,""],
+["2026-06-25","CV Sido Mulyo","Duplek",90.5,90,0,90,1200,1200,1200,108600,108000,0,0,108000,"","","SJ096","Paid","Completed",true,true,true,false,""],
+["2026-06-25","CV Sido Mulyo","Boncos",124,115,0,115,1000,1000,1000,124000,115000,0,0,115000,"","","SJ096","Paid","Completed",true,true,true,false,""],
+["2026-06-26","Lapak Pak Aldi","Kerasan Campur",2280.5,2280.5,0,2280.5,500,500,500,1140250,1140250,0,0,1140250,"","","SJ097","Paid","Completed",true,false,true,false,""],
+["2026-06-27","CV Sido Mulyo","Kardus",1821,1800,0,1800,2200,2200,2200,4006200,3960000,0,0,3960000,"","","SJ098","Paid","Completed",true,true,true,false,""],
+["2026-06-27","CV Sido Mulyo","Duplek",673.5,660,0,660,1200,1200,1200,808200,792000,0,0,792000,"","","SJ098","Paid","Completed",true,true,true,false,""],
+["2026-06-27","CV Sido Mulyo","Boncos",123.5,120,0,120,1000,1000,1000,123500,120000,0,0,120000,"","","SJ098","Paid","Completed",true,true,true,false,""],
+["2026-06-29","UD Rahayu Abadi","AG Kotor",852,861,0,861,4700,4500,4500,4004400,3874500,0,0,3874500,"","","SJ099","Paid","Completed",true,true,true,false,""],
+["2026-06-29","UD Rahayu Abadi","Milku",44,8,0,8,3000,3000,3000,132000,24000,0,0,24000,"","","SJ099","Paid","Completed",true,true,true,false,""],
+["2026-06-29","UD Rahayu Abadi","Mizone",49,0,0,0,3500,0,0,171500,0,0,0,0,"","","SJ099","Paid","Completed",true,true,true,false,""],
+["2026-06-29","UD Rahayu Abadi","Bodong Warna",234.5,243,0,243,2500,2500,2500,586250,607500,0,0,607500,"","","SJ099","Paid","Completed",true,true,true,false,""],
+["2026-06-29","UD Rahayu Abadi","Monti",22.5,183,0,183,4000,3800,3800,90000,695400,0,0,695400,"","","SJ099","Paid","Completed",true,true,true,false,""],
+["2026-06-29","UD Rahayu Abadi","Bodong Kotor",18.5,0,0,0,4000,0,0,74000,0,0,0,0,"","","SJ099","Paid","Completed",true,true,true,false,""],
+["2026-06-29","UD Rahayu Abadi","AG Kotor",285.5,0,0,0,4700,0,0,1341850,0,0,0,0,"","","SJ099","Paid","Completed",true,true,true,false,""],
+["2026-06-29","BMPS","BP PET Mix",3302.5,3260,0,3260,9300,9300,9300,30713250,30318000,0,0,30318000,"","","SJ100","Paid","Completed",true,true,true,false,""],
+["2026-06-29","BMPS","BP Galon Le",1012.5,1020,0,1020,7700,7700,7700,7796250,7854000,0,0,7854000,"","","SJ100","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","",63,0,0,0,5200,0,0,327600,0,200000,500000,-300000,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","",625.5,1565.5,0,1565.5,2800,2800,2800,1751400,4383400,0,0,4383400,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","",1108.5,0,0,0,5200,0,0,5764200,0,0,0,0,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","",0,10,0,10,0,22500,22500,0,225000,0,0,225000,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","",0,25,0,25,0,24500,24500,0,612500,0,0,612500,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","",0,13,0,13,0,23350,23350,0,303550,0,0,303550,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","",0,10.5,0,10.5,0,14500,14500,0,152250,0,0,152250,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-07-02","CV Sido Mulyo","Kardus",649,636,0,636,2200,2200,2200,1427800,1399200,0,0,1399200,"","","SJ102","Paid","Completed",true,true,true,false,"2026-07-03"],
+["2026-07-02","CV Sido Mulyo","Duplek",829,800,0,800,1200,1200,1200,994800,960000,0,0,960000,"","","SJ102","Paid","Completed",true,true,true,false,"2026-07-03"],
+["2026-07-03","CV Berkat Sinar Harapan","Cacah PP BN",880.5,880.5,0,880.5,9400,9400,9400,8276700,8276700,0,0,8276700,"","","SJ104","Paid","Completed",true,false,true,false,"2026-07-03"],
+["2026-07-03","CV Berkat Sinar Harapan","Cacah PP Mambo",553,553,0,553,5700,5700,5700,3152100,3152100,0,0,3152100,"","","SJ104","Paid","Completed",true,false,true,false,"2026-07-03"],
+["2026-07-03","CV Berkat Sinar Harapan","Cacah PP Hitam",678.5,678.5,0,678.5,5700,5700,5700,3867450,3867450,0,0,3867450,"","","SJ104","Paid","Completed",true,false,true,false,"2026-07-03"],
+["2026-07-03","CV Berkat Sinar Harapan","BP PP Hitam",1214,1214,0,1214,3200,3200,3200,3884800,3884800,0,0,3884800,"","","SJ104","Paid","Completed",true,false,true,false,"2026-07-03"],
+["2026-07-04","CV Sido Mulyo","Kardus",1635,1602,0,1602,2200,2200,2200,3597000,3524400,0,0,3524400,"","","SJ105","Paid","Completed",true,true,true,false,"2026-07-04"],
+["2026-07-04","CV Sido Mulyo","Kardus",523.5,512,0,512,2200,2200,2200,1151700,1126400,0,0,1126400,"","","SJ106","Paid","Completed",true,true,true,false,"2026-07-06"],
+["2026-07-04","CV Sido Mulyo","Duplek",711.5,696,0,696,1200,1200,1200,853800,835200,0,0,835200,"","","SJ106","Paid","Completed",true,true,true,false,"2026-07-06"],
+["2026-07-04","CV Sido Mulyo","Boncos",159,149,0,149,1000,1000,1000,159000,149000,0,0,149000,"","","SJ106","Paid","Completed",true,true,true,false,"2026-07-06"],
+["2026-07-06","Lapak Pak Aldi","Kerasan Campur",1329,1329,0,1329,500,500,500,664500,664500,0,0,664500,"","","SJ107","Unpaid","Completed",true,false,false,false,""],
+["2026-07-09","CV Sido Mulyo","Kardus",1560,1528,0,1528,2200,2200,2200,3432000,3361600,0,0,3361600,"","","SJ108","Paid","Completed",true,true,true,false,"2026-07-10"],
+["2026-07-09","CV Sido Mulyo","Duplek",328.5,321,0,321,1200,1200,1200,394200,385200,0,0,385200,"","","SJ108","Paid","Completed",true,true,true,false,"2026-07-10"],
+["2026-07-10","Haka Sentral Plastik","BP Gabruk",3764.5,3610,0,3610,3500,3500,3500,13175750,12635000,0,0,12635000,"","","SJ109","Paid","Completed",true,true,true,false,"2026-07-11"],
+["2026-07-10","CV Sido Mulyo","Kardus",749.5,734,0,734,2200,2200,2200,1648900,1614800,0,0,1614800,"","","SJ110","Paid","Completed",true,true,true,false,"2026-07-10"],
+["2026-07-10","CV Sido Mulyo","Duplek",507.5,496,0,496,1200,1200,1200,609000,595200,0,0,595200,"","","SJ110","Paid","Completed",true,true,true,false,"2026-07-10"],
+["2026-07-10","BMPS","BP PET Mix",3370,3320,0,3320,9300,9300,9300,31341000,30876000,0,0,30876000,"","","SJ111","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-10","BMPS","BP PET BN",131,140,0,140,9700,9700,9700,1270700,1358000,0,0,1358000,"","","SJ111","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-10","BMPS","BP Galon Le",217.5,220,0,220,7700,7700,7700,1674750,1694000,0,0,1694000,"","","SJ111","Paid","Completed",true,true,false,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","AG Kotor",142.5,91,0,91,4000,4000,4000,570000,364000,0,0,364000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","Monti",0,30,0,30,0,3800,3800,0,114000,0,0,114000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","Tutup Botol",306.5,306,0,306,5500,5500,5500,1685750,1683000,0,0,1683000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","Bodong Warna",90,50,0,50,2000,2000,2000,180000,100000,0,0,100000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","Mizone",104.5,106,0,106,3500,3500,3500,365750,371000,0,0,371000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","Sprite",53.5,86,0,86,3500,3000,3000,187250,258000,0,0,258000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","BP Sprite",358.5,354,0,354,3500,3500,3500,1254750,1239000,0,0,1239000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","Milku",66.5,47,0,47,3000,3000,3000,199500,141000,0,0,141000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-13","UD Rahayu Abadi","BP Milku",174.5,170,0,170,3000,3500,3500,523500,595000,0,0,595000,"","","SJ112","Paid","Completed",true,true,true,false,"2026-07-14"],
+["2026-07-14","Lapak Pak Aldi","Kerasan Campur",429.5,429.5,0,429.5,500,500,500,214750,214750,0,0,214750,"","","SJ113","Unpaid","Completed",true,false,false,false,""],
+["2026-07-14","Lapak Pak Aldi","Emberan Besar",294,294,0,294,1500,1500,1500,441000,441000,0,0,441000,"","","SJ113","Unpaid","Completed",true,false,false,false,""],
+["2026-07-14","Lapak Pak Aldi","Kaleng",12,12,0,12,2800,2800,2800,33600,33600,0,0,33600,"","","SJ113","Unpaid","Completed",true,false,false,false,""],
+["2026-07-14","CV Sido Mulyo","Duplek",653.5,633,0,633,1200,1200,1200,784200,759600,0,0,759600,"","","SJ114","Paid","Completed",true,true,true,false,"2026-07-15"],
+["2026-07-14","CV Sido Mulyo","Boncos",251,226,0,226,1000,1000,1000,251000,226000,0,0,226000,"","","SJ114","Paid","Completed",true,true,true,false,"2026-07-15"],
+["2026-07-15","Lapak Pak Aldi","Kaleng",1223.5,1223.5,0,1223.5,2800,2800,2800,3425800,3425800,0,0,3302100,"","","SJ115","Paid","Completed",true,false,false,false,"2026-07-15"],
+["2026-07-15","Lapak Pak Aldi","Besi Rongsok",270,270,0,270,4700,4700,4700,1269000,1269000,0,0,1269000,"","","SJ115","Unpaid","Completed",true,false,false,false,""],
+["2026-07-15","Lapak Pak Aldi","Alumunium Rongsok",7.5,7.5,0,7.5,24000,24000,24000,180000,180000,0,0,180000,"","","SJ115","Unpaid","Completed",true,false,false,false,""]
 ];
 const COLORS = [
   '#2ee8a0','#61b8ff','#ffc53d','#ff6b87','#c4b5fd',
@@ -1427,6 +1428,7 @@ const fmtInt = n => Math.round(n).toLocaleString('id-ID');
 const fmtShort = n => n >= 1000000 ? (n/1000000).toFixed(1)+'jt' : n >= 1000 ? (n/1000).toFixed(1)+'rb' : Math.round(n)+'';
 const fmtRp = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
 const fmtRpShort = n => n >= 1000000000 ? 'Rp '+(n/1000000000).toFixed(1)+'M' : n >= 1000000 ? 'Rp '+(n/1000000).toFixed(1)+'jt' : n >= 1000 ? 'Rp '+(n/1000).toFixed(0)+'rb' : 'Rp '+Math.round(n);
+const fmtDateShort = s => { if (!s) return '—'; const d = new Date(s+'T00:00:00'); if (isNaN(d)) return '—'; return d.getDate()+' '+MONTH_NAME[d.getMonth()]+' '+d.getFullYear(); };
 
 const getWeekKey = d => {
   const dt = new Date(d);
@@ -2569,11 +2571,13 @@ function render() {
   } else {
     const sjMap2 = {};
     rows.forEach(r=>{
-      const key = r[17] || ('__NOSJ__'+r[0]+'__'+r[1]+'__'+r[16]);
-      if (!sjMap2[key]) sjMap2[key]={noSJ:r[17]||'—',inv:r[16]||'—',date:r[0],offtaker:r[1],lines:0,totalPf:0,netDiterima:0,pay:r[18],del:r[19],sj:r[20],rc:r[21],tr:r[22],df:r[23]};
+      const baseKey2 = r[17] || ('__NOSJ__'+r[0]+'__'+r[1]+'__'+r[16]);
+      const key = baseKey2 + '||' + (r[18]||'');
+      if (!sjMap2[key]) sjMap2[key]={noSJ:r[17]||'—',inv:r[16]||'—',date:r[0],offtaker:r[1],lines:0,totalPf:0,netDiterima:0,pay:r[18],del:r[19],sj:r[20],rc:r[21],tr:r[22],df:r[23],tglPayment:''};
       sjMap2[key].lines++;
       sjMap2[key].totalPf += (r[10]||0);
       sjMap2[key].netDiterima += (r[14]||0);
+      if (r[24] && (!sjMap2[key].tglPayment || r[24] > sjMap2[key].tglPayment)) sjMap2[key].tglPayment = r[24];
     });
     const allSJ2 = Object.values(sjMap2);
     const unpaidDel2 = allSJ2.filter(e=>e.pay==='Unpaid'&&e.del==='Delivered').sort((a,b)=>b.date.localeCompare(a.date));
@@ -2652,7 +2656,7 @@ function downloadUnpaidReport() {
   btns.forEach(b => { b.disabled = true; b.textContent = '⏳ Menyiapkan…'; });
 
   try {
-    const source = (window._lastSjEntries && window._lastSjEntries.length) ? window._lastSjEntries : (window._payRowArr || []);
+    const source = (window._lastRows && window._lastRows.length) ? buildKeuEntries(window._lastRows) : (window._payRowArr || []);
     const unpaid = source
       .filter(e => e.payStatus === 'Unpaid' || e.pay === 'Unpaid')
       .map(e => ({
@@ -2884,13 +2888,45 @@ function openSJDetail(noSJ) {
   renderVolTable(_popupFilteredRows, 'filtered-table-body');
 }
 
+function buildKeuEntries(rows) {
+  // Group by No.SJ + Payment Status, so a single SJ containing a mix of
+  // Paid and Unpaid line items is split into separate rows. This keeps
+  // "Net Diterima" (and other sums) accurate per payment status instead of
+  // lumping paid and unpaid line-items together under one status label.
+  const map = {};
+  (rows||[]).forEach(r => {
+    const baseKey = r[17] || ('__NOSJ__'+r[0]+'__'+r[1]+'__'+r[16]);
+    const key = baseKey + '||' + (r[18] || '');
+    if (!map[key]) {
+      map[key] = {
+        date:r[0], offtaker:r[1], noSJ:r[17], invoiceNo:r[16],
+        payStatus:r[18], delStatus:r[19],
+        sj:r[20], rc:r[21], tr:r[22], df:r[23],
+        tglPayment:'',
+        totalOft:0, totalPf:0, netDiterima:0,
+        beratPDUP:0, beratOft:0, lines:0,
+        rows:[]
+      };
+    }
+    map[key].totalOft    += (r[11]||0);
+    map[key].totalPf     += (r[10]||0);
+    map[key].netDiterima += (r[14]||0);
+    map[key].beratPDUP   += (r[3]||0);
+    map[key].beratOft    += (r[4]||0);
+    map[key].lines++;
+    map[key].rows.push(r);
+    if (r[24] && (!map[key].tglPayment || r[24] > map[key].tglPayment)) map[key].tglPayment = r[24];
+  });
+  return Object.values(map);
+}
+
 function openPopup(type) {
   _openPopupEl('popup-'+type);
   if (type === 'volume') {
     _popupVolRows = window._lastRows || [];
     renderVolTable(_popupVolRows);
   } else if (type === 'keuangan') {
-    _popupKeuEntries = window._lastSjEntries || [];
+    _popupKeuEntries = buildKeuEntries(window._lastRows);
     window._keuFilterMode = 'all';
     ['all','paid','unpaid'].forEach(m => {
       document.getElementById('keu-tab-'+m).classList.toggle('active', m === 'all');
@@ -3080,7 +3116,7 @@ function renderVolTable(data, targetId) {
     <th class="tr">Harga/Kg</th>
     <th class="tr">Berat PDUP</th><th class="tr">Berat Offtaker</th><th class="tr">Pot. Berat</th>
     <th class="tr">Total (Offtaker)</th><th class="tr">Total (Proforma)</th>
-    <th class="tr">Pot. Rp</th><th class="tr">Net Diterima</th><th>Keterangan</th>
+    <th class="tr">Pot. Rp</th><th class="tr">Net Diterima</th><th>Tgl Payment</th><th>Keterangan</th>
   </tr></thead><tbody>`;
   data.forEach((r,i)=>{
     const dt=new Date(r[0]); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
@@ -3102,6 +3138,7 @@ function renderVolTable(data, targetId) {
       <td class="tr tn" style="color:var(--text3)">${r[10]?fmtRp(r[10]):'—'}</td>
       <td class="tr tn" style="color:var(--coral)">${r[13]>0?'-'+fmtRpShort(r[13]):'—'}</td>
       <td class="tr tn" style="color:var(--accent);font-weight:600">${r[14]?fmtRpShort(r[14]):'—'}</td>
+      <td style="font-size:11px;white-space:nowrap;color:var(--text2)">${r[24]?fmtDateShort(r[24]):'—'}</td>
       <td style="font-size:11px;color:var(--text3);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r[15]}">${r[15]||'—'}</td>
     </tr>`;
   });
@@ -3136,8 +3173,7 @@ function renderKeuTable(entries) {
     <th class="tr">Berat PDUP</th><th class="tr">Berat Offtaker</th>
     <th class="tr">Total (Offtaker)</th><th class="tr">Total (Proforma)</th><th class="tr">Selisih Rp</th>
     <th class="tr">Net Diterima</th>
-    <th class="tc">Bayar</th><th class="tc">Kirim</th>
-    <th class="tc">SJ</th><th class="tc">RC</th><th class="tc">TF</th>
+    <th class="tc">Bayar</th><th>Tgl Payment</th>
   </tr></thead><tbody>`;
   entries.sort((a,b)=>a.date.localeCompare(b.date)).forEach((e,i)=>{
     const dt=new Date(e.date); const dtStr=dt.getDate()+' '+MONTH_NAME[dt.getMonth()]+' '+dt.getFullYear();
@@ -3161,9 +3197,7 @@ function renderKeuTable(entries) {
       <td class="tr tn ${dCls}" style="font-weight:600">${dSign}${fmtRpShort(Math.abs(diffRpKeu))}</td>
       <td class="tr tn" style="color:var(--accent);font-weight:600">${e.netDiterima>0?fmtRp(e.netDiterima):'—'}</td>
       <td class="tc">${payBadge}</td>
-      <td class="tc">${delBadge}</td>
-      <td class="tc">${docIcon(e.sj)}</td><td class="tc">${docIcon(e.rc)}</td>
-      <td class="tc">${docIcon(e.tr)}</td>
+      <td style="font-size:11px;white-space:nowrap;color:var(--text2)">${e.tglPayment?fmtDateShort(e.tglPayment):'—'}</td>
     </tr>`;
   });
   html+='</tbody></table>';
@@ -3218,7 +3252,7 @@ function renderPayFullTable(rowsArr) {
   <table><thead><tr>
     <th>#</th><th>No. SJ</th><th>Tgl</th><th>Offtaker</th>
     <th class="tr">Nominal</th>
-    <th class="tc">Bayar</th><th class="tc">Kirim</th>
+    <th class="tc">Bayar</th><th>Tgl Payment</th><th class="tc">Kirim</th>
   </tr></thead><tbody>`;
   rowsArr.forEach((e,i)=>{
     const payBadge = e.pay==='Paid'?'<span class="pay-badge pay-paid">✓</span>':e.pay==='Unpaid'?'<span class="pay-badge pay-unpaid">⏳</span>':'<span class="badge bz">—</span>';
@@ -3236,7 +3270,9 @@ function renderPayFullTable(rowsArr) {
       <td style="font-size:11px;white-space:nowrap">${dtStr}</td>
       <td title="${e.offtaker}" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.offtaker}</td>
       <td class="tr tn" style="color:${nomColor};font-weight:600;font-size:11px" title="${nomTitle}">${nomLabel}</td>
-      <td class="tc">${payBadge}</td><td class="tc">${delBadge}</td>
+      <td class="tc">${payBadge}</td>
+      <td style="font-size:11px;white-space:nowrap;color:var(--text2)">${e.tglPayment?fmtDateShort(e.tglPayment):'—'}</td>
+      <td class="tc">${delBadge}</td>
     </tr>`;
   });
   html+='</tbody></table>';
