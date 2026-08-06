@@ -530,6 +530,27 @@
 
   /* ============ THEME TOGGLE BUTTON ============ */
   .header-right { display: flex; align-items: center; gap: 10px; }
+
+  /* ============ SYNC STATUS (Google Sheet live sync) ============ */
+  .sync-status {
+    font-size: 11px; font-weight: 600; padding: 6px 12px; border-radius: 30px;
+    cursor: pointer; user-select: none; white-space: nowrap; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px; border: 1px solid;
+    backdrop-filter: var(--glass-blur-sm); -webkit-backdrop-filter: var(--glass-blur-sm);
+  }
+  .sync-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .sync-status.loading { background: rgba(97,184,255,0.14); border-color: rgba(97,184,255,0.4); color: var(--accent2); }
+  .sync-status.loading::before { background: var(--accent2); animation: syncPulse 1s ease-in-out infinite; }
+  .sync-status.ok { background: rgba(22,163,74,0.14); border-color: rgba(22,163,74,0.32); color: var(--green); }
+  .sync-status.ok::before { background: var(--green); }
+  .sync-status.error { background: rgba(225,29,90,0.12); border-color: rgba(225,29,90,0.35); color: var(--coral); }
+  .sync-status.error::before { background: var(--coral); }
+  .sync-status:hover { transform: scale(1.03); }
+  @keyframes syncPulse { 0%,100% { opacity: 0.4; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.15); } }
+  html[data-theme="dark"] .sync-status.loading { background: rgba(97,184,255,0.16); border-color: rgba(97,184,255,0.4); }
+  html[data-theme="dark"] .sync-status.ok { background: rgba(46,232,160,0.16); border-color: rgba(46,232,160,0.4); }
+  html[data-theme="dark"] .sync-status.error { background: rgba(255,107,135,0.16); border-color: rgba(255,107,135,0.4); }
+  @media (max-width: 600px) { .sync-status { font-size: 10px; padding: 5px 9px; } }
   .theme-toggle-btn {
     width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
     background: rgba(255,255,255,0.60); border: 1px solid rgba(37,99,235,0.20);
@@ -728,6 +749,7 @@
     </div>
   </div>
   <div class="header-right">
+    <span class="sync-status loading" id="sync-status" onclick="syncSalesData(false)" title="Klik untuk sinkron ulang dari Google Sheet">Memuat data…</span>
     <span class="header-badge" id="rangeLabel">Jan – Jun 2026</span>
     <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Switch to dark mode">
       <span id="themeToggleIcon">🌙</span>
@@ -1137,16 +1159,16 @@
     Chart.defaults.borderColor = isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(37,99,235,0.08)';
   }
   applyChartTheming();
-const RAW = [
+let RAW = [
 ["2026-01-06","Panca Kraft Pratama - UWAAA","Kardus",1180.5,1183,0,1183,2350,2350,2350,2774175,2780050,0,5000,2775050,"","MGI/JAN/2026/001","SJ001","Paid","Completed",true,true,true,true,""],
 ["2026-01-30","Lapak Tri","Kerasan Campur",2195,2195,0,2195,1300,1300,1300,2853500,2853500,146500,0,3000000,"","MGI/JAN/2026/002","SJ004","Paid","Completed",true,true,true,true,""],
 ["2026-02-03","PD Fajar Mandiri","Tutup Botol",184,184,0,184,5500,5500,5500,1012000,1012000,0,0,1012000,"","MGI/FEB/2026/001","SJ005","Paid","Completed",true,true,true,true,""],
 ["2026-02-03","Buana Plast","Cacah PP BN Sablon",625,625,0,625,7000,7000,7000,4375000,4375000,0,0,4375000,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true,""],
 ["2026-02-03","Buana Plast","Cacah PP Mambo + Abu",106,106,0,106,4500,4500,4500,477000,477000,0,0,477000,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true,""],
 ["2026-02-03","Buana Plast","Cacah PP Warna",1055,1055,0,1055,5500,5500,5500,5802500,5802500,0,0,5802500,"","MGI/FEB/2026/002","SJ006","Paid","Completed",true,true,true,true,""],
-["2026-02-03","Haka Sentral Plastik","Cacah PP PK",149,149,0,149,8500,8500,8500,1266500,1266500,0,0,1266500,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
-["2026-02-03","Haka Sentral Plastik","Cacah PP Hitam",475,475,0,475,5000,5000,5000,2375000,2375000,0,0,2375000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
-["2026-02-03","Haka Sentral Plastik","Cacah PP Mambo",105,105,0,105,5000,5000,5000,525000,525000,0,0,525000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
+["2026-02-03","PT Haka Sentral Plastik","Cacah PP PK",149,149,0,149,8500,8500,8500,1266500,1266500,0,0,1266500,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
+["2026-02-03","PT Haka Sentral Plastik","Cacah PP Hitam",475,475,0,475,5000,5000,5000,2375000,2375000,0,0,2375000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
+["2026-02-03","PT Haka Sentral Plastik","Cacah PP Mambo",105,105,0,105,5000,5000,5000,525000,525000,0,0,525000,"","MGI/FEB/2026/003","SJ007","Paid","Completed",true,true,true,true,""],
 ["2026-02-06","BMPS","BP PET MIX",3922,3415.96,0,3415.96,6200,6200,6200,24316400,21178952,0,0,21178952,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
 ["2026-02-06","BMPS","BP PET BN",378.5,369,0,369,6700,6700,6700,2535950,2472300,0,0,2472300,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
 ["2026-02-06","BMPS","BP PET BM",0,265,0,265,5700,5700,5700,0,1510500,0,0,1510500,"","MGI/FEB/2026/004","SJ008","Paid","Completed",true,true,true,false,""],
@@ -1157,7 +1179,7 @@ const RAW = [
 ["2026-02-10","PD Fajar Mandiri","Tutup Botol",56,55,0,55,5500,5500,5500,308000,302500,0,0,302500,"","MGI/FEB/2026/005","SJ010","Paid","Completed",true,true,true,true,""],
 ["2026-02-21","PD Fajar Mandiri","Keleman PP",255,255,0,255,2000,2000,2000,510000,510000,0,0,510000,"","MGI/FEB/2026/007","SJ011","Paid","Completed",true,true,true,true,""],
 ["2026-02-23","Lapak Tri","Gabruk Kecil",1924,1924,0,1924,800,800,800,1539200,1539200,0,0,1539200,"","MGI/FEB/2026/007","SJ012","Paid","Completed",true,true,true,true,""],
-["2026-02-23","Lapak Tri","",510,451,0,451,800,800,800,408000,360800,0,0,360800,"","MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true,""],
+["2026-02-23","Lapak Tri","Kerasan Campur",510,451,0,451,800,800,800,408000,360800,0,0,360800,"","MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true,""],
 ["2026-02-23","Lapak Tri","PETC Warna",48.5,0,0,0,0,0,0,0,0,0,0,0,"","MGI/FEB/2026/008","SJ012","Paid","Completed",true,true,true,true,""],
 ["2026-02-25","Panca Kraft Pratama - Daya Selaras Group","Kardus",1805.5,1794,0,1794,2550,2550,2550,4604025,4574700,0,0,4574700,"","MGI/FEB/2026/009","SJ013","Paid","Completed",true,true,true,true,""],
 ["2026-03-03","PT Kita Olah Indonesia","BP Naso",582,574,0,574,6500,6500,6500,3783000,3731000,0,0,3731000,"","MGI/MAR/2026/001","SJ014","Paid","Completed",true,true,true,true,""],
@@ -1170,8 +1192,8 @@ const RAW = [
 ["2026-03-05","PT Indah Kiat - Uwaaa","Duplek",1534,1280.4,0,1280.4,1550,1550,1550,2377700,1984620,0,0,1984620,"","","SJ015","Paid","Completed",true,true,true,true,""],
 ["2026-03-06","BMPS","BP PET MIX",2467.5,2579.95,0,2579.95,6800,6800,6800,16779000,17543660,0,0,17543660,"","","SJ019","Paid","Completed",true,true,true,false,""],
 ["2026-03-06","BMPS","BP Galon Le",1094.5,1100,0,1100,5600,5600,5600,6129200,6160000,0,0,6160000,"","","SJ019","Paid","Completed",true,true,true,false,""],
-["2026-03-06","Haka Sentral Plastik","Cacah PP Hitam",729.5,749,0,749,5000,5000,5000,3647500,3745000,0,0,3745000,"","","SJ018","Paid","Completed",true,true,true,true,""],
-["2026-03-06","Haka Sentral Plastik","Cacah PP PK",401.5,383,0,383,8500,8500,8500,3412750,3255500,0,0,3255500,"","","SJ018","Paid","Completed",true,true,true,true,""],
+["2026-03-06","PT Haka Sentral Plastik","Cacah PP Hitam",729.5,749,0,749,5000,5000,5000,3647500,3745000,0,0,3745000,"","","SJ018","Paid","Completed",true,true,true,true,""],
+["2026-03-06","PT Haka Sentral Plastik","Cacah PP PK",401.5,383,0,383,8500,8500,8500,3412750,3255500,0,0,3255500,"","","SJ018","Paid","Completed",true,true,true,true,""],
 ["2026-03-07","PT Kita Olah Indonesia","BP AG Bersih",170.5,170,0,170,6000,6000,6000,1023000,1020000,0,0,1020000,"","","SJ017","Paid","Completed",true,true,true,true,""],
 ["2026-03-07","PT Kita Olah Indonesia","BP AG Kotor",1076.5,1045,0,1045,3000,3000,3000,3229500,3135000,0,0,3135000,"","","SJ017","Paid","Completed",true,true,true,true,""],
 ["2026-03-07","PT Kita Olah Indonesia","BP Monti",248.5,240,0,240,2500,2500,2500,621250,600000,0,0,600000,"","","SJ017","Paid","Completed",true,true,true,true,""],
@@ -1351,8 +1373,8 @@ const RAW = [
 ["2026-06-18","BMPS","BP Galon Le",850.5,880,0,880,7700,7700,7700,6548850,6776000,0,0,6776000,"","","SJ093","Paid","Completed",true,true,true,false,""],
 ["2026-06-19","Lapak Bapak Rocky","Kerasan Campur",1937,0,0,0,800,800,800,1549600,0,0,0,0,"","","SJ094","Unpaid","Completed",true,false,false,false,""],
 ["2026-06-19","Lapak Bapak Rocky","Emberan Besar",21,0,0,0,2300,2300,2300,48300,0,0,0,0,"","","SJ094","Unpaid","Completed",true,false,false,false,""],
-["2026-06-22","Lapak Pak Aldi","Kerasan Campur",1842.5,1593.9,0,1593.9,500,500,500,921250,796950,0,0,796950,"","","SJ095","Unpaid","Completed",true,false,false,false,""],
-["2026-06-22","Lapak Pak Aldi","Emberan Besar",153,132.3,0,132.3,1500,1500,1500,229500,198450,0,0,198450,"","","SJ095","Unpaid","Completed",true,false,false,false,""],
+["2026-06-22","Lapak Pak Aldi","Kerasan Campur",1842.5,1593.9,0,1593.9,500,500,500,921250,796950,0,0,796950,"","","SJ095","Paid","Completed",true,true,true,false,"2026-07-23"],
+["2026-06-22","Lapak Pak Aldi","Emberan Besar",153,132.3,0,132.3,1500,1500,1500,229500,198450,0,0,198450,"","","SJ095","Paid","Completed",true,true,true,false,"2026-07-23"],
 ["2026-06-25","CV Sido Mulyo","Kardus",1619,1600,0,1600,2200,2200,2200,3561800,3520000,0,0,3520000,"","","SJ096","Paid","Completed",true,true,true,false,""],
 ["2026-06-25","CV Sido Mulyo","Duplek",90.5,90,0,90,1200,1200,1200,108600,108000,0,0,108000,"","","SJ096","Paid","Completed",true,true,true,false,""],
 ["2026-06-25","CV Sido Mulyo","Boncos",124,115,0,115,1000,1000,1000,124000,115000,0,0,115000,"","","SJ096","Paid","Completed",true,true,true,false,""],
@@ -1369,13 +1391,13 @@ const RAW = [
 ["2026-06-29","UD Rahayu Abadi","AG Kotor",285.5,0,0,0,4700,0,0,1341850,0,0,0,0,"","","SJ099","Paid","Completed",true,true,true,false,""],
 ["2026-06-29","BMPS","BP PET Mix",3302.5,3260,0,3260,9300,9300,9300,30713250,30318000,0,0,30318000,"","","SJ100","Paid","Completed",true,true,true,false,""],
 ["2026-06-29","BMPS","BP Galon Le",1012.5,1020,0,1020,7700,7700,7700,7796250,7854000,0,0,7854000,"","","SJ100","Paid","Completed",true,true,true,false,""],
-["2026-06-30","Lapak Bapak Rocky","",63,0,0,0,5200,0,0,327600,0,200000,500000,-300000,"","","SJ101","Paid","Completed",true,true,true,false,""],
-["2026-06-30","Lapak Bapak Rocky","",625.5,1565.5,0,1565.5,2800,2800,2800,1751400,4383400,0,0,4383400,"","","SJ101","Paid","Completed",true,true,true,false,""],
-["2026-06-30","Lapak Bapak Rocky","",1108.5,0,0,0,5200,0,0,5764200,0,0,0,0,"","","SJ101","Paid","Completed",true,true,true,false,""],
-["2026-06-30","Lapak Bapak Rocky","",0,10,0,10,0,22500,22500,0,225000,0,0,225000,"","","SJ101","Paid","Completed",true,true,true,false,""],
-["2026-06-30","Lapak Bapak Rocky","",0,25,0,25,0,24500,24500,0,612500,0,0,612500,"","","SJ101","Paid","Completed",true,true,true,false,""],
-["2026-06-30","Lapak Bapak Rocky","",0,13,0,13,0,23350,23350,0,303550,0,0,303550,"","","SJ101","Paid","Completed",true,true,true,false,""],
-["2026-06-30","Lapak Bapak Rocky","",0,10.5,0,10.5,0,14500,14500,0,152250,0,0,152250,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","Besi Rongsok",63,0,0,0,5200,0,0,327600,0,200000,500000,-300000,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","Kaleng",625.5,1565.5,0,1565.5,2800,2800,2800,1751400,4383400,0,0,4383400,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","Logam Gabruk",1108.5,0,0,0,5200,0,0,5764200,0,0,0,0,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","Alumunium Kuali",0,10,0,10,0,22500,22500,0,225000,0,0,225000,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","Alumunium Panci",0,25,0,25,0,24500,24500,0,612500,0,0,612500,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","Alumunium Rongsok",0,13,0,13,0,23350,23350,0,303550,0,0,303550,"","","SJ101","Paid","Completed",true,true,true,false,""],
+["2026-06-30","Lapak Bapak Rocky","Alumunium Babet",0,10.5,0,10.5,0,14500,14500,0,152250,0,0,152250,"","","SJ101","Paid","Completed",true,true,true,false,""],
 ["2026-07-02","CV Sido Mulyo","Kardus",649,636,0,636,2200,2200,2200,1427800,1399200,0,0,1399200,"","","SJ102","Paid","Completed",true,true,true,false,"2026-07-03"],
 ["2026-07-02","CV Sido Mulyo","Duplek",829,800,0,800,1200,1200,1200,994800,960000,0,0,960000,"","","SJ102","Paid","Completed",true,true,true,false,"2026-07-03"],
 ["2026-07-03","CV Berkat Sinar Harapan","Cacah PP BN",880.5,880.5,0,880.5,9400,9400,9400,8276700,8276700,0,0,8276700,"","","SJ104","Paid","Completed",true,false,true,false,"2026-07-03"],
@@ -1389,7 +1411,7 @@ const RAW = [
 ["2026-07-06","Lapak Pak Aldi","Kerasan Campur",1329,1329,0,1329,500,500,500,664500,664500,0,0,664500,"","","SJ107","Unpaid","Completed",true,false,false,false,""],
 ["2026-07-09","CV Sido Mulyo","Kardus",1560,1528,0,1528,2200,2200,2200,3432000,3361600,0,0,3361600,"","","SJ108","Paid","Completed",true,true,true,false,"2026-07-10"],
 ["2026-07-09","CV Sido Mulyo","Duplek",328.5,321,0,321,1200,1200,1200,394200,385200,0,0,385200,"","","SJ108","Paid","Completed",true,true,true,false,"2026-07-10"],
-["2026-07-10","Haka Sentral Plastik","BP Gabruk",3764.5,3610,0,3610,3500,3500,3500,13175750,12635000,0,0,12635000,"","","SJ109","Paid","Completed",true,true,true,false,"2026-07-11"],
+["2026-07-10","PT Haka Sentral Plastik","BP Gabruk",3764.5,3610,0,3610,3500,3500,3500,13175750,12635000,0,0,12635000,"","","SJ109","Paid","Completed",true,true,true,false,"2026-07-11"],
 ["2026-07-10","CV Sido Mulyo","Kardus",749.5,734,0,734,2200,2200,2200,1648900,1614800,0,0,1614800,"","","SJ110","Paid","Completed",true,true,true,false,"2026-07-10"],
 ["2026-07-10","CV Sido Mulyo","Duplek",507.5,496,0,496,1200,1200,1200,609000,595200,0,0,595200,"","","SJ110","Paid","Completed",true,true,true,false,"2026-07-10"],
 ["2026-07-10","BMPS","BP PET Mix",3370,3320,0,3320,9300,9300,9300,31341000,30876000,0,0,30876000,"","","SJ111","Paid","Completed",true,true,true,false,"2026-07-14"],
@@ -1411,7 +1433,58 @@ const RAW = [
 ["2026-07-14","CV Sido Mulyo","Boncos",251,226,0,226,1000,1000,1000,251000,226000,0,0,226000,"","","SJ114","Paid","Completed",true,true,true,false,"2026-07-15"],
 ["2026-07-15","Lapak Pak Aldi","Kaleng",1223.5,1223.5,0,1223.5,2800,2800,2800,3425800,3425800,0,0,3302100,"","","SJ115","Paid","Completed",true,false,false,false,"2026-07-15"],
 ["2026-07-15","Lapak Pak Aldi","Besi Rongsok",270,270,0,270,4700,4700,4700,1269000,1269000,0,0,1269000,"","","SJ115","Unpaid","Completed",true,false,false,false,""],
-["2026-07-15","Lapak Pak Aldi","Alumunium Rongsok",7.5,7.5,0,7.5,24000,24000,24000,180000,180000,0,0,180000,"","","SJ115","Unpaid","Completed",true,false,false,false,""]
+["2026-07-15","Lapak Pak Aldi","Alumunium Rongsok",7.5,7.5,0,7.5,24000,24000,24000,180000,180000,0,0,180000,"","","SJ115","Unpaid","Completed",true,false,false,false,""],
+["2026-07-17","PT Haka Sentral Plastik","BP Gabruk",4409,4210,0,4210,3500,3500,3500,15431500,14735000,0,540750,14194250,"","","SJ116","Paid","Completed",true,true,true,false,"2026-07-18"],
+["2026-07-18","UD Rahayu Abadi","AG Bersih",0,54,0,54,0,6500,6500,0,351000,0,0,351000,"","","SJ117","Paid","Completed",true,true,true,false,"2026-07-18"],
+["2026-07-18","UD Rahayu Abadi","AG Kotor",557,279,0,279,4000,4000,4000,2228000,1116000,0,0,1116000,"","","SJ117","Paid","Completed",true,true,true,false,"2026-07-18"],
+["2026-07-18","UD Rahayu Abadi","Monti",38,88,0,88,3800,3800,3800,144400,334400,0,0,334400,"","","SJ117","Paid","Completed",true,true,true,false,"2026-07-18"],
+["2026-07-18","UD Rahayu Abadi","Bodong Warna",58.5,44,0,44,2000,2000,2000,117000,88000,0,0,88000,"","","SJ117","Paid","Completed",true,true,true,false,"2026-07-18"],
+["2026-07-18","UD Rahayu Abadi","Milku",101,95,0,95,3000,3000,3000,303000,285000,0,0,285000,"","","SJ117","Paid","Completed",true,true,true,false,"2026-07-18"],
+["2026-07-18","CV Sido Mulyo","Bodong Kotor",42.5,42,0,42,4000,4000,4000,170000,168000,0,0,168000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Besi Rongsok",51,51,0,51,5000,5000,5000,255000,255000,0,0,255000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Gabruk",361.5,361,0,361,1700,1700,1700,614550,613700,0,0,613700,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","PVC",191,191,0,191,1250,1250,1250,238750,238750,0,0,238750,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Kaleng",275,275,0,275,3000,3000,3000,825000,825000,0,0,825000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Kerasan Campur",133,133,0,133,1000,1000,1000,133000,133000,0,0,133000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Boncos",59.5,59,0,59,1000,1000,1000,59500,59000,0,0,59000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Tutup Botol",68.5,68,0,68,2500,2500,2500,171250,170000,0,0,170000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Galon Le",11.5,11,0,11,4000,4000,4000,46000,44000,0,0,44000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","PP BN",12,12,0,12,3000,3000,3000,36000,36000,0,0,36000,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-18","CV Sido Mulyo","Karung Boncos",578.5,578,0,578,1200,1200,1200,694200,693600,0,0,693600,"","","SJ118","Paid","Completed",true,true,true,false,"2026-07-20"],
+["2026-07-21","CV Sido Mulyo","Kardus",807,790,0,790,2200,2200,2200,1775400,1738000,0,0,1738000,"","","SJ119","Paid","Completed",true,true,true,false,"2026-07-22"],
+["2026-07-21","CV Sido Mulyo","Duplek",1249,1224,0,1224,1200,1200,1200,1498800,1468800,0,0,1468800,"","","SJ119","Paid","Completed",true,true,true,false,"2026-07-22"],
+["2026-07-23","Lapak Pak Aldi","Kaleng",741.5,741.5,0,741.5,2800,2800,2800,2076200,2076200,0,0,2076200,"","","SJ120","Unpaid","Completed",true,false,false,false,""],
+["2026-07-23","Lapak Pak Aldi","PVC",272,272,0,272,1500,1500,1500,408000,408000,0,0,408000,"","","SJ120","Unpaid","Completed",true,false,false,false,""],
+["2026-07-23","Lapak Pak Aldi","Besi Rongsok",113,113,0,113,4700,4700,4700,531100,531100,0,0,531100,"","","SJ120","Unpaid","Completed",true,false,false,false,""],
+["2026-07-23","Lapak Pak Aldi","Alumunium Rongsok",3,3,0,3,24000,24000,24000,72000,72000,0,0,72000,"","","SJ120","Unpaid","Completed",true,false,false,false,""],
+["2026-07-23","Lapak Pak Aldi","Kawat Ranjang",17,17,0,17,2000,1200,1200,34000,20400,0,0,20400,"","","SJ120","Unpaid","Completed",true,false,false,false,""],
+["2026-07-24","PT Haka Sentral Plastik","BP Gabruk",4240.5,3840,0,3840,3500,3500,3500,14841750,13440000,0,0,13440000,"","","SJ121","Paid","Completed",true,true,true,false,"2026-07-25"],
+["2026-07-24","BMPS","BP PET Mix",3423,3280,0,3280,9300,9300,9300,31833900,30504000,0,0,30504000,"","","SJ122","Paid","Completed",true,true,true,false,"2026-07-29"],
+["2026-07-24","BMPS","BP Galon Le",1437.5,1420,0,1420,7700,7700,7700,11068750,10934000,0,0,10934000,"","","SJ122","Paid","Completed",true,true,true,false,"2026-07-29"],
+["2026-07-27","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Putih 2",659,710,0,710,8000,8000,8000,5272000,5680000,0,0,5680000,"","","SJ123","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-07-27","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Bening 2",794,710,0,710,9000,8700,8700,7146000,6177000,0,0,6177000,"","","SJ123","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-07-27","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Jerigen Bening 2",0,60,0,60,0,8000,8000,0,480000,0,0,480000,"","","SJ123","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-07-27","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Mambo Mainan 1",0,515,0,515,7000,6000,6000,0,3090000,0,0,3090000,"","","SJ123","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-07-27","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Mambo Mainan 2",892,135,0,135,0,5500,5500,0,742500,0,0,742500,"","","SJ123","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-07-27","PT Eterna Persada Indonesia (Pan Era Group)","HDPE Press Blow Hitam Mainan 1",138.5,130,0,130,5500,5500,5500,761750,715000,0,0,715000,"","","SJ123","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-07-27","CV Sido Mulyo","Kardus",1499.5,1469,0,1469,2200,2200,2200,3298900,3231800,0,0,3231800,"","","SJ124","Paid","Completed",true,true,true,false,"2026-07-28"],
+["2026-07-27","CV Sido Mulyo","Duplek",264.5,258,0,258,1200,1200,1200,317400,309600,0,0,309600,"","","SJ124","Paid","Completed",true,true,true,false,"2026-07-28"],
+["2026-07-27","CV Sido Mulyo","Boncos",134.5,120,0,120,1000,1000,1000,134500,120000,0,0,120000,"","","SJ124","Paid","Completed",true,true,true,false,"2026-07-28"],
+["2026-07-29","CV Berkat Sinar Harapan","Cacah PP BN",863,853,0,853,10000,9700,9700,8630000,8274100,0,0,8274100,"","","SJ125","Paid","Completed",true,true,true,false,"2026-07-30"],
+["2026-07-29","CV Berkat Sinar Harapan","Cacah PP PK",563,543,0,543,9000,8700,8700,5067000,4724100,0,0,4724100,"","","SJ125","Paid","Completed",true,true,true,false,"2026-07-30"],
+["2026-07-29","CV Berkat Sinar Harapan","Cacah AG Kotor",216,86,0,86,8000,7800,7800,1728000,670800,0,0,670800,"","","SJ125","Paid","Completed",true,true,true,false,"2026-07-30"],
+["2026-07-29","CV Berkat Sinar Harapan","Cacah Monti",32.5,179,0,179,6000,6000,6000,195000,1074000,0,0,1074000,"","","SJ125","Paid","Completed",true,true,true,false,"2026-07-30"],
+["2026-07-29","CV Berkat Sinar Harapan","BP Falcon",684,640,0,640,3600,3000,3000,2462400,1920000,0,0,1920000,"","","SJ125","Paid","Completed",true,true,true,false,"2026-07-30"],
+["2026-07-29","CV Sido Mulyo","Kardus",1151,1127,0,1127,2200,2200,2200,2532200,2479400,0,0,2479400,"","","SJ126","Paid","Completed",true,true,true,false,"2026-07-30"],
+["2026-07-29","CV Sido Mulyo","Duplek",258.5,252,0,252,1200,1200,1200,310200,302400,0,0,302400,"","","SJ126","Paid","Completed",true,true,true,false,"2026-07-30"],
+["2026-07-30","PT Haka Sentral Plastik","Cacah PP Mambo",1043,1043,0,1043,6000,6000,6000,6258000,6258000,0,0,6258000,"","","SJ127","Paid","Completed",true,true,true,false,"2026-07-31"],
+["2026-07-30","PT Haka Sentral Plastik","Cacah PP Hitam",1059.5,1055,0,1055,6600,6600,6600,6992700,6963000,0,0,6963000,"","","SJ127","Paid","Completed",true,true,true,false,"2026-07-31"],
+["2026-08-03","PT Haka Sentral Plastik","BP Gabruk",3188,3150,0,3150,3500,3500,3500,11158000,11025000,0,0,11025000,"","","SJ128","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-08-03","CV Sido Mulyo","Kardus",1377,1340,0,1340,2200,2200,2200,3029400,2948000,0,0,2948000,"","","SJ129","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-08-03","CV Sido Mulyo","Duplek",338.5,331,0,331,1200,1200,1200,406200,397200,0,0,397200,"","","SJ129","Paid","Completed",true,true,true,false,"2026-08-04"],
+["2026-08-04","CV Sido Mulyo","Kardus",46.5,40,0,40,2200,2200,2200,102300,88000,0,0,88000,"","","SJ130","Paid","Completed",true,true,true,false,"2026-08-05"],
+["2026-08-04","CV Sido Mulyo","Duplek",203,192,0,192,1200,1200,1200,243600,230400,0,0,230400,"","","SJ130","Paid","Completed",true,true,true,false,"2026-08-05"],
+["2026-08-04","CV Sido Mulyo","Boncos",2022.5,1819,0,1819,2200,2200,2200,4449500,4001800,0,0,4001800,"","","SJ130","Paid","Completed",true,true,true,false,"2026-08-05"],
 ];
 const COLORS = [
   '#2ee8a0','#61b8ff','#ffc53d','#ff6b87','#c4b5fd',
@@ -1472,14 +1545,171 @@ const MONTH_SHORT = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt'
 const MONTH_FULL  = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const DOW_SHORT   = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
 
-// Pre-compute counts from RAW
-const _dateCounts = {};
-const _monthCounts = {};
-RAW.forEach(r => {
-  _dateCounts[r[0]] = (_dateCounts[r[0]] || 0) + 1;
-  const mk = r[0].slice(0,7);
-  _monthCounts[mk] = (_monthCounts[mk] || 0) + 1;
-});
+// Pre-compute counts from RAW (re-runnable so live data can refresh them)
+let _dateCounts = {};
+let _monthCounts = {};
+function recomputeCounts() {
+  _dateCounts = {};
+  _monthCounts = {};
+  RAW.forEach(r => {
+    if (!r[0]) return;
+    _dateCounts[r[0]] = (_dateCounts[r[0]] || 0) + 1;
+    const mk = r[0].slice(0,7);
+    _monthCounts[mk] = (_monthCounts[mk] || 0) + 1;
+  });
+}
+recomputeCounts();
+
+// ─────────────────────────────────────────────────────────────────────────
+// LIVE SYNC WITH GOOGLE SHEET — "Sales Reporting" tab
+// Sales data entered in the spreadsheet is fetched here and the dashboard is
+// re-rendered, so the app stays in sync with the sheet.
+// ─────────────────────────────────────────────────────────────────────────
+const SHEET_ID   = '1Sghpit4X29ugh0vs7VP1MXiBSqxE7v-NAwGXRJP498Y';
+const SALES_GID  = '457043419';                       // gid of the "Sales Reporting" tab
+const GVIZ_BASE  = 'https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json&gid='+SALES_GID;
+const SYNC_INTERVAL_MS = 5 * 60 * 1000;               // auto-refresh every 5 minutes
+
+// gviz date value looks like "Date(2026,0,6)" (month is 0-based) → "YYYY-MM-DD"
+function gvizDateToISO(v){
+  if (v === null || v === undefined || v === '') return '';
+  const m = String(v).match(/Date\((\d+),(\d+),(\d+)/);
+  if (!m) return '';
+  const mo = String(parseInt(m[2],10)+1).padStart(2,'0');
+  return m[1]+'-'+mo+'-'+String(m[3]).padStart(2,'0');
+}
+
+// Map a gviz row (array of {v}) to the dashboard's RAW row format (25 columns).
+// Column letters of the "Sales Reporting" tab are shown in comments.
+function sheetRowToRaw(c){
+  const raw = i => (c[i] && c[i].v !== null && c[i].v !== undefined) ? c[i].v : null;
+  const num = i => { const v = raw(i); return (typeof v === 'number') ? v : (v === '' || v === null) ? 0 : (Number(v)||0); };
+  const str = i => { const v = raw(i); return (v === null || v === undefined) ? '' : String(v).trim(); };
+  const bool = i => { const v = raw(i); return v === true || v === 'TRUE' || v === 'true' || v === 1; };
+  return [
+    gvizDateToISO(raw(0)),  // 0  Date            (A)
+    str(1),                 // 1  Offtaker        (B)
+    str(2),                 // 2  Material        (C  Jenis PDUP)
+    num(4),                 // 3  Berat PDUP      (E)
+    num(5),                 // 4  Berat Offtaker (F)
+    num(6),                 // 5  Potongan Berat (G)
+    num(7),                 // 6  Berat Netto    (H)
+    num(9),                 // 7  Harga Proforma  (J)
+    num(10),                // 8  Harga Offtaker  (K)
+    num(10),                // 9  Harga/Kg (used)  (K)
+    num(11),                // 10 Total Proforma  (L)
+    num(12),                // 11 Total Offtaker (M)
+    num(13),                // 12                (N)
+    num(14),                // 13 Potongan Rp     (O)
+    num(15),                // 14 Net Diterima   (P)
+    str(16),                // 15 Keterangan      (Q)
+    str(18),                // 16 No. Invoice     (S)   [skip R Link Document]
+    str(22),                // 17 No. SJ          (W)
+    str(19),                // 18 Payment Status  (T)
+    str(20),                // 19 Delivery Status (U)
+    bool(23),               // 20 Doc SJ          (X)
+    bool(24),               // 21 Doc RC          (Y)
+    bool(25),               // 22 Doc TR          (Z)
+    bool(26),               // 23 Doc DF          (AA)
+    gvizDateToISO(raw(21))  // 24 Tgl Payment     (V)
+  ];
+}
+
+// Load the sheet via JSONP (works from file:// and https:// — no CORS issues).
+// gviz returns: google.visualization.Query.setResponse({...});
+function loadSalesJSONP(url){
+  return new Promise((resolve, reject) => {
+    let done = false, timer = null;
+    window.google = window.google || {};
+    window.google.visualization = window.google.visualization || {};
+    window.google.visualization.Query = window.google.visualization.Query || {};
+    window.google.visualization.Query.setResponse = function(json){
+      if (done) return; done = true; clearTimeout(timer); resolve(json);
+    };
+    const s = document.createElement('script');
+    s.src = url; s.async = true;
+    s.onerror = () => { if (done) return; done = true; clearTimeout(timer); reject(new Error('Gagal memuat sheet')); };
+    timer = setTimeout(() => { if (done) return; done = true; reject(new Error('Timeout')); }, 25000);
+    document.head.appendChild(s);
+    setTimeout(() => { if (s.parentNode) s.parentNode.removeChild(s); }, 30000);
+  });
+}
+
+async function fetchSalesData(){
+  const url = GVIZ_BASE + '&_t=' + Date.now();   // cache-buster for fresh data
+  const json = await loadSalesJSONP(url);
+  if (json && json.status === 'error') {
+    const msg = (json.errors && json.errors[0] && json.errors[0].message) || 'Sheet error';
+    throw new Error(msg);
+  }
+  const rows = (json && json.table && json.table.rows) || [];
+  const out = [];
+  rows.forEach(r => {
+    const c = r.c || [];
+    if (!c[0] || c[0].v === null || c[0].v === undefined) return; // skip header/summary/blank rows
+    out.push(sheetRowToRaw(c));
+  });
+  // Forward-fill a blank offtaker from a sibling line item with the same No. SJ
+  // (handles stray-blank / merged-cell offtaker entries within one delivery).
+  const sjOft = {};
+  out.forEach(r => { if (r[17] && r[1] && !sjOft[r[17]]) sjOft[r[17]] = r[1]; });
+  out.forEach(r => { if (r[17] && (!r[1] || r[1] === '') && sjOft[r[17]]) r[1] = sjOft[r[17]]; });
+  return out;
+}
+
+// Refresh the offtaker/material dropdown option lists without wiping the user's
+// active selections (used after a live-data update).
+function refreshDropdowns(){
+  const offtakers = [...new Set(RAW.map(r=>r[1]))].sort();
+  const materials = [...new Set(RAW.map(r=>r[2]).filter(Boolean))].sort();
+  ddAll['dd-offtaker'] = offtakers;
+  ddAll['dd-material'] = materials;
+  ['dd-offtaker','dd-material'].forEach(id => {
+    [...ddSelected[id]].forEach(v => { if (!ddAll[id].includes(v)) ddSelected[id].delete(v); });
+    populateDd(id, getCurrentItems(id));
+    updateDdTrigger(id);
+  });
+}
+
+let _syncTimer = null;
+function setSyncStatus(state, msg){
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.className = 'sync-status ' + state;
+  el.textContent = msg;
+}
+
+let _syncing = false;
+async function syncSalesData(isAuto){
+  if (_syncing) return;          // prevent overlapping JSONP calls (shared global callback)
+  _syncing = true;
+  try {
+    setSyncStatus('loading', isAuto ? 'Memperbarui…' : 'Memuat data…');
+    const data = await fetchSalesData();
+    if (!data.length) {
+      setSyncStatus('error', 'Sheet kosong — data cadangan');
+      return;
+    }
+    RAW = data;
+    recomputeCounts();
+    refreshDropdowns();
+    render();
+    const now = new Date();
+    const ts = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    setSyncStatus('ok', 'Tersinkron • ' + ts);
+  } catch (e) {
+    console.warn('Sinkronisasi gagal:', e);
+    setSyncStatus('error', 'Sinkron gagal — data cadangan');
+  } finally {
+    _syncing = false;
+  }
+}
+
+function startAutoSync(){
+  if (_syncTimer) clearInterval(_syncTimer);
+  _syncTimer = setInterval(() => syncSalesData(true), SYNC_INTERVAL_MS);
+}
+
 
 function rpInit() { /* no-op: replaced by dp picker */ }
 
@@ -2324,7 +2554,7 @@ function render() {
   document.getElementById('kpi-totgap-pct').textContent = (pct>=0?'+':'')+pct.toFixed(2)+'% dari total PDUP';
 
   // ── FINANCIAL KPIs (count by unique SJ) ──
-  const totalNet = rows.reduce((s,r)=>s+(r[14]||0),0);
+  const totalNet = rows.filter(r=>r[18]==='Paid').reduce((s,r)=>s+(r[14]||0),0);
   // Selisih Total (Offtaker) vs Total (Proforma) per SJ-group
   const totalOftAll = sjEntries.reduce((s,e)=>s+e.totalOft,0);
   const totalPfAll  = sjEntries.reduce((s,e)=>s+e.totalPf,0);
@@ -2406,7 +2636,7 @@ function render() {
     const key = groupFn(r);
     if (!grouped[key]) grouped[key]={pdup:0,net:0};
     grouped[key].pdup += r[3];
-    grouped[key].net  += (r[14]||0);
+    if (r[18]==='Paid') grouped[key].net += (r[14]||0);
   });
   const tKeys = Object.keys(grouped).sort();
 
@@ -3103,7 +3333,7 @@ function renderVolTable(data, targetId) {
   const totalPdup = data.reduce((s,r)=>s+(r[3]||0),0);
   const totalOft  = data.reduce((s,r)=>s+(r[11]||0),0);
   const totalPf   = data.reduce((s,r)=>s+(r[10]||0),0);
-  const totalNet  = data.reduce((s,r)=>s+(r[14]||0),0);
+  const totalNet  = data.filter(r=>r[18]==='Paid').reduce((s,r)=>s+(r[14]||0),0);
   let html = `<div class="popup-stat-row">
     <div class="popup-stat"><div class="popup-stat-label">Total Berat PDUP</div><div class="popup-stat-val kv-green">${fmtInt(totalPdup)} kg</div></div>
     <div class="popup-stat"><div class="popup-stat-label">Total (Offtaker)</div><div class="popup-stat-val kv-blue">${fmtRpShort(totalOft)}</div></div>
@@ -3137,7 +3367,7 @@ function renderVolTable(data, targetId) {
       <td class="tr tn">${r[11]?fmtRp(r[11]):'—'}</td>
       <td class="tr tn" style="color:var(--text3)">${r[10]?fmtRp(r[10]):'—'}</td>
       <td class="tr tn" style="color:var(--coral)">${r[13]>0?'-'+fmtRpShort(r[13]):'—'}</td>
-      <td class="tr tn" style="color:var(--accent);font-weight:600">${r[14]?fmtRpShort(r[14]):'—'}</td>
+      <td class="tr tn" style="color:var(--accent);font-weight:600">${r[18]==='Paid'&&r[14]?fmtRpShort(r[14]):'—'}</td>
       <td style="font-size:11px;white-space:nowrap;color:var(--text2)">${r[24]?fmtDateShort(r[24]):'—'}</td>
       <td style="font-size:11px;color:var(--text3);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r[15]}">${r[15]||'—'}</td>
     </tr>`;
@@ -3153,7 +3383,7 @@ function renderKeuTable(entries) {
   const unpaidCount  = entries.filter(e=>e.payStatus==='Unpaid').length;
   const compCount    = entries.filter(e=>e.delStatus==='Completed').length;
   const delivCount   = entries.filter(e=>e.delStatus==='Delivered').length;
-  const totalNetKeu  = entries.reduce((s,e)=>s+e.netDiterima,0);
+  const totalNetKeu  = entries.filter(e=>e.payStatus==='Paid').reduce((s,e)=>s+e.netDiterima,0);
   const totalOftKeu  = entries.reduce((s,e)=>s+e.totalOft,0);
   const totalPfKeu   = entries.reduce((s,e)=>s+e.totalPf,0);
   const selRpKeu     = totalOftKeu - totalPfKeu;
@@ -3165,7 +3395,8 @@ function renderKeuTable(entries) {
     <div class="popup-stat"><div class="popup-stat-label">Unpaid</div><div class="popup-stat-val kv-coral">${unpaidCount}</div></div>
     <div class="popup-stat"><div class="popup-stat-label">Completed</div><div class="popup-stat-val kv-blue">${compCount}</div></div>
     <div class="popup-stat"><div class="popup-stat-label">Delivered</div><div class="popup-stat-val kv-amber">${delivCount}</div></div>
-    <div class="popup-stat"><div class="popup-stat-label">Net Diterima</div><div class="popup-stat-val kv-green">${fmtRp(totalNetKeu)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Total Proforma</div><div class="popup-stat-val kv-blue">${fmtRp(totalPfKeu)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Total Net Diterima</div><div class="popup-stat-val kv-green">${fmtRp(totalNetKeu)}</div></div>
     <div class="popup-stat"><div class="popup-stat-label">Selisih Offtaker-Proforma</div><div class="popup-stat-val ${selCls}">${selSign}${fmtRpShort(Math.abs(selRpKeu))}</div></div>
   </div>
   <table><thead><tr>
@@ -3195,7 +3426,7 @@ function renderKeuTable(entries) {
       <td class="tr tn">${fmtRp(e.totalOft)}</td>
       <td class="tr tn" style="color:var(--text3)">${fmtRp(e.totalPf)}</td>
       <td class="tr tn ${dCls}" style="font-weight:600">${dSign}${fmtRpShort(Math.abs(diffRpKeu))}</td>
-      <td class="tr tn" style="color:var(--accent);font-weight:600">${e.netDiterima>0?fmtRp(e.netDiterima):'—'}</td>
+      <td class="tr tn" style="color:var(--accent);font-weight:600">${e.payStatus==='Paid'&&e.netDiterima>0?fmtRp(e.netDiterima):'—'}</td>
       <td class="tc">${payBadge}</td>
       <td style="font-size:11px;white-space:nowrap;color:var(--text2)">${e.tglPayment?fmtDateShort(e.tglPayment):'—'}</td>
     </tr>`;
@@ -3281,6 +3512,10 @@ function renderPayFullTable(rowsArr) {
 
 buildDropdowns();
 render();
+
+// Live sync with the "Sales Reporting" Google Sheet tab, then auto-refresh.
+syncSalesData(false);
+startAutoSync();
 
 // Move all popup elements to document.body to escape any stacking context
 (function() {
