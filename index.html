@@ -700,6 +700,28 @@
   html[data-theme="dark"] .disc-meta-chip { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 12px; font-size: 11px; color: var(--text2); }
   html[data-theme="dark"] .disc-rp-side.rp-oft { border-color: rgba(46,232,160,0.25); }
   html[data-theme="dark"] .rp-oft .disc-rp-label { color: rgba(46,232,160,0.6); }
+
+  /* ── KEU PAYMENT DATE RANGE PICKER ── */
+  .keu-paydate-range { display:flex; align-items:center; gap:5px; }
+  .keu-date-input {
+    background: rgba(37,99,235,0.06); border:1.5px solid rgba(37,99,235,0.18); border-radius:8px;
+    color: var(--text); font-size:12px; font-family:inherit; padding:6px 8px; outline:none;
+    cursor:pointer; transition:border-color 0.2s,background 0.2s; color-scheme:light; width:122px;
+  }
+  .keu-date-input:focus { border-color:rgba(37,99,235,0.45); background:#fff; box-shadow:0 0 0 3px rgba(37,99,235,0.08); }
+  .keu-date-input::-webkit-calendar-picker-indicator { cursor:pointer; opacity:.6; }
+  .keu-date-arrow { font-size:13px; color:var(--text3); flex-shrink:0; }
+  .keu-date-clear {
+    background:none; border:1px solid rgba(37,99,235,0.18); border-radius:6px;
+    color:var(--text3); font-size:11px; cursor:pointer; padding:5px 7px;
+    transition:all 0.15s; line-height:1; display:none;
+  }
+  .keu-date-clear.visible { display:inline-flex; align-items:center; }
+  .keu-date-clear:hover { color:var(--coral); border-color:rgba(225,29,90,0.4); background:rgba(225,29,90,0.06); }
+  html[data-theme="dark"] .keu-date-input { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.14); color:var(--text); color-scheme:dark; }
+  html[data-theme="dark"] .keu-date-input:focus { border-color:rgba(46,232,160,0.5); background:rgba(255,255,255,0.12); box-shadow:0 0 0 3px rgba(46,232,160,0.12); }
+  html[data-theme="dark"] .keu-date-clear { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.12); color:var(--text3); }
+  html[data-theme="dark"] .keu-date-clear:hover { color:var(--coral); border-color:rgba(255,107,135,0.4); background:rgba(255,107,135,0.10); }
 </style>
 </head>
 <body>
@@ -1078,18 +1100,25 @@
       <div class="dd-wrap" id="dd-keu-date">
         <div class="dd-trigger" onclick="toggleDropdown('dd-keu-date')" style="min-width:150px;padding:7px 10px;font-size:12.5px;">
           <span>📅</span>
-          <span class="dd-trigger-label placeholder" id="dd-keu-date-label">Semua tanggal</span>
+          <span class="dd-trigger-label placeholder" id="dd-keu-date-label">Semua tgl SJ</span>
           <span class="dd-count" id="dd-keu-date-count" style="display:none"></span>
           <span class="dd-arrow">▼</span>
         </div>
         <div class="dd-panel" id="dd-keu-date-panel">
-          <div class="dd-search-wrap"><input class="dd-search" placeholder="Cari tanggal…" oninput="filterKeuDateItems(this.value)"/></div>
+          <div class="dd-search-wrap"><input class="dd-search" placeholder="Cari tgl SJ…" oninput="filterKeuDateItems(this.value)"/></div>
           <div class="dd-actions">
             <button class="dd-act-btn" onclick="selectAllKeuDate()">Pilih semua</button>
             <button class="dd-act-btn" onclick="clearKeuDate()">Hapus semua</button>
           </div>
           <div class="dd-list" id="dd-keu-date-list"></div>
         </div>
+      </div>
+      <div class="keu-paydate-range" id="keu-paydate-range">
+        <span class="keu-date-arrow">💸</span>
+        <input type="date" id="keu-paydate-from" class="keu-date-input" title="Tgl bayar mulai" onchange="onKeuPayDateChange()" />
+        <span class="keu-date-arrow">→</span>
+        <input type="date" id="keu-paydate-to" class="keu-date-input" title="Tgl bayar akhir" onchange="onKeuPayDateChange()" />
+        <button class="keu-date-clear" id="keu-paydate-clear" onclick="clearKeuPayDateRange()" title="Hapus filter tgl bayar">✕</button>
       </div>
       <input class="popup-search" id="keu-search" placeholder="Cari No. SJ / offtaker…" oninput="filterPopupTable('keu')">
       <button class="popup-close" onclick="closePopup()">✕</button>
@@ -1524,6 +1553,10 @@ const periodLabel = k => {
 // ── DROPDOWN STATE ──
 const ddSelected = { 'dd-offtaker': new Set(), 'dd-material': new Set(), 'dd-keu-date': new Set() };
 const ddAll      = { 'dd-offtaker': [], 'dd-material': [], 'dd-keu-date': [] };
+
+// ── KEU PAYMENT DATE RANGE STATE ──
+let keuPayDateFrom = null;   // ISO string "YYYY-MM-DD" or null
+let keuPayDateTo   = null;   // ISO string "YYYY-MM-DD" or null
 
 let selectedCalMonths = new Set();
 let currentDocFilter = 'all';
@@ -3169,6 +3202,20 @@ function openPopup(type) {
     ddSelected['dd-keu-date'].clear();
     populateKeuDateDd(uniqueDates);
     updateKeuDateTrigger();
+    // Payment date range picker
+    keuPayDateFrom = null; keuPayDateTo = null;
+    const payFromEl = document.getElementById('keu-paydate-from');
+    const payToEl   = document.getElementById('keu-paydate-to');
+    const payClearBtn = document.getElementById('keu-paydate-clear');
+    if (payFromEl) payFromEl.value = '';
+    if (payToEl) payToEl.value = '';
+    if (payClearBtn) payClearBtn.classList.remove('visible');
+    // Set min/max from available payment dates
+    const allPayDates = _popupKeuEntries.map(e=>e.tglPayment).filter(Boolean).sort();
+    if (allPayDates.length) {
+      if (payFromEl) { payFromEl.min = allPayDates[0]; payFromEl.max = allPayDates[allPayDates.length-1]; }
+      if (payToEl)   { payToEl.min   = allPayDates[0]; payToEl.max   = allPayDates[allPayDates.length-1]; }
+    }
     applyKeuFilters();
   }
 }
@@ -3191,6 +3238,15 @@ function applyKeuFilters() {
   if (mode === 'paid') base = base.filter(e => e.payStatus === 'Paid');
   else if (mode === 'unpaid') base = base.filter(e => e.payStatus === 'Unpaid');
   if (dateSel && dateSel.size > 0) base = base.filter(e => dateSel.has(e.date));
+  // Payment date range filter
+  if (keuPayDateFrom || keuPayDateTo) {
+    base = base.filter(e => {
+      if (!e.tglPayment) return false;
+      if (keuPayDateFrom && e.tglPayment < keuPayDateFrom) return false;
+      if (keuPayDateTo   && e.tglPayment > keuPayDateTo)   return false;
+      return true;
+    });
+  }
   if (q) base = base.filter(e =>
     (e.offtaker||'').toLowerCase().includes(q) ||
     (e.noSJ||'').toLowerCase().includes(q) ||
@@ -3261,7 +3317,7 @@ function updateKeuDateTrigger() {
   const cnt = document.getElementById('dd-keu-date-count');
   if (!lbl || !cnt) return;
   if (sel.size === 0) {
-    lbl.textContent = 'Semua tanggal';
+    lbl.textContent = 'Semua tgl SJ';
     lbl.classList.add('placeholder');
     cnt.style.display = 'none';
   } else if (sel.size === 1) {
@@ -3277,6 +3333,36 @@ function updateKeuDateTrigger() {
     cnt.textContent = sel.size;
     cnt.style.display = 'inline-block';
   }
+}
+
+// ── KEU PAYMENT DATE RANGE PICKER ──
+function onKeuPayDateChange() {
+  const fromEl = document.getElementById('keu-paydate-from');
+  const toEl   = document.getElementById('keu-paydate-to');
+  const clearBtn = document.getElementById('keu-paydate-clear');
+  keuPayDateFrom = (fromEl && fromEl.value) ? fromEl.value : null;
+  keuPayDateTo   = (toEl   && toEl.value)   ? toEl.value   : null;
+  // Auto-swap if start > end
+  if (keuPayDateFrom && keuPayDateTo && keuPayDateFrom > keuPayDateTo) {
+    const tmp = keuPayDateFrom;
+    keuPayDateFrom = keuPayDateTo;
+    keuPayDateTo = tmp;
+    if (fromEl) fromEl.value = keuPayDateFrom;
+    if (toEl)   toEl.value   = keuPayDateTo;
+  }
+  if (clearBtn) clearBtn.classList.toggle('visible', !!(keuPayDateFrom || keuPayDateTo));
+  applyKeuFilters();
+}
+
+function clearKeuPayDateRange() {
+  keuPayDateFrom = null; keuPayDateTo = null;
+  const fromEl = document.getElementById('keu-paydate-from');
+  const toEl   = document.getElementById('keu-paydate-to');
+  const clearBtn = document.getElementById('keu-paydate-clear');
+  if (fromEl) fromEl.value = '';
+  if (toEl)   toEl.value   = '';
+  if (clearBtn) clearBtn.classList.remove('visible');
+  applyKeuFilters();
 }
 
 function closePopup() {
